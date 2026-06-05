@@ -19,7 +19,7 @@
 11. [On-Premises Deployment](#-on-premises-deployment)
 12. [Vercel Deployment](#-vercel-deployment-recommended)
 13. [Data Storage](#-data-storage)
-13. [Security](#-security)
+14. [Security](#-security)
 14. [Roadmap](#-roadmap)
 15. [Contributing](#-contributing)
 16. [Troubleshooting](#-troubleshooting)
@@ -54,7 +54,8 @@
 | **Charts**        | Chart.js            | Interactive graphs (line, bar, pie)                                       | Lightweight, easy to integrate, and supports animations.                  |
 | **State Management** | Zustand         | Global state for React                                                   | Simpler than Redux, good for medium-sized apps.                           |
 | **Deployment**    | On-Premises (Node.js)| Self-hosted on any machine with Node.js                                  | Full control over data and infrastructure.                               |
-| **Reverse Proxy** | Nginx/Apache        | (Optional) For HTTPS, load balancing, and static file serving           | Recommended for production.                                                |
+| **Cloud Deployment** | **Vercel**      | Zero-config hosting for Next.js with Edge Network                        | Recommended. Automatic CI/CD, preview deployments, free tier.             |
+| **Reverse Proxy** | Nginx/Apache        | (Optional) For HTTPS, load balancing, and static file serving           | Recommended for on-premises production.                                    |
 | **Process Manager** | PM2              | (Optional) Keep the Next.js app running in production                   | Ensures uptime and auto-restarts.                                          |
 | **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
 
@@ -179,6 +180,7 @@ virlet/
 │   ├── components/              # React components
 │   └── lib/                     # Utility functions
 ├── .gitignore                   # Git ignore rules
+├── .vercelignore                # Files to exclude from Vercel deployments
 ├── jest.config.js               # Jest test configuration
 ├── jest.setup.js                # Jest setup file
 ├── next.config.js               # Next.js configuration
@@ -186,6 +188,7 @@ virlet/
 ├── postcss.config.js            # PostCSS configuration
 ├── tailwind.config.ts           # Tailwind CSS configuration
 ├── tsconfig.json                # TypeScript configuration
+├── vercel.json                  # Vercel project configuration
 └── README.md                    # This file
 ```
 
@@ -345,11 +348,19 @@ gh pr create --title "Your PR title" --body "Description of changes"
 
 ### Code Quality
 
-Run the linter to check for issues:
+Run ESLint to check for issues (Next.js 16 removed `next lint` command):
 
 ```bash
+# Install ESLint if not already installed
+npm install --save-dev eslint @next/eslint-plugin-next
+
+# Run ESLint
+npx eslint .
+# or
 npm run lint
 ```
+
+> **Note**: Next.js 16 removed the built-in `next lint` command. Use ESLint directly instead.
 
 ---
 
@@ -870,7 +881,7 @@ To add LowDB:
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run tests and lint
+4. Run tests and ESLint
 5. Submit a pull request
 
 ### Pull Request Guidelines
