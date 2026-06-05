@@ -44,7 +44,12 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        window.location.href = "/dashboard";
+        const { user } = await response.json();
+        await signIn("credentials", {
+          user,
+          redirect: false,
+        });
+        router.push("/dashboard");
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to log in with debug token.");
