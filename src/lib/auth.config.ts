@@ -1,0 +1,124 @@
+import type { NextAuthConfig } from "next-auth";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+
+export const authConfig = {
+  providers: [
+    // Using GitHub as a simple OAuth provider for demo purposes
+    // In production, you'd want to use Instagram OAuth
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    // Simple credentials provider for demo
+    Credentials({
+      name: "credentials",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        // In a real app, you'd validate against a database
+        // For demo purposes, we'll use a simple hardcoded user
+        if (
+          credentials?.username === "demo" &&
+          credentials?.password === "demo123"
+        ) {
+          return {
+            id: "1",
+            name: "Demo User",
+            email: "demo@example.com",
+            image: "https://via.placeholder.com/150",
+            bio: "Sports content creator",
+            followers: 15000,
+            following: 250,
+            posts: 125,
+          };
+        }
+        return null;
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/login",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+        // Add custom fields
+        if ("bio" in user) {
+          token.bio = (user as any).bio;
+        }
+        if ("followers" in user) {
+          token.followers = (user as any).followers;
+        }
+        if ("following" in user) {
+          token.following = (user as any).following;
+        }
+        if ("posts" in user) {
+          token.posts = (user as any).posts;
+        }
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+        // Add custom fields to session
+        session.user.bio = token.bio as string | undefined;
+        session.user.followers = token.followers as number | undefined;
+        session.user.following = token.following as number | undefined;
+        session.user.posts = token.posts as number | undefined;
+      }
+      return session;
+    },
+  },
+} satisfies NextAuthConfig;
+
+// Extend the types to include custom fields
+declare module "next-auth" {
+  interface User {
+    bio?: string;
+    followers?: number;
+    following?: number;
+    posts?: number;
+  }
+
+  interface Session {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      image?: string;
+      bio?: string;
+      followers?: number;
+      following?: number;
+      posts?: number;
+    };
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    name: string;
+    email: string;
+    picture?: string;
+    bio?: string;
+    followers?: number;
+    following?: number;
+    posts?: number;
+  }
+}
