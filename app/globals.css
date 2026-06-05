@@ -10,15 +10,6 @@
   html {
     color-scheme: dark;
   }
-  
-  body {
-    @apply bg-gray-900 text-white;
-  }
-  
-  /* Dark mode is enabled via the 'dark' class on html element */
-  .dark {
-    color-scheme: dark;
-  }
 }
 
 @layer components {
