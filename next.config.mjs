@@ -12,10 +12,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    // Disable Turbopack for now to avoid compatibility issues
-    turbopack: false,
-  },
 };
 
 export default nextConfig;
