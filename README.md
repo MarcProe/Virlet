@@ -53,9 +53,6 @@
  | **Deployment**    | Vercel |                     |                          |
  | **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
 
-> **🔹 Note for AI**:
-> - **Frontend framework is locked to Next.js** (no alternatives).
-> - **Dark mode is enforced**—no light mode toggles or support.
 
 ---
 
