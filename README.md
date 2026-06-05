@@ -49,8 +49,7 @@
  | **Frontend**      | **Next.js (App Router)** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
  | **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
  | **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
- | **Styling**       |    |                                                |          |
- | **STyle Template  | TypeUI Neumorphism | Style Template | |
+ | **Style Template**  | TypeUI Neumorphism | Style Template | |
  | **Deployment**    | Vercel |                     |                          |
  | **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
 
