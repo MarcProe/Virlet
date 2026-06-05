@@ -38,7 +38,7 @@
 ✅ **Data-driven** (real-time analytics, exportable reports)
 ✅ **Instagram Authentication** (for the app itself and API access to Instagram)
 
-**Target Users**: Sports influencers, athletes, and content creators who **hate light mode**.
+**Target Users**: Sports influencers, athletes, and content creators.
 
 ---
 
