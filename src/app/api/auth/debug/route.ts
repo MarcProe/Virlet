@@ -32,7 +32,7 @@ export async function POST() {
       id: accountId,
       name: "Instagram User",
       email: `${accountId}@instagram.com`,
-      image: `https://www.instagram.com/p/${accountId}/`,
+      picture: `https://www.instagram.com/p/${accountId}/`,
       bio: "Instagram user",
       followers: 0,
       following: 0,
