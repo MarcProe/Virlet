@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import AccountWidget from "@/components/AccountWidget";
+import Image from "next/image";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
@@ -30,11 +31,13 @@ export default function DashboardPage() {
               </h1>
             </div>
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <img
-                  className="h-8 w-8 rounded-full"
+              <div className="relative flex-shrink-0 h-8 w-8">
+                <Image
+                  className="rounded-full object-cover"
                   src={session.user?.image || "https://via.placeholder.com/150"}
                   alt="Profile"
+                  fill
+                  sizes="32px"
                 />
               </div>
               <div className="ml-3">

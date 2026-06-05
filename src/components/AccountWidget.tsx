@@ -1,6 +1,7 @@
 "use client";
 
 import { Session } from "next-auth";
+import Image from "next/image";
 
 export default function AccountWidget({ user }: { user: Session["user"] }) {
   return (
@@ -15,11 +16,15 @@ export default function AccountWidget({ user }: { user: Session["user"] }) {
       </div>
 
       <div className="flex flex-col items-center">
-        <img
-          className="h-20 w-20 rounded-full mb-4"
-          src={user?.image || "https://via.placeholder.com/150"}
-          alt="Profile"
-        />
+        <div className="relative h-20 w-20 mb-4">
+          <Image
+            className="rounded-full object-cover"
+            src={user?.image || "https://via.placeholder.com/150"}
+            alt="Profile"
+            fill
+            sizes="80px"
+          />
+        </div>
 
         <h4 className="text-xl font-bold text-gray-900 dark:text-white">
           {user?.name || "Unknown"}
