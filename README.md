@@ -577,6 +577,89 @@ git push origin main
 
 Vercel will automatically deploy when you push to the linked branch.
 
+### Preview Deployments (For Feature Branches)
+
+**Preview deployments are automatically created for every non-production branch!**
+
+When you push to a feature branch (like `vibe/boilerplate-hello-world-a86e2e`), Vercel creates a **preview deployment** with a unique URL:
+
+```
+https://[branch-name]-[hash].vercel.app
+```
+
+#### How Preview Deployments Work
+
+1. **Automatic**: Created for every push to non-production branches
+2. **Isolated**: Each PR gets its own deployment
+3. **Temporary**: Automatically cleaned up after PR is merged/closed
+4. **Identical to Production**: Same build process, just different URL
+
+#### Finding Your Preview URL
+
+**Method 1: Vercel Dashboard**
+1. Go to [https://vercel.com/dashboard](https://vercel.com/dashboard)
+2. Select your project
+3. Go to "Deployments" tab
+4. Filter by "Preview" environment
+5. Click "Visit" on your deployment
+
+**Method 2: GitHub PR Comment**
+- Vercel bot automatically posts a comment on your PR with the preview URL
+- Example: `https://virlet-git-feature-branch-abc123.vercel.app`
+
+**Method 3: Vercel CLI**
+```bash
+# List all deployments
+vercel deployments
+
+# Filter for preview deployments
+vercel deployments --filter=preview
+
+# Open preview in browser
+vercel open
+```
+
+#### Preview vs Production Differences
+
+| Feature | Preview | Production |
+|---------|---------|------------|
+| Auto-created | ✅ Yes | ❌ No (manual) |
+| URL | Dynamic | Fixed |
+| Environment | Preview | Production |
+| Cleanup | Auto | Manual |
+| Custom Domain | ❌ No | ✅ Yes |
+| Analytics | ✅ Yes | ✅ Yes |
+
+#### Configure Preview Environment
+
+Set environment variables specific to preview deployments:
+
+1. Go to Vercel → Project → Settings → Environment Variables
+2. Add variables for **Preview** environment:
+   ```bash
+   NEXT_PUBLIC_ENV=preview
+   NEXT_PUBLIC_API_URL=https://your-preview-url.vercel.app/api
+   ```
+
+3. Use in your code:
+   ```typescript
+   const isPreview = process.env.NEXT_PUBLIC_ENV === 'preview';
+   ```
+
+#### Testing Preview Deployments
+
+✅ **What to test on preview:**
+- Hello World page renders correctly
+- Dark mode styling works
+- Interactive button functions
+- API routes respond
+- No console errors
+
+❌ **What won't work on preview:**
+- Custom domains
+- Production-only environment variables
+- Some third-party integrations
+
 ### Automatic Deployments (Git Integration)
 
 Once connected to GitHub, Vercel provides:
