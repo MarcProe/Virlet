@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import InstagramProvider from "next-auth/providers/instagram";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authConfig = {
   providers: [
@@ -13,6 +14,18 @@ export const authConfig = {
         },
       },
     }),
+    // Add CredentialsProvider for debug login
+    CredentialsProvider({
+      name: "Debug",
+      credentials: {},
+      async authorize(credentials) {
+        // If the user object is passed, return it directly
+        if (credentials?.user) {
+          return credentials.user as any;
+        }
+        return null;
+      },
+    }),
   ],
   pages: {
     signIn: "/login",
@@ -24,6 +37,7 @@ export const authConfig = {
         token.name = user.name || "";
         token.email = user.email || "";
         token.picture = user.image || "";
+        token.accessToken = user.accessToken;
         // Add custom fields (if available from Instagram)
         if ("bio" in user && user.bio) {
           token.bio = user.bio;
@@ -46,6 +60,7 @@ export const authConfig = {
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.image = token.picture as string | undefined;
+        session.user.accessToken = token.accessToken as string | undefined;
         // Add custom fields to session
         session.user.bio = token.bio as string | undefined;
         session.user.followers = token.followers as number | undefined;
@@ -65,6 +80,7 @@ declare module "next-auth" {
     followers?: number;
     following?: number;
     posts?: number;
+    accessToken?: string;
   }
 
   interface Session {
@@ -77,6 +93,7 @@ declare module "next-auth" {
       followers?: number;
       following?: number;
       posts?: number;
+      accessToken?: string;
     };
   }
 }
@@ -91,5 +108,6 @@ declare module "next-auth/jwt" {
     followers?: number;
     following?: number;
     posts?: number;
+    accessToken?: string;
   }
 }
