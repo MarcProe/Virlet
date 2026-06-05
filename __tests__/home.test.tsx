@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Home from '../app/page'
 
@@ -9,22 +9,6 @@ describe('Home Page', () => {
     expect(screen.getByText('Hello, World! 👋')).toBeInTheDocument()
     expect(screen.getByText('Virlet')).toBeInTheDocument()
     expect(screen.getByText('Instagram Creator Analytics & Management')).toBeInTheDocument()
-  })
-
-  it('renders the counter button', () => {
-    render(<Home />)
-    
-    const button = screen.getByText(/Count: 0/)
-    expect(button).toBeInTheDocument()
-  })
-
-  it('increments counter when button is clicked', () => {
-    render(<Home />)
-    
-    const button = screen.getByText(/Count: 0/)
-    fireEvent.click(button)
-    
-    expect(screen.getByText(/Count: 1/)).toBeInTheDocument()
   })
 
   it('has neumorphism page class', () => {
@@ -41,10 +25,17 @@ describe('Home Page', () => {
     expect(card).toHaveClass('neumorphism-card')
   })
 
-  it('has neumorphism button', () => {
+  it('has proper heading hierarchy', () => {
     render(<Home />)
     
-    const button = screen.getByText(/Count: 0/)
-    expect(button).toHaveClass('neumorphism-btn')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Virlet')
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Hello, World! 👋')
+  })
+
+  it('has footer with copyright', () => {
+    render(<Home />)
+    
+    const currentYear = new Date().getFullYear()
+    expect(screen.getByText(`© ${currentYear} Virlet. All rights reserved.`)).toBeInTheDocument()
   })
 })

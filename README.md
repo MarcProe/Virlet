@@ -1,1415 +1,365 @@
-# **Virlet: Instagram Creator Analytics & Management App**
-*Modern, adaptive one-page web app for sports creators to track, analyze, and optimize Instagram performance. Dark mode only—because light mode is for n00bs.*
+# Virlet: Instagram Creator Analytics & Management
 
-![Virlet Dashboard Preview](https://via.placeholder.com/1200x630/1F2937/3B82F6?text=Virlet+Dashboard) *(Replace with actual dark-themed screenshot later)*
-
----
-
-## **📌 Table of Contents**
-1. [Overview](#-overview)
-2. [Tech Stack](#-tech-stack)
-3. [Project Structure](#-project-structure)
-4. [Prerequisites](#-prerequisites)
-5. [Setup](#-setup)
-6. [Running the App](#-running-the-app)
-7. [Development Workflow](#-development-workflow)
-8. [Testing](#-testing)
-9. [API Integration](#-api-integration)
-10. [UI/UX Guidelines](#-uiux-guidelines)
-11. [On-Premises Deployment](#-on-premises-deployment)
-12. [Vercel Deployment](#-vercel-deployment-recommended)
-13. [Data Storage](#-data-storage)
-14. [Neumorphism Design System](#-neumorphism-design-system-dark-mode-only)
-15. [Security](#-security)
-16. [Roadmap](#-roadmap)
-15. [Contributing](#-contributing)
-16. [Troubleshooting](#-troubleshooting)
-17. [Changelog](#-changelog)
-18. [License](#-license)
+Modern Next.js 16 web app for Instagram creators to track, analyze, and optimize performance. Features system-based dark/light mode with dark as the preferred default.
 
 ---
 
----
-## **📌 Overview**
-**Virlet** is a **Next.js-based web app** (frontend + backend in one) for Instagram creators to **measure post impact, analyze audience growth, and manage content professionally**. The app is:
-✅ **One-page, adaptive** (works on mobile, tablet, desktop)
-✅ **Dark mode only** (no light mode—ever)
-✅ **Visually striking** (big, colorful elements, interactive graphs)
-✅ **Zero-setup backend** (uses Next.js API routes + LowDB)
-✅ **On-premises ready** (self-hosted, no cloud dependencies)
-✅ **Data-driven** (real-time analytics, exportable reports)
+## Tech Stack
 
-**Target Users**: Sports influencers, athletes, and content creators who **hate light mode**.
-
----
-
----
-## **🛠️ Tech Stack**
-
-| Category          | Technology          | Purpose                                                                 | Justification                                                                 |
-|-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| **Frontend**      | **Next.js 16.2.7 (App Router)** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export. Turbopack by default. |
-| **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
-| **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
-| **Styling**       | **Tailwind CSS**    | Custom, responsive design                                                | Rapid development, utility-first, and highly customizable.               |
-| **Charts**        | Chart.js            | Interactive graphs (line, bar, pie)                                       | Lightweight, easy to integrate, and supports animations.                  |
-| **State Management** | Zustand         | Global state for React                                                   | Simpler than Redux, good for medium-sized apps.                           |
-| **Deployment**    | On-Premises (Node.js)| Self-hosted on any machine with Node.js                                  | Full control over data and infrastructure.                               |
-| **Cloud Deployment** | **Vercel**      | Zero-config hosting for Next.js with Edge Network                        | Recommended. Automatic CI/CD, preview deployments, free tier.             |
-| **Reverse Proxy** | Nginx/Apache        | (Optional) For HTTPS, load balancing, and static file serving           | Recommended for on-premises production.                                    |
-| **Process Manager** | PM2              | (Optional) Keep the Next.js app running in production                   | Ensures uptime and auto-restarts.                                          |
-| **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
-
-> **🔹 Note for AI**:
-> - **Frontend framework is locked to Next.js** (no alternatives).
-> - **Dark mode is enforced**—no light mode toggles or support.
+| Layer | Technology | Version | Purpose |
+|-------|------------|---------|---------|
+| Framework | Next.js | 16.2.7 | App Router, API routes, Turbopack |
+| React | React | 19.0.0 | UI components |
+| Styling | Tailwind CSS | 3.4.1 | Utility-first CSS |
+| Language | TypeScript | 5.5.0 | Type safety |
+| Deployment | Vercel | - | Recommended hosting |
+| Analytics | Vercel Speed Insights | ^1.0.0 | Performance monitoring |
 
 ---
 
----
-## **🤖 AI Agent Guidelines**
-
-### General Directives
-
-When working on this project, AI agents **MUST** follow these rules:
-
-1. **Always use feature branches** for new work, fixes, or changes
-   - Create a new branch: `git checkout -b feature/your-feature-name` or `vibe/your-task-slug`
-   - Never work directly on `main` branch
-   - Push your branch and create a **draft PR** for review
-
-2. **Check official documentation online** when unsure
-   - Always verify information from official sources
-   - Do not rely solely on cached or outdated knowledge
-
-3. **Follow best practices**
-   - Write clean, maintainable code
-   - Add tests for new functionality
-   - Update documentation as needed
-   - Keep commits focused and descriptive
-
-### Official Documentation & Resources
-
-Always refer to these official sources for accurate, up-to-date information:
-
-| Resource | URL | Purpose |
-|----------|-----|---------|
-| **Next.js Official Docs** | [https://nextjs.org/docs](https://nextjs.org/docs) | Primary documentation for all Next.js features |
-| **Next.js App Router Docs** | [https://nextjs.org/docs/app](https://nextjs.org/docs/app) | App Router specific documentation |
-| **Next.js Upgrade Guide (v16)** | [https://nextjs.org/docs/app/guides/upgrading/version-16](https://nextjs.org/docs/app/guides/upgrading/version-16) | Migration guide for Next.js 16 |
-| **Next.js API Reference** | [https://nextjs.org/docs/app/api-reference](https://nextjs.org/docs/app/api-reference) | Complete API documentation |
-| **React Official Docs** | [https://react.dev](https://react.dev) | React 19 documentation |
-| **Tailwind CSS Docs** | [https://tailwindcss.com/docs](https://tailwindcss.com/docs) | Tailwind CSS v3+ documentation |
-| **TypeScript Docs** | [https://www.typescriptlang.org/docs](https://www.typescriptlang.org/docs) | TypeScript documentation |
-| **Jest Docs** | [https://jestjs.io/docs](https://jestjs.io/docs) | Jest testing framework documentation |
-| **Testing Library Docs** | [https://testing-library.com/docs](https://testing-library.com/docs) | React Testing Library documentation |
-
-### Workflow for AI Agents
-
-#### Starting New Work
-
-```bash
-# 1. Always pull the latest changes first
-git pull origin main
-
-# 2. Create a feature branch (use descriptive names)
-git checkout -b feature/add-login-page
-# OR for vibe tasks:
-git checkout -b vibe/add-login-page-a86e2e
-
-# 3. Make your changes, commit often with clear messages
-git add .
-git commit -m "feat: add login page component"
-
-# 4. Push to remote and create a draft PR
-git push -u origin feature/add-login-page
-gh pr create --draft --title "feat: add login page" --body "Description of changes"
-```
-
-#### Code Review Process
-
-- **Draft PRs**: All AI-created PRs should start as **draft**
-- **Human review**: Wait for human approval before merging
-- **Address feedback**: Respond to all review comments and make requested changes
-- **Test locally**: When possible, verify changes work before pushing
-
-#### Important Constraints
-
-✅ **DO:**
-- Use Next.js 16.2.7+ features
-- Enforce dark mode in all components
-- Use TypeScript for all new code
-- Add tests for new functionality
-- Follow existing code patterns
-- Use Tailwind CSS for styling
-
-❌ **DON'T:**
-- Add light mode support (dark mode only!)
-- Use alternative frontend frameworks
-- Commit secrets or sensitive data
-- Push directly to `main` branch
-- Merge without human review
-- Use deprecated APIs (check Next.js 16 upgrade guide)
-
-#### Verification Checklist
-
-Before creating a PR, verify:
-
-- [ ] Code follows Next.js 16 conventions
-- [ ] Dark mode is properly implemented
-- [ ] TypeScript types are correct
-- [ ] No console errors or warnings
-- [ ] Tests pass (if applicable)
-- [ ] Documentation is updated (if applicable)
-- [ ] Branch is up to date with `main`
-
----
-
----
-## **📁 Project Structure**
+## Project Structure
 
 ```
 virlet/
-├── app/                          # Next.js App Router
-│   ├── globals.css              # Global styles with Tailwind CSS
-│   ├── layout.tsx               # Root layout component
-│   └── page.tsx                 # Home page with Hello World
+├── app/
+│   ├── globals.css           # Global styles + CSS variables for dark/light mode
+│   ├── layout.tsx            # Root layout with ThemeProvider
+│   └── page.tsx              # Home page with Hello World
+├── components/
+│   └── ThemeProvider.tsx     # System-based theme detection
+├── public/                   # Static assets
 ├── __tests__/
-│   └── home.test.tsx            # Jest tests for home page
-├── public/                      # Static assets
-├── src/                         # Source code (future)
-│   ├── components/              # React components
-│   └── lib/                     # Utility functions
-├── .gitignore                   # Git ignore rules
-├── .vercelignore                # Files to exclude from Vercel deployments
-├── jest.config.js               # Jest test configuration
-├── jest.setup.js                # Jest setup file
-├── next.config.js               # Next.js configuration
-├── package.json                 # Project dependencies
-├── postcss.config.js            # PostCSS configuration
-├── tailwind.config.ts           # Tailwind CSS configuration
-├── tsconfig.json                # TypeScript configuration
-├── vercel.json                  # Vercel project configuration
-└── README.md                    # This file
+│   └── home.test.tsx         # Jest tests
+├── .vercelignore             # Files to exclude from Vercel deployments
+├── next.config.js            # Next.js configuration
+├── tailwind.config.ts        # Tailwind with darkMode: 'class'
+├── postcss.config.js         # PostCSS for Tailwind
+├── tsconfig.json             # TypeScript configuration
+├── jest.config.js            # Jest test configuration
+├── jest.setup.js             # Jest setup file
+└── package.json              # Dependencies and scripts
 ```
 
 ---
 
----
-## **⚙️ Prerequisites**
+## Quick Start
 
-Before you begin, ensure you have the following installed:
+### Prerequisites
+- Node.js 20.9.0 or later (required for Next.js 16)
+- npm, yarn, or pnpm
 
-- **Node.js**: v20.9.0 or later (LTS recommended) - *Next.js 16 requires Node.js 20.9+*
-- **npm**: v9 or later (comes with Node.js)
-- **Git**: v2.30 or later
-
-### Verify Installation
+### Installation
 
 ```bash
-# Check Node.js version
-node --version
-
-# Check npm version
-npm --version
-
-# Check Git version
-git --version
-```
-
----
-
----
-## **🚀 Setup**
-
-### 1. Clone the Repository
-
-```bash
+# Clone the repository
 git clone https://github.com/MarcProe/Virlet.git
 cd Virlet
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
-```
 
-This will install all production and development dependencies including:
-- Next.js 16.2.7
-- React 19+
-- Tailwind CSS
-- TypeScript
-- Jest and React Testing Library
-
----
-
----
-## **🏃 Running the App**
-
-### Development Mode
-
-Start the development server with hot-reloading:
-
-```bash
+# Run development server
 npm run dev
+
+# Open http://localhost:3000
 ```
 
-The app will be available at: [http://localhost:3000](http://localhost:3000)
-
-Open this URL in your browser to see the Hello World page with Virlet branding.
-
-### Production Mode
-
-Build the app for production:
+### Build for Production
 
 ```bash
 npm run build
-```
-
-Then start the production server:
-
-```bash
 npm start
 ```
 
-The production app will be available at: [http://localhost:3000](http://localhost:3000)
+---
+
+## Theme System (Dark/Light Mode)
+
+The app uses **system preference detection** for dark/light mode:
+
+- `tailwind.config.ts`: `darkMode: 'class'` - generates `.dark` prefixed utility classes
+- `components/ThemeProvider.tsx`: Detects `prefers-color-scheme` and applies `dark` class to `<html>`
+- `app/globals.css`: Defines CSS variables for both modes:
+  - `:root` - Light mode colors
+  - `.dark` - Dark mode colors
+- `app/layout.tsx`: Wraps app with `<ThemeProvider>`
+
+### CSS Variables
+
+**Light Mode (`:root`):**
+```css
+--bg-base: #ffffff;
+--bg-raised: #f3f4f6;
+--text-primary: #111827;
+--text-secondary: #4b5563;
+--primary: #0d9488;
+```
+
+**Dark Mode (`.dark`):**
+```css
+--bg-base: #111827;
+--bg-raised: #1f2937;
+--text-primary: #f9fafb;
+--text-secondary: #9ca3af;
+--primary: #0d9488;
+```
 
 ---
 
----
-## **🧪 Testing**
+## Neumorphism Design System
 
-### Run All Tests
+Custom neumorphism components using CSS variables:
+
+- `.neumorphism-page` - Full-page container
+- `.neumorphism-card` - Card with neumorphism shadow effect
+- `.neumorphism-btn` - Button with neumorphism styling
+- `.neumorphism-h1`, `.neumorphism-h2` - Typography
+- `.neumorphism-body`, `.neumorphism-muted` - Text styles
+
+Shadows adapt to light/dark mode via CSS variables.
+
+---
+
+## Current Page Content
+
+`app/page.tsx` displays:
+- Virlet branding header
+- "Hello, World!" message
+- App description
+- Footer with copyright
+
+All styled with neumorphism design system and responsive to system theme.
+
+---
+
+## Deployment
+
+### Vercel (Recommended)
 
 ```bash
-npm test
+# Install Vercel CLI
+npm install -g vercel
+
+# Deploy
+vercel
 ```
 
-This runs Jest with the following:
-- React Testing Library for component testing
-- Jest DOM for DOM assertions
-- TypeScript support via ts-jest
+Configuration files:
+- `vercel.json` - Project settings
+- `.vercelignore` - Excludes test files, git config, etc.
 
-### Test Files Location
-
-Tests are located in the `__tests__/` directory:
-- `__tests__/home.test.tsx` - Tests for the home page
-
-### Adding New Tests
-
-Create new test files with the `.test.tsx` or `.spec.tsx` extension in the `__tests__/` directory or alongside the component being tested.
-
-Example test structure:
-
-```typescript
-import { render, screen, fireEvent } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import MyComponent from '../app/my-component'
-
-describe('MyComponent', () => {
-  it('renders correctly', () => {
-    render(<MyComponent />)
-    expect(screen.getByText('Hello')).toBeInTheDocument()
-  })
-})
-```
-
----
-
----
-## **💻 Development Workflow**
-
-### Creating a Feature Branch
+### On-Premises
 
 ```bash
-# Create and checkout a new feature branch
-git checkout -b feature/your-feature-name
+# Build
+npm run build
 
-# Make your changes, then commit
-git add .
-git commit -m "feat: describe your changes"
+# Start production server
+npm start
 
-# Push to remote
-git push -u origin feature/your-feature-name
-```
-
-### Creating a Pull Request
-
-1. Push your feature branch to GitHub
-2. Visit the repository on GitHub
-3. Click "Pull requests" > "New pull request"
-4. Select your branch and create the PR
-
-Or use the GitHub CLI:
-
-```bash
-gh pr create --title "Your PR title" --body "Description of changes"
-```
-
-### Code Quality
-
-Run ESLint to check for issues (Next.js 16 removed `next lint` command):
-
-```bash
-# Install ESLint if not already installed
-npm install --save-dev eslint @next/eslint-plugin-next
-
-# Run ESLint
-npx eslint .
-# or
-npm run lint
-```
-
-> **Note**: Next.js 16 removed the built-in `next lint` command. Use ESLint directly instead.
-
----
-
----
-## **🎨 UI/UX Guidelines**
-
-### Design Principles
-
-- **Dark mode only**: All components must use dark mode colors
-- **Responsive**: Design for mobile, tablet, and desktop
-- **Accessible**: Follow WCAG 2.1 AA standards
-- **Consistent**: Use the defined color palette and spacing
-
-### Color Palette
-
-The app uses a custom primary color palette defined in `tailwind.config.ts`:
-
-```typescript
-// Primary colors (blue theme)
-primary-50: '#f0f9ff'
-primary-100: '#e0f2fe'
-primary-200: '#bae6fd'
-primary-300: '#7dd3fc'
-primary-400: '#38bdf8'
-primary-500: '#0ea5e9'
-primary-600: '#0284c7'
-primary-700: '#0369a1'
-primary-800: '#075985'
-primary-900: '#0c4a6e'
-```
-
-### Typography
-
-- **Font**: Inter (loaded via Next.js font optimization)
-- **Headings**: Bold, use primary colors for emphasis
-- **Body text**: Regular weight, use gray-300/400 for secondary text
-
-### Spacing
-
-Use Tailwind's spacing scale (rem-based):
-- `p-4` = 1rem (16px)
-- `p-8` = 2rem (32px)
-- `mb-4` = 1rem bottom margin
-- etc.
-
----
-
----
-## **🏠 On-Premises Deployment**
-
-### Basic Deployment
-
-1. Build the app:
-   ```bash
-   npm run build
-   ```
-
-2. Start the server:
-   ```bash
-   npm start
-   ```
-
-3. The app will run on port 3000 by default
-
-### Using PM2 (Recommended for Production)
-
-Install PM2 globally:
-
-```bash
+# With PM2 (recommended)
 npm install -g pm2
-```
-
-Start the app with PM2:
-
-```bash
 pm2 start npm --name virlet -- start
 ```
 
-This will:
-- Keep the app running in the background
-- Auto-restart on crashes
-- Auto-restart on system reboot (with `pm2 startup`)
+---
 
-### Environment Variables
-
-Create a `.env.local` file for environment-specific configuration:
+## Testing
 
 ```bash
-# Next.js port
-PORT=3000
-
-# Future: Database path
-DATABASE_PATH=./data/db.json
-
-# Future: Instagram API credentials
-INSTAGRAM_CLIENT_ID=your_client_id
-INSTAGRAM_CLIENT_SECRET=your_client_secret
+# Run tests
+npm test
 ```
 
-**Never commit `.env.local` to Git!** It's already in `.gitignore`.
+Uses Jest with React Testing Library.
 
 ---
 
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Jest tests |
+
 ---
-## **☁️ Vercel Deployment (Recommended)**
 
-Vercel is the recommended platform for deploying Next.js applications. It offers:
-- Zero-configuration deployment for Next.js
-- Automatic CI/CD
-- Edge network for fast global performance
-- Built-in support for Serverless Functions
-- Free tier for personal projects
+## Configuration Files
 
-### Prerequisites
+### next.config.js
+```javascript
+module.exports = {
+  reactStrictMode: true,
+}
+```
 
-1. **Vercel Account**: [Sign up for free](https://vercel.com/signup)
-2. **Vercel CLI**: Install the CLI tool
+### tailwind.config.ts
+```typescript
+{
+  darkMode: 'class',
+  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', ...],
+  theme: {
+    extend: {
+      colors: { primary, surface, text },
+      boxShadow: { neumorphism, neumorphism-hover, ... },
+      fontFamily: { sans: ['Inter', ...], mono: ['JetBrains Mono', ...] },
+    }
+  }
+}
+```
+
+### postcss.config.js
+```javascript
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  }
+}
+```
+
+---
+
+## AI Agent Instructions
+
+### To Rebuild This Project From Scratch
+
+1. **Create Next.js 16 app:**
    ```bash
-   npm install -g vercel
+   npx create-next-app@latest virlet --typescript --tailwind --eslint --app --src-dir=false --import-alias="@/*"
+   cd virlet
    ```
-3. **GitHub Integration**: Connect your GitHub account to Vercel
 
-### Method 1: Deploy via Vercel Dashboard (Easiest)
-
-#### Step 1: Import the Repository
-
-1. Go to [https://vercel.com/dashboard](https://vercel.com/dashboard)
-2. Click "Add New" → "Project"
-3. Click "Import" next to your GitHub repository
-4. Select the repository: `MarcProe/Virlet`
-
-#### Step 2: Configure Project
-
-- **Project Name**: `virlet` (or your preferred name)
-- **Framework Preset**: **Next.js** (auto-detected)
-- **Build Command**: `npm run build` (auto-detected)
-- **Output Directory**: `.next` (auto-detected)
-- **Install Command**: `npm install` (auto-detected)
-- **Root Directory**: (leave empty for root)
-
-#### Step 3: Environment Variables
-
-Add any environment variables your app needs:
-- Click "Environment Variables" in the project settings
-- Add variables like `INSTAGRAM_CLIENT_ID`, `INSTAGRAM_CLIENT_SECRET`, etc.
-
-#### Step 4: Deploy
-
-Click "Deploy". Vercel will:
-1. Clone your repository
-2. Install dependencies
-3. Build the app
-4. Deploy to a preview URL
-5. Assign a production URL
-
-#### Step 5: Access Your App
-
-- **Preview Deployment**: Available immediately after push
-- **Production URL**: Assigned after first successful deployment
-- Example: `https://virlet.vercel.app` or `https://virlet-[hash].vercel.app`
-
-### Method 2: Deploy via Vercel CLI
-
-#### Step 1: Install Vercel CLI
-
-```bash
-npm install -g vercel
-```
-
-#### Step 2: Login to Vercel
-
-```bash
-vercel login
-```
-
-This will open your browser for authentication.
-
-#### Step 3: Link Project to Vercel
-
-```bash
-# Navigate to your project directory
-cd Virlet
-
-# Link to an existing Vercel project
-vercel link
-
-# Or create a new project
-vercel
-```
-
-Follow the prompts to:
-- Select your Vercel account
-- Link to your GitHub repository
-- Configure project settings
-
-#### Step 4: Deploy
-
-```bash
-# Development deployment (preview)
-vercel
-
-# Production deployment
-vercel --prod
-```
-
-#### Step 5: Push to GitHub for Automatic Deployments
-
-```bash
-# Add and commit your changes
-git add .
-git commit -m "feat: add new feature"
-git push origin main
-```
-
-Vercel will automatically deploy when you push to the linked branch.
-
-### Preview Deployments (For Feature Branches)
-
-**Preview deployments are automatically created for every non-production branch!**
-
-When you push to a feature branch (like `vibe/boilerplate-hello-world-a86e2e`), Vercel creates a **preview deployment** with a unique URL:
-
-```
-https://[branch-name]-[hash].vercel.app
-```
-
-#### How Preview Deployments Work
-
-1. **Automatic**: Created for every push to non-production branches
-2. **Isolated**: Each PR gets its own deployment
-3. **Temporary**: Automatically cleaned up after PR is merged/closed
-4. **Identical to Production**: Same build process, just different URL
-
-#### Finding Your Preview URL
-
-**Method 1: Vercel Dashboard**
-1. Go to [https://vercel.com/dashboard](https://vercel.com/dashboard)
-2. Select your project
-3. Go to "Deployments" tab
-4. Filter by "Preview" environment
-5. Click "Visit" on your deployment
-
-**Method 2: GitHub PR Comment**
-- Vercel bot automatically posts a comment on your PR with the preview URL
-- Example: `https://virlet-git-feature-branch-abc123.vercel.app`
-
-**Method 3: Vercel CLI**
-```bash
-# List all deployments
-vercel deployments
-
-# Filter for preview deployments
-vercel deployments --filter=preview
-
-# Open preview in browser
-vercel open
-```
-
-#### Preview vs Production Differences
-
-| Feature | Preview | Production |
-|---------|---------|------------|
-| Auto-created | ✅ Yes | ❌ No (manual) |
-| URL | Dynamic | Fixed |
-| Environment | Preview | Production |
-| Cleanup | Auto | Manual |
-| Custom Domain | ❌ No | ✅ Yes |
-| Analytics | ✅ Yes | ✅ Yes |
-
-#### Configure Preview Environment
-
-Set environment variables specific to preview deployments:
-
-1. Go to Vercel → Project → Settings → Environment Variables
-2. Add variables for **Preview** environment:
+2. **Install additional dependencies:**
    ```bash
-   NEXT_PUBLIC_ENV=preview
-   NEXT_PUBLIC_API_URL=https://your-preview-url.vercel.app/api
+   npm install @vercel/speed-insights
+   npm install -D @types/node @types/react @types/react-dom
    ```
 
-3. Use in your code:
-   ```typescript
-   const isPreview = process.env.NEXT_PUBLIC_ENV === 'preview';
-   ```
-
-#### Testing Preview Deployments
-
-✅ **What to test on preview:**
-- Hello World page renders correctly
-- Dark mode styling works
-- Interactive button functions
-- API routes respond
-- No console errors
-- Speed Insights metrics (if configured)
-
-❌ **What won't work on preview:**
-- Custom domains
-- Production-only environment variables
-- Some third-party integrations
-
-### Performance Monitoring with Vercel Speed Insights
-
-**Vercel Speed Insights** is now integrated into your project for performance monitoring!
-
-#### What is Speed Insights?
-
-Vercel Speed Insights provides:
-- **Real User Monitoring (RUM)**: Track actual user performance
-- **Core Web Vitals**: Measure LCP, FID, CLS
-- **Performance Metrics**: Load times, TTI, FCP
-- **Dashboard**: Visualize performance data
-- **Alerts**: Get notified of performance regressions
-
-#### Setup Complete ✅
-
-The project already includes:
-
-1. **Package installed**: `@vercel/speed-insights` in `package.json`
-2. **Component added**: `<SpeedInsights />` in `app/layout.tsx`
-
-#### How It Works
-
-1. **Automatic Collection**: Speed Insights automatically collects performance data from real users
-2. **No Configuration**: Works out of the box with Next.js
-3. **Vercel Integration**: Data appears in your Vercel project dashboard
-
-#### Viewing Performance Data
-
-1. Go to: [https://vercel.com/dashboard](https://vercel.com/dashboard)
-2. Select your **Virlet** project
-3. Go to **Speed Insights** tab
-4. View:
-   - Performance metrics over time
-   - Core Web Vitals scores
-   - Page load distributions
-   - User experience breakdowns
-
-#### Performance Metrics Tracked
-
-| Metric | Description | Target |
-|--------|-------------|--------|
-| **LCP** | Largest Contentful Paint | < 2.5s |
-| **FID** | First Input Delay | < 100ms |
-| **CLS** | Cumulative Layout Shift | < 0.1 |
-| **FCP** | First Contentful Paint | < 1.8s |
-| **TTI** | Time to Interactive | < 3.8s |
-| **TBT** | Total Blocking Time | < 200ms |
-
-#### Customizing Speed Insights
-
-The `<SpeedInsights />` component accepts props:
-
-```typescript
-<SpeedInsights
-  // Optional: Custom endpoint (default: Vercel's endpoint)
-  endpoint="https://vitals.vercel-insights.com/v1/speed-insights"
-  // Optional: Debug mode
-  debug={false}
-  // Optional: Sample rate (0-1, default: 1)
-  sampleRate={1}
-/>
-```
-
-#### Disabling in Development
-
-To disable Speed Insights in development:
-
-```typescript
-{process.env.NODE_ENV === 'production' && <SpeedInsights />}
-```
-
-#### Best Practices
-
-✅ **Do:**
-- Keep Speed Insights in production
-- Monitor Core Web Vitals regularly
-- Set performance budgets
-- Optimize based on real user data
-
-❌ **Don't:**
-- Remove Speed Insights (it's lightweight)
-- Ignore performance regressions
-- Test only on fast connections
-
-#### Troubleshooting
-
-**Speed Insights not showing data?**
-1. Wait 5-10 minutes after deployment
-2. Ensure the component is in your root layout
-3. Check for ad blockers (they may block the script)
-4. Verify deployment succeeded
-5. Check Vercel dashboard for errors
-
-**High CLS or LCP?**
-- Optimize images with `next/image`
-- Use dynamic imports for heavy components
-- Implement loading states
-- Check font loading (use `next/font`)
-
-### Automatic Deployments (Git Integration)
-
-Once connected to GitHub, Vercel provides:
-
-- **Preview Deployments**: Created for every pull request
-- **Production Deployments**: Created when merging to `main`
-- **Rollbacks**: Instant rollback to previous deployments
-- **Custom Domains**: Add your own domain (e.g., `virlet.com`)
-
-#### Setting Up Git Integration
-
-1. Go to your project in [Vercel Dashboard](https://vercel.com/dashboard)
-2. Navigate to "Git" tab
-3. Connect your GitHub repository
-4. Configure deployment settings:
-   - **Production Branch**: `main`
-   - **Preview Branch**: All branches
-   - **Build & Development Settings**: Auto-detected
-
-### Configuration Files
-
-The project includes these Vercel-specific files:
-
-- **`vercel.json`**: Vercel project configuration
-  - Specifies build settings
-  - Configures routes
-  - Sets install command
-
-- **`.vercelignore`**: Files to exclude from deployment
-  - Excludes `node_modules`, `.next`, test files
-  - Reduces deployment size and speeds up builds
-
-### Environment Variables on Vercel
-
-#### Adding Environment Variables
-
-1. **Via Dashboard**:
-   - Go to Project → Settings → Environment Variables
-   - Click "Add New"
-   - Enter Name and Value
-   - Select environments (Production, Preview, Development)
-
-2. **Via CLI**:
+3. **Update Next.js to 16.2.7:**
    ```bash
-   vercel env add
+   npm install next@16.2.7 react@19 react-dom@19
    ```
 
-#### Example Environment Variables
-
-```bash
-# Next.js Configuration
-NEXT_PUBLIC_APP_URL=https://virlet.vercel.app
-NEXT_PUBLIC_API_URL=https://virlet.vercel.app/api
-
-# Instagram API (for future integration)
-INSTAGRAM_CLIENT_ID=your_client_id
-INSTAGRAM_CLIENT_SECRET=your_client_secret
-INSTAGRAM_REDIRECT_URI=https://virlet.vercel.app/api/auth/callback/instagram
-
-# Database (for future LowDB or other)
-DATABASE_URL=your_database_url
-```
-
-### Custom Domain Setup
-
-To use your own domain (e.g., `virlet.com`):
-
-1. Go to Project → Settings → Domains
-2. Click "Add Domain"
-3. Enter your domain name
-4. Follow DNS configuration instructions
-5. Wait for DNS propagation (can take up to 48 hours)
-
-### Monitoring and Analytics
-
-Vercel provides built-in monitoring:
-
-- **Deployment Logs**: View build and runtime logs
-- **Performance Metrics**: Core Web Vitals, load times
-- **Error Tracking**: Automatic error detection
-- **Analytics**: Page views, unique visitors
-
-Access these in your project dashboard under "Analytics" and "Logs" tabs.
-
-### Troubleshooting Vercel Deployments
-
-#### Common Issues
-
-**1. Build Fails**
-- Check `npm install` works locally
-- Verify Node.js version (Vercel uses latest LTS)
-- Check for missing environment variables
-- Review build logs in Vercel dashboard
-
-**2. Deployment Stuck**
-- Check Vercel status: [https://status.vercel.com](https://status.vercel.com)
-- Try redeploying manually
-- Check for infinite loops in your code
-
-**3. 404 Errors**
-- Verify your `next.config.js` export settings
-- Check that `output: 'standalone'` is not set (unless intentional)
-- Ensure all pages are in the correct directory
-
-**4. Environment Variables Not Loading**
-- Verify variables are added in Vercel dashboard
-- Check variable names match your code
-- Ensure variables are marked for the correct environment
-
-**5. Slow Deployments**
-- Reduce `node_modules` size (remove unused dependencies)
-- Use `.vercelignore` to exclude unnecessary files
-- Enable caching in Vercel project settings
-
-### Vercel Project Settings
-
-Recommended settings for this project:
-
-| Setting | Value | Notes |
-|---------|-------|-------|
-| **Node.js Version** | Latest (20.x) | Next.js 16 requires Node.js 20.9+ |
-| **Memory** | 3008 MB | Sufficient for Next.js builds |
-| **Max Duration** | 60s | For Serverless Functions |
-| **Regions** | Auto | Deploy to multiple regions |
-| **Concurrency** | Default | Adjust based on traffic |
-
-### Useful Vercel Commands
-
-```bash
-# List all projects
-vercel projects
-
-# List deployments
-vercel deployments
-
-# View logs for a deployment
-vercel logs
-
-# Pull environment variables locally
-vercel env pull
-
-# Push environment variables to Vercel
-vercel env push
-
-# Open project in browser
-vercel open
-
-# Remove a deployment
-vercel remove
-```
-
-### Testing on Vercel
-
-#### Preview Deployments
-
-Every pull request creates a preview deployment:
-- URL format: `https://virlet-[branch-name]-[hash].vercel.app`
-- Automatically updated as you push new commits
-- Perfect for testing PRs before merging
-
-#### Production Testing
-
-After merging to `main`:
-1. Deployment automatically starts
-2. Wait for build to complete (usually 1-3 minutes)
-3. Test at your production URL
-4. Use Vercel's rollback feature if issues arise
-
-### Continuous Deployment Workflow
-
-```bash
-# 1. Create a feature branch
-git checkout -b feature/new-feature
-
-# 2. Make changes and commit
-git add .
-git commit -m "feat: add new feature"
-git push origin feature/new-feature
-
-# 3. Vercel automatically creates a preview deployment
-#    URL: https://virlet-feature-new-feature-[hash].vercel.app
-
-# 4. Test the preview deployment
-#    - Open the preview URL
-#    - Test all functionality
-#    - Check console for errors
-
-# 5. Create a PR on GitHub
-#    - Vercel adds a comment with the preview URL
-#    - Reviewers can test the preview
-
-# 6. After approval, merge to main
-#    - Vercel automatically deploys to production
-#    - Production URL: https://virlet.vercel.app
-```
-
----
-
----
-## **🎨 Neumorphism Design System (Dark Mode Only)**
-
-Based on [TypeUI Neumorphism](https://www.typeui.sh/design-skills/neumorphism), this project implements a **dark mode only** neumorphism design system with soft, extruded UI elements and tactile shadows.
-
-### Design Philosophy
-
-**Neumorphism** (New Skeuomorphism) creates UI elements that appear to be extruded from or embedded into the surface, using subtle shadows and highlights. For dark mode, we use:
-- **Outer shadows**: Dark shadows on bottom-right (extruded effect)
-- **Inner shadows**: Light shadows on top-left (embedded effect)
-- **Monochromatic surfaces**: Dark gray color palette
-- **Tactile feel**: Elements appear touchable and physical
-
-### Color Palette (Dark Mode Only)
-
-| Token | Hex | Usage |
-|-------|-----|-------|
-| **Surface Base** | `#111827` | Page background |
-| **Surface Raised** | `#1f2937` | Cards, raised elements |
-| **Surface Pressed** | `#374151` | Pressed/active states |
-| **Surface Border** | `#374151` | Borders, dividers |
-| **Text Primary** | `#f9fafb` | Main text |
-| **Text Secondary** | `#9ca3af` | Secondary text |
-| **Text Muted** | `#6b7280` | Muted text, captions |
-| **Primary** | `#0d9488` | Primary actions, accents |
-| **Primary Light** | `#14b8a6` | Hover states |
-| **Primary Dark** | `#0f766e` | Active states |
-
-### Typography
-
-- **Font Family**: Space Mono (primary), JetBrains Mono (monospace)
-- **Weights**: 100-900 (full range)
-- **Scale**: Desktop-first expressive scale
-
-### Box Shadows (Dark Mode Neumorphism)
-
-```css
-/* Extruded effect (raised elements) */
-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), 
-            -4px -4px 8px rgba(255, 255, 255, 0.05);
-
-/* Inset effect (pressed elements) */
-box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3), 
-            inset -2px -2px 4px rgba(255, 255, 255, 0.05);
-
-/* Hover effect */
-box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), 
-            -6px -6px 12px rgba(255, 255, 255, 0.05);
-```
-
-### Component Classes
-
-The design system includes these Tailwind classes:
-
-#### Layout
-- `.bg-neumorphism-base` - Background color
-- `.bg-neumorphism-raised` - Raised surface color
-- `.bg-neumorphism-pressed` - Pressed surface color
-- `.border-neumorphism` - Border color
-
-#### Typography
-- `.neumorphism-h1` - Main heading (5xl, bold, primary-light)
-- `.neumorphism-h2` - Section heading (2xl, semibold)
-- `.neumorphism-body` - Body text (base, secondary)
-- `.neumorphism-muted` - Muted text (sm, muted)
-- `.text-neumorphism-primary` - Primary text color
-- `.text-neumorphism-secondary` - Secondary text color
-- `.text-neumorphism-muted` - Muted text color
-- `.text-primary-neumorphism` - Primary accent color
-- `.bg-primary-neumorphism` - Primary background color
-
-#### Components
-- `.neumorphism-card` - Card with neumorphic shadow
-- `.neumorphism-btn` - Base button with neumorphic effect
-- `.neumorphism-btn-primary` - Primary colored button
-- `.neumorphism-input` - Input field with inset shadow
-
-#### Animations
-- `.neumorphism-pulse` - Gentle pulsing shadow effect
-
-### Usage Examples
-
-#### Card Component
-```typescript
-<div className="neumorphism-card">
-  <h2 className="neumorphism-h2">Card Title</h2>
-  <p className="neumorphism-body">Card content goes here.</p>
-</div>
-```
-
-#### Button Component
-```typescript
-<button 
-  className="neumorphism-btn neumorphism-btn-primary"
-  onClick={handleClick}
->
-  Click Me
-</button>
-```
-
-#### Input Component
-```typescript
-<input 
-  className="neumorphism-input"
-  placeholder="Enter text..."
-/>
-```
-
-### Customizing Components
-
-Create custom neumorphic components by combining the base classes:
-
-```typescript
-// Custom neumorphic badge
-<div className="neumorphism-btn bg-primary-neumorphism text-white px-3 py-1 text-sm">
-  New
-</div>
-
-// Custom neumorphic panel
-<div className="neumorphism-card border-neumorphism p-6">
-  <h3 className="neumorphism-h2 text-primary-neumorphism">Panel Title</h3>
-  <p className="neumorphism-body">Panel content</p>
-</div>
-```
-
-### Accessibility
-
-✅ **WCAG 2.2 AA Compliant**
-- All text has sufficient contrast (minimum 4.5:1)
-- Interactive elements have visible focus states
-- Keyboard navigation supported
-- Screen reader friendly
-
-**Focus States**:
-- Buttons show focus ring: `0 0 0 3px rgba(13, 148, 136, 0.3)`
-- Inputs show focus border: `1px solid var(--color-primary)`
-
-**Keyboard Navigation**:
-- All interactive elements are keyboard accessible
-- Tab order follows visual hierarchy
-- Enter/Space activates buttons
-
-### Design Tokens in tailwind.config.ts
-
-```typescript
-// Colors
-primary: {
-  600: '#0d9488',  // Main primary
-  500: '#14b8a6',  // Light primary
-  700: '#0f766e',  // Dark primary
-},
-surface: {
-  base: '#111827',    // Background
-  raised: '#1f2937',  // Cards
-  pressed: '#374151', // Active states
-  border: '#374151',  // Borders
-},
-
-// Shadows
-boxShadow: {
-  neumorphism: '4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05)',
-  'neumorphism-inset': 'inset 2px 2px 4px rgba(0, 0, 0, 0.3), inset -2px -2px 4px rgba(255, 255, 255, 0.05)',
-  'neumorphism-hover': '6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.05)',
-  'neumorphism-active': 'inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.05)',
-},
-
-// Border radius
-borderRadius: {
-  neumorphism: '12px',
-  'neumorphism-sm': '8px',
-},
-
-// Transitions
-transitionTimingFunction: {
-  neumorphism: 'cubic-bezier(0.4, 0, 0.2, 1)',
-},
-transitionDuration: {
-  neumorphism: '200ms',
-},
-```
-
-### Best Practices
-
-✅ **DO:**
-- Use neumorphism classes for all UI elements
-- Maintain consistent shadow depth
-- Use the color tokens for consistency
-- Test contrast ratios (minimum 4.5:1)
-- Ensure all interactive elements have hover/active states
-
-❌ **DON'T:**
-- Mix neumorphism with flat design
-- Use light mode (dark mode only!)
-- Create custom shadows without testing
-- Use colors outside the palette
-- Ignore accessibility requirements
-
-### Migration from Flat Design
-
-If migrating existing components to neumorphism:
-
-1. **Replace flat cards** with `.neumorphism-card`
-2. **Replace flat buttons** with `.neumorphism-btn`
-3. **Replace flat inputs** with `.neumorphism-input`
-4. **Update typography** to use neumorphism classes
-5. **Remove flat shadows** and use neumorphism shadows
-
-### QA Checklist
-
-Before merging neumorphism changes:
-
-- [ ] All text has sufficient contrast (4.5:1 minimum)
-- [ ] All interactive elements have hover states
-- [ ] All interactive elements have focus states
-- [ ] All interactive elements are keyboard accessible
-- [ ] Shadows are consistent across all components
-- [ ] Color palette is used consistently
-- [ ] Typography hierarchy is maintained
-- [ ] No light mode styles exist
-- [ ] All components work in dark mode
-- [ ] Performance is not impacted by complex shadows
-
----
-
----
-## **💾 Data Storage**
-
-The boilerplate is ready for LowDB integration. LowDB is a lightweight JSON file database that's perfect for on-premises deployment.
-
-### Future Implementation
-
-To add LowDB:
-
-1. Install the package:
-   ```bash
-   npm install lowdb @types/lowdb
-   ```
-
-2. Create a database utility:
-   ```typescript
-   // src/lib/db.ts
-   import { Low, JSONFile } from 'lowdb'
-   
-   type Data = {
-     users: User[]
-     posts: Post[]
-     analytics: Analytics[]
-   }
-   
-   const adapter = new JSONFile<Data>('db.json')
-   const db = new Low(adapter)
-   
-   export default db
-   ```
-
-3. Use in API routes:
-   ```typescript
-   // app/api/data/route.ts
-   import db from '@/lib/db'
-   
-   export async function GET() {
-     await db.read()
-     const data = db.data
-     return Response.json(data)
+4. **Create ThemeProvider component:**
+   ```tsx
+   // components/ThemeProvider.tsx
+   'use client'
+   import { useEffect } from 'react'
+   export function ThemeProvider({ children }: { children: React.ReactNode }) {
+     useEffect(() => {
+       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+       if (systemPrefersDark) {
+         document.documentElement.classList.add('dark')
+       }
+       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+       const handler = (e: MediaQueryListEvent) => {
+         e.matches ? document.documentElement.classList.add('dark') 
+                   : document.documentElement.classList.remove('dark')
+       }
+       mediaQuery.addEventListener('change', handler)
+       return () => mediaQuery.removeEventListener('change', handler)
+     }, [])
+     return <>{children}</>
    }
    ```
 
----
+5. **Update layout.tsx:**
+   ```tsx
+   import { ThemeProvider } from '@/components/ThemeProvider'
+   import './globals.css'
+   
+   export default function RootLayout({ children }) {
+     return (
+       <html lang="en" suppressHydrationWarning>
+         <body>
+           <ThemeProvider>{children}</ThemeProvider>
+         </body>
+       </html>
+     )
+   }
+   ```
+
+6. **Update globals.css:**
+   ```css
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+
+   :root {
+     --bg-base: #ffffff;
+     --bg-raised: #f3f4f6;
+     --text-primary: #111827;
+     --primary: #0d9488;
+   }
+   .dark {
+     --bg-base: #111827;
+     --bg-raised: #1f2937;
+     --text-primary: #f9fafb;
+     --primary: #0d9488;
+   }
+   html { color-scheme: light dark; }
+   body { background: var(--bg-base); color: var(--text-primary); }
+   ```
+
+7. **Update tailwind.config.ts:**
+   ```typescript
+   import type { Config } from 'tailwindcss'
+   export default {
+     darkMode: 'class',
+     content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
+     theme: { extend: { ... } },
+     plugins: [],
+   } satisfies Config
+   ```
+
+8. **Create page.tsx:**
+   ```tsx
+   export default function Home() {
+     return (
+       <main className="min-h-screen p-8">
+         <h1 className="text-4xl font-bold">Virlet</h1>
+         <p>Instagram Creator Analytics & Management</p>
+       </main>
+     )
+   }
+   ```
+
+9. **Add Vercel config:**
+   ```json
+   // vercel.json
+   { "version": 2, "builds": [{ "src": "package.json", "use": "@vercel/next" }] }
+   ```
+
+10. **Add .vercelignore:**
+    ```
+    __tests__/
+    .git/
+    node_modules/
+    ```
+
+### Development Workflow
+
+- Always use feature branches: `git checkout -b vibe/feature-name`
+- Create draft PRs for review
+- Run `npm run build` before committing
+- Test on Vercel preview deployments
 
 ---
-## **🔒 Security**
 
-### Best Practices
-
-- **Environment variables**: Never hardcode secrets
-- **HTTPS**: Always use HTTPS in production
-- **CORS**: Configure properly for API routes
-- **Input validation**: Validate all user input
-- **Rate limiting**: Implement for public APIs
-
-### Next.js Security Features
-
-- Automatic security headers
-- Built-in CSRF protection
-- Secure cookie handling
-- Type-safe API routes
-
----
-
----
-## **🗺️ Roadmap**
-
-### Phase 1: Foundation (Current)
-- [x] Next.js 16.2.7 boilerplate with App Router
-- [x] Tailwind CSS with dark mode
-- [x] TypeScript configuration
-- [x] Jest testing setup
-- [x] Hello World page
-
-### Phase 2: Core Features
-- [ ] Instagram OAuth integration (NextAuth.js)
-- [ ] User authentication and sessions
-- [ ] Dashboard layout and navigation
-- [ ] LowDB database integration
-- [ ] Basic analytics display
-
-### Phase 3: Analytics
-- [ ] Post performance tracking
-- [ ] Audience growth charts (Chart.js)
-- [ ] Engagement metrics
-- [ ] Exportable reports
-
-### Phase 4: Advanced Features
-- [ ] Content scheduling
-- [ ] Multi-account support
-- [ ] Notifications
-- [ ] Mobile PWA support
-
----
-
----
-## **🤝 Contributing**
-
-### Getting Started
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Run tests and ESLint
-5. Submit a pull request
-
-### Pull Request Guidelines
-
-- Use descriptive commit messages
-- Follow the existing code style
-- Add tests for new features
-- Update documentation as needed
-- Keep PRs focused and reviewable
-
-### Commit Message Format
-
-```
-type(scope): description
-
-body
-
-footer
-```
-
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-
-Example:
-```
-feat(auth): add Instagram OAuth login
-
-- Implement NextAuth.js with Instagram provider
-- Add login button component
-- Update user session management
-
-Closes #123
-```
+4. Run tests: `npm test`
+5. Submit a draft PR
 
 ---
 
----
-## **🐛 Troubleshooting**
+## License
 
-### Common Issues
-
-#### "Module not found" errors
-
-Run:
-```bash
-npm install
-```
-
-If the issue persists, try:
-```bash
-rm -rf node_modules package-lock.json
-npm cache clean --force
-npm install
-```
-
-#### Port already in use
-
-Change the port by creating a `.env.local` file:
-```
-PORT=3001
-```
-
-Or kill the process using the port:
-```bash
-# On Linux/Mac
-lsof -i :3000
-kill -9 <PID>
-
-# On Windows
-netstat -ano | findstr :3000
-taskkill /PID <PID> /F
-```
-
-#### TypeScript errors
-
-Ensure all dependencies are installed:
-```bash
-npm install
-```
-
-If using VS Code, restart the TypeScript server (Ctrl+Shift+P > "Restart TS server").
-
-#### Tailwind classes not working
-
-Ensure you've imported the global CSS in your layout:
-```typescript
-import './globals.css'
-```
-
-And that your Tailwind config includes the correct content paths.
-
----
-
----
-## **📝 Changelog**
-
-### v0.1.0 (2024)
-- Initial boilerplate setup
-- Next.js 16.2.7 with App Router
-- React 19 support
-- Tailwind CSS configuration
-- TypeScript support
-- Jest testing setup
-- Hello World landing page
-- Dark mode enabled
-
----
-
----
-## **📄 License**
-
-This project is proprietary. All rights reserved.
-
----
-
----
-## **🙏 Acknowledgments**
-
-- [Next.js](https://nextjs.org/) - The React Framework
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [React](https://react.dev/) - A JavaScript library for building user interfaces
-- [Jest](https://jestjs.io/) - Delightful JavaScript Testing
-
----
-
-*Built with ❤️ for Instagram creators who hate light mode.*
+MIT
