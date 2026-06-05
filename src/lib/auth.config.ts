@@ -2,6 +2,21 @@ import type { NextAuthOptions } from "next-auth";
 import InstagramProvider from "next-auth/providers/instagram";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+// Define a type for the credentials
+interface DebugCredentials {
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string;
+    bio?: string;
+    followers?: number;
+    following?: number;
+    posts?: number;
+    accessToken?: string;
+  };
+}
+
 export const authConfig = {
   providers: [
     InstagramProvider({
@@ -18,10 +33,10 @@ export const authConfig = {
     CredentialsProvider({
       name: "Debug",
       credentials: {},
-      async authorize(credentials) {
+      async authorize(credentials: DebugCredentials) {
         // If the user object is passed, return it directly
         if (credentials?.user) {
-          return credentials.user as any;
+          return credentials.user;
         }
         return null;
       },
