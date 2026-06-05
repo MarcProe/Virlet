@@ -44,13 +44,7 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        const { user } = await response.json();
-        // Use NextAuth.js's signIn to set the session
-        await signIn("credentials", {
-          user,
-          redirect: false,
-        });
-        router.push("/dashboard");
+        window.location.href = "/dashboard";
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to log in with debug token.");
