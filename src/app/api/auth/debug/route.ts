@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { encode } from "next-auth/jwt";
 
 export async function GET() {
   // Check if debug token and account ID are configured
@@ -37,12 +36,12 @@ export async function POST() {
       );
     }
 
-    // Create a user object with the provided account ID and token
+    // Create a user object
     const user = {
       id: accountId,
       name: "Instagram User",
       email: `${accountId}@instagram.com`,
-      picture: `https://www.instagram.com/p/${accountId}/`,
+      image: `https://www.instagram.com/p/${accountId}/`,
       bio: "Instagram user",
       followers: 0,
       following: 0,
@@ -50,23 +49,8 @@ export async function POST() {
       accessToken: token,
     };
 
-    // Create a session token with the user object and secret
-    const sessionToken = await encode({
-      token: user,
-      secret,
-    });
-
-    // Set the session cookie
-    const response = NextResponse.json({ success: true });
-    response.cookies.set("next-auth.session-token", sessionToken, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
-
-    return response;
+    // Return the user data for NextAuth.js to handle
+    return NextResponse.json({ user });
   } catch (error) {
     console.error("Debug login error:", error);
     return NextResponse.json(
