@@ -1,6 +1,5 @@
 import type { NextAuthOptions } from "next-auth";
 import InstagramProvider from "next-auth/providers/instagram";
-import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authConfig = {
   providers: [
@@ -12,18 +11,6 @@ export const authConfig = {
         params: {
           scope: "user_profile user_media",
         },
-      },
-    }),
-    // Add CredentialsProvider for debug login
-    CredentialsProvider({
-      name: "Debug",
-      credentials: {},
-      async authorize(credentials: Record<string, any>) {
-        // If the user object is passed, return it directly
-        if (credentials?.user) {
-          return credentials.user;
-        }
-        return null;
       },
     }),
   ],
@@ -38,19 +25,10 @@ export const authConfig = {
         token.email = user.email || "";
         token.picture = user.image || "";
         token.accessToken = user.accessToken;
-        // Add custom fields (if available from Instagram)
-        if ("bio" in user && user.bio) {
-          token.bio = user.bio;
-        }
-        if ("followers" in user && user.followers) {
-          token.followers = user.followers;
-        }
-        if ("following" in user && user.following) {
-          token.following = user.following;
-        }
-        if ("posts" in user && user.posts) {
-          token.posts = user.posts;
-        }
+        if ("bio" in user && user.bio) token.bio = user.bio;
+        if ("followers" in user && user.followers) token.followers = user.followers;
+        if ("following" in user && user.following) token.following = user.following;
+        if ("posts" in user && user.posts) token.posts = user.posts;
       }
       return token;
     },
@@ -61,7 +39,6 @@ export const authConfig = {
         session.user.email = token.email as string;
         session.user.image = token.picture as string | undefined;
         session.user.accessToken = token.accessToken as string | undefined;
-        // Add custom fields to session
         session.user.bio = token.bio as string | undefined;
         session.user.followers = token.followers as number | undefined;
         session.user.following = token.following as number | undefined;
@@ -73,7 +50,7 @@ export const authConfig = {
   secret: process.env.AUTH_SECRET,
 } satisfies NextAuthOptions;
 
-// Extend the types to include custom fields
+// Extend types
 declare module "next-auth" {
   interface User {
     bio?: string;
@@ -82,7 +59,6 @@ declare module "next-auth" {
     posts?: number;
     accessToken?: string;
   }
-
   interface Session {
     user: {
       id: string;
