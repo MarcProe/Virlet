@@ -3,23 +3,23 @@
 @tailwind utilities;
 
 /* ======================================== */
-/* VIRLET - NEUMORPHISM DARK MODE */
-/* Dark mode is default via html.dark class */
+/* VIRLET - NEUMORPHISM DARK/LIGHT MODE */
+/* Dark mode is default, light mode available */
 /* ======================================== */
 
-/* CSS Custom Properties for dark mode */
+/* Light mode CSS Custom Properties */
 :root {
-  /* Background colors */
-  --bg-base: #111827;
-  --bg-raised: #1f2937;
-  --bg-pressed: #374151;
+  /* Background colors - LIGHT */
+  --bg-base: #ffffff;
+  --bg-raised: #f3f4f6;
+  --bg-pressed: #e5e7eb;
   
-  /* Border colors */
-  --border-color: #374151;
+  /* Border colors - LIGHT */
+  --border-color: #d1d5db;
   
-  /* Text colors */
-  --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
+  /* Text colors - LIGHT */
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
   --text-muted: #6b7280;
   
   /* Primary brand color (Teal) */
@@ -27,7 +27,33 @@
   --primary-light: #14b8a6;
   --primary-dark: #0f766e;
   
-  /* Shadows for neumorphism */
+  /* Shadows for neumorphism - LIGHT */
+  --shadow-neumorphism: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8);
+  --shadow-neumorphism-hover: 6px 6px 12px rgba(0, 0, 0, 0.1), -6px -6px 12px rgba(255, 255, 255, 0.8);
+  --shadow-neumorphism-inset: inset 2px 2px 4px rgba(0, 0, 0, 0.1), inset -2px -2px 4px rgba(255, 255, 255, 0.8);
+}
+
+/* Dark mode CSS Custom Properties */
+.dark {
+  /* Background colors - DARK */
+  --bg-base: #111827;
+  --bg-raised: #1f2937;
+  --bg-pressed: #374151;
+  
+  /* Border colors - DARK */
+  --border-color: #374151;
+  
+  /* Text colors - DARK */
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  
+  /* Primary brand color (Teal) - same in both modes */
+  --primary: #0d9488;
+  --primary-light: #14b8a6;
+  --primary-dark: #0f766e;
+  
+  /* Shadows for neumorphism - DARK */
   --shadow-neumorphism: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05);
   --shadow-neumorphism-hover: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.05);
   --shadow-neumorphism-inset: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.05);
@@ -38,10 +64,13 @@
 /* ======================================== */
 
 html {
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
   margin: 0;
@@ -55,7 +84,7 @@ h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
 }
 
 /* ======================================== */
-/* NEUMORPHISM COMPONENTS - DARK MODE */
+/* NEUMORPHISM COMPONENTS */
 /* ======================================== */
 
 /* Page container */
