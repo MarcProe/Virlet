@@ -32,11 +32,11 @@
 ## **📌 Overview**
 **Virlet** is a **Next.js-based web app** (frontend + backend in one) for Instagram creators to **measure post impact, analyze audience growth, and manage content professionally**. The app is:
 ✅ **One-page, adaptive** (works on mobile, tablet, desktop)
-✅ **Dark mode only** (no light mode—ever)
 ✅ **Visually striking** (big, colorful elements, interactive graphs)
 ✅ **Zero-setup backend** (uses Next.js API routes + LowDB)
 ✅ **On-premises ready** (self-hosted, no cloud dependencies)
 ✅ **Data-driven** (real-time analytics, exportable reports)
+✅ **Instagram Authentication** (for the app itself and API access to Instagram)
 
 **Target Users**: Sports influencers, athletes, and content creators who **hate light mode**.
 
@@ -49,12 +49,9 @@
  | **Frontend**      | **Next.js (App Router)** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
  | **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
  | **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
- | **Styling**       | **Tailwind CSS**    | Custom, responsive design                                                | Rapid development, utility-first, and highly customizable.               |
- | **Charts**        | Chart.js            | Interactive graphs (line, bar, pie)                                       | Lightweight, easy to integrate, and supports animations.                  |
- | **State Management** | Zustand         | Global state for React                                                   | Simpler than Redux, good for medium-sized apps.                           |
- | **Deployment**    | On-Premises (Node.js)| Self-hosted on any machine with Node.js                                  | Full control over data and infrastructure.                               |
- | **Reverse Proxy** | Nginx/Apache        | (Optional) For HTTPS, load balancing, and static file serving           | Recommended for production.                                                |
- | **Process Manager** | PM2              | (Optional) Keep the Next.js app running in production                   | Ensures uptime and auto-restarts.                                          |
+ | **Styling**       |    |                                                |          |
+ | **STyle Template  | TypeUI Neumorphism | Style Template | |
+ | **Deployment**    | Vercel |                     |                          |
  | **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
 
 > **🔹 Note for AI**:
