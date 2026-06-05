@@ -26,10 +26,11 @@ export async function POST() {
       accessToken: token,
     };
 
-    // Create a session token
+    // Create a session token with the user object inside the token property
     const sessionToken = await encode({
-      token: user,
-      user: user,
+      token: {
+        ...user,
+      },
     });
 
     // Set the session cookie
