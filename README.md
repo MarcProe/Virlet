@@ -46,7 +46,7 @@
 ## **🛠️ Tech Stack**
    Category          | Technology          | Purpose                                                                 | Justification                                                                 |
  |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
- | **Frontend**      | **Next.js (App Router)** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
+ | **Frontend**      | **Next.js 16.2.7** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
  | **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
  | **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
  | **Style Template**  | TypeUI Neumorphism | Style Template | |
