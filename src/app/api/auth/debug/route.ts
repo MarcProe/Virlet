@@ -1,6 +1,22 @@
 import { NextResponse } from "next/server";
 import { encode } from "next-auth/jwt";
 
+export async function GET() {
+  // Check if debug token and account ID are configured
+  const token = process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_TOKEN;
+  const accountId = process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_ACCOUNT_ID;
+  const secret = process.env.AUTH_SECRET;
+
+  if (!token || !accountId || !secret) {
+    return NextResponse.json(
+      { available: false, error: "Debug token, account ID, or secret are not configured." },
+      { status: 400 }
+    );
+  }
+
+  return NextResponse.json({ available: true });
+}
+
 export async function POST() {
   try {
     const token = process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_TOKEN;
