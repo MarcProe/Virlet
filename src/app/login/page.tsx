@@ -49,7 +49,8 @@ export default function LoginPage() {
           user,
           redirect: false,
         });
-        router.push("/dashboard");
+        // Force a full page reload to pick up the session
+        window.location.href = "/dashboard";
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to log in with debug token.");
