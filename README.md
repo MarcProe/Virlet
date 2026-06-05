@@ -46,7 +46,7 @@
 
 | Category          | Technology          | Purpose                                                                 | Justification                                                                 |
 |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| **Frontend**      | **Next.js (App Router)** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
+| **Frontend**      | **Next.js 16.2.7 (App Router)** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export. Turbopack by default. |
 | **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
 | **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
 | **Styling**       | **Tailwind CSS**    | Custom, responsive design                                                | Rapid development, utility-first, and highly customizable.               |
@@ -96,7 +96,7 @@ virlet/
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js**: v18.17 or later (LTS recommended)
+- **Node.js**: v20.9.0 or later (LTS recommended) - *Next.js 16 requires Node.js 20.9+*
 - **npm**: v9 or later (comes with Node.js)
 - **Git**: v2.30 or later
 
@@ -132,8 +132,8 @@ npm install
 ```
 
 This will install all production and development dependencies including:
-- Next.js 14+
-- React 18+
+- Next.js 16.2.7
+- React 19+
 - Tailwind CSS
 - TypeScript
 - Jest and React Testing Library
@@ -424,7 +424,7 @@ To add LowDB:
 ## **🗺️ Roadmap**
 
 ### Phase 1: Foundation (Current)
-- [x] Next.js 14+ boilerplate with App Router
+- [x] Next.js 16.2.7 boilerplate with App Router
 - [x] Tailwind CSS with dark mode
 - [x] TypeScript configuration
 - [x] Jest testing setup
@@ -557,7 +557,8 @@ And that your Tailwind config includes the correct content paths.
 
 ### v0.1.0 (2024)
 - Initial boilerplate setup
-- Next.js 14+ with App Router
+- Next.js 16.2.7 with App Router
+- React 19 support
 - Tailwind CSS configuration
 - TypeScript support
 - Jest testing setup
