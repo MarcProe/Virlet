@@ -51,21 +51,21 @@ export const authConfig = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.picture = user.image;
+        token.name = user.name || "";
+        token.email = user.email || "";
+        token.picture = user.image || "";
         // Add custom fields
-        if ("bio" in user) {
-          token.bio = (user as any).bio;
+        if ("bio" in user && user.bio) {
+          token.bio = user.bio;
         }
-        if ("followers" in user) {
-          token.followers = (user as any).followers;
+        if ("followers" in user && user.followers) {
+          token.followers = user.followers;
         }
-        if ("following" in user) {
-          token.following = (user as any).following;
+        if ("following" in user && user.following) {
+          token.following = user.following;
         }
-        if ("posts" in user) {
-          token.posts = (user as any).posts;
+        if ("posts" in user && user.posts) {
+          token.posts = user.posts;
         }
       }
       return token;
@@ -73,9 +73,9 @@ export const authConfig = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.picture as string | undefined;
         // Add custom fields to session
         session.user.bio = token.bio as string | undefined;
         session.user.followers = token.followers as number | undefined;
@@ -116,7 +116,7 @@ declare module "next-auth/jwt" {
     id: string;
     name: string;
     email: string;
-    picture?: string;
+    picture: string;
     bio?: string;
     followers?: number;
     following?: number;
