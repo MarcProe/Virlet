@@ -64,6 +64,105 @@
 ---
 
 ---
+## **🤖 AI Agent Guidelines**
+
+### General Directives
+
+When working on this project, AI agents **MUST** follow these rules:
+
+1. **Always use feature branches** for new work, fixes, or changes
+   - Create a new branch: `git checkout -b feature/your-feature-name` or `vibe/your-task-slug`
+   - Never work directly on `main` branch
+   - Push your branch and create a **draft PR** for review
+
+2. **Check official documentation online** when unsure
+   - Always verify information from official sources
+   - Do not rely solely on cached or outdated knowledge
+
+3. **Follow best practices**
+   - Write clean, maintainable code
+   - Add tests for new functionality
+   - Update documentation as needed
+   - Keep commits focused and descriptive
+
+### Official Documentation & Resources
+
+Always refer to these official sources for accurate, up-to-date information:
+
+| Resource | URL | Purpose |
+|----------|-----|---------|
+| **Next.js Official Docs** | [https://nextjs.org/docs](https://nextjs.org/docs) | Primary documentation for all Next.js features |
+| **Next.js App Router Docs** | [https://nextjs.org/docs/app](https://nextjs.org/docs/app) | App Router specific documentation |
+| **Next.js Upgrade Guide (v16)** | [https://nextjs.org/docs/app/guides/upgrading/version-16](https://nextjs.org/docs/app/guides/upgrading/version-16) | Migration guide for Next.js 16 |
+| **Next.js API Reference** | [https://nextjs.org/docs/app/api-reference](https://nextjs.org/docs/app/api-reference) | Complete API documentation |
+| **React Official Docs** | [https://react.dev](https://react.dev) | React 19 documentation |
+| **Tailwind CSS Docs** | [https://tailwindcss.com/docs](https://tailwindcss.com/docs) | Tailwind CSS v3+ documentation |
+| **TypeScript Docs** | [https://www.typescriptlang.org/docs](https://www.typescriptlang.org/docs) | TypeScript documentation |
+| **Jest Docs** | [https://jestjs.io/docs](https://jestjs.io/docs) | Jest testing framework documentation |
+| **Testing Library Docs** | [https://testing-library.com/docs](https://testing-library.com/docs) | React Testing Library documentation |
+
+### Workflow for AI Agents
+
+#### Starting New Work
+
+```bash
+# 1. Always pull the latest changes first
+git pull origin main
+
+# 2. Create a feature branch (use descriptive names)
+git checkout -b feature/add-login-page
+# OR for vibe tasks:
+git checkout -b vibe/add-login-page-a86e2e
+
+# 3. Make your changes, commit often with clear messages
+git add .
+git commit -m "feat: add login page component"
+
+# 4. Push to remote and create a draft PR
+git push -u origin feature/add-login-page
+gh pr create --draft --title "feat: add login page" --body "Description of changes"
+```
+
+#### Code Review Process
+
+- **Draft PRs**: All AI-created PRs should start as **draft**
+- **Human review**: Wait for human approval before merging
+- **Address feedback**: Respond to all review comments and make requested changes
+- **Test locally**: When possible, verify changes work before pushing
+
+#### Important Constraints
+
+✅ **DO:**
+- Use Next.js 16.2.7+ features
+- Enforce dark mode in all components
+- Use TypeScript for all new code
+- Add tests for new functionality
+- Follow existing code patterns
+- Use Tailwind CSS for styling
+
+❌ **DON'T:**
+- Add light mode support (dark mode only!)
+- Use alternative frontend frameworks
+- Commit secrets or sensitive data
+- Push directly to `main` branch
+- Merge without human review
+- Use deprecated APIs (check Next.js 16 upgrade guide)
+
+#### Verification Checklist
+
+Before creating a PR, verify:
+
+- [ ] Code follows Next.js 16 conventions
+- [ ] Dark mode is properly implemented
+- [ ] TypeScript types are correct
+- [ ] No console errors or warnings
+- [ ] Tests pass (if applicable)
+- [ ] Documentation is updated (if applicable)
+- [ ] Branch is up to date with `main`
+
+---
+
+---
 ## **📁 Project Structure**
 
 ```
