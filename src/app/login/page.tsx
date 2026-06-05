@@ -9,30 +9,25 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [useDebugToken, setUseDebugToken] = useState(false);
   const [debugAvailable, setDebugAvailable] = useState(false);
-  const [debugChecked, setDebugChecked] = useState(false);
   const router = useRouter();
 
-  // Check if debug endpoint is available
-  const checkDebugAvailable = async () => {
-    if (debugChecked) return;
-    setDebugChecked(true);
-    try {
-      const response = await fetch("/api/auth/debug", {
-        method: "GET",
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setDebugAvailable(data.available);
-      }
-    } catch {
-      setDebugAvailable(false);
-    }
-  };
-
-  // Check debug availability when the page loads
+  // Check if debug endpoint is available (only once on mount)
   useEffect(() => {
+    const checkDebugAvailable = async () => {
+      try {
+        const response = await fetch("/api/auth/debug", {
+          method: "GET",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setDebugAvailable(data.available);
+        }
+      } catch {
+        setDebugAvailable(false);
+      }
+    };
     checkDebugAvailable();
-  }, []);
+  }, []); // Empty dependency array = run once on mount
 
   const handleOAuthSignIn = (provider: string) => {
     setLoading(true);
@@ -49,8 +44,8 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        router.push("/dashboard");
-        router.refresh();
+        // Manually redirect to dashboard after setting the cookie
+        window.location.href = "/dashboard";
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to log in with debug token.");
