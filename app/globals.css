@@ -1,31 +1,37 @@
-@tailwind base;
+/* Remove Tailwind base to prevent style conflicts */
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
 
-/* Force dark mode */
-@layer base {
-  html {
-    background-color: #111827;
-    color: #f9fafb;
-  }
-  
-  body {
-    background-color: #111827;
-    color: #f9fafb;
-  }
+/* Force dark mode on all elements */
+* {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+}
+
+/* Override specific elements */
+html {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+}
+
+body {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+  min-height: 100vh;
 }
 
 @layer components {
   .btn-primary {
-    background-color: #0284c7;
-    color: white;
-    font-weight: 700;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s;
+    background-color: #0284c7 !important;
+    color: white !important;
+    font-weight: 700 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.5rem !important;
+    transition: background-color 0.2s !important;
   }
   
   .btn-primary:hover {
-    background-color: #0369a1;
+    background-color: #0369a1 !important;
   }
 }
