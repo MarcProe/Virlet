@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Virlet - Instagram Creator Analytics',
-  description: 'Modern analytics dashboard for Instagram creators',
+  description: 'Modern analytics dashboard for Instagram creators with Neumorphism design',
 }
 
 export default function RootLayout({
@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning style={{ backgroundColor: '#111827', color: '#f9fafb' }}>
-      <body className={inter.className} style={{ backgroundColor: '#111827', color: '#f9fafb', minHeight: '100vh' }}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
         {children}
         <SpeedInsights />
       </body>

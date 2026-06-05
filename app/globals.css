@@ -1,37 +1,233 @@
-/* Remove Tailwind base to prevent style conflicts */
-/* @tailwind base; */
+/* Neumorphism Design System - DARK MODE ONLY */
+/* Based on TypeUI Neumorphism: https://www.typeui.sh/design-skills/neumorphism */
+
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Force dark mode on all elements */
-* {
-  background-color: #111827 !important;
-  color: #f9fafb !important;
+/* ======================================== */
+/* NEUMORPHISM FOUNDATIONS */
+/* ======================================== */
+
+:root {
+  /* Dark mode only - no light mode */
+  color-scheme: dark;
+  
+  /* Neumorphism color tokens */
+  --color-surface-base: #111827;
+  --color-surface-raised: #1f2937;
+  --color-surface-pressed: #374151;
+  --color-surface-border: #374151;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+  --color-primary: #0d9488;
+  --color-primary-light: #14b8a6;
+  --color-primary-dark: #0f766e;
 }
 
-/* Override specific elements */
-html {
-  background-color: #111827 !important;
-  color: #f9fafb !important;
-}
+/* ======================================== */
+/* BASE STYLES - DARK MODE ONLY */
+/* ======================================== */
 
-body {
-  background-color: #111827 !important;
-  color: #f9fafb !important;
-  min-height: 100vh;
-}
-
-@layer components {
-  .btn-primary {
-    background-color: #0284c7 !important;
-    color: white !important;
-    font-weight: 700 !important;
-    padding: 0.5rem 1rem !important;
-    border-radius: 0.5rem !important;
-    transition: background-color 0.2s !important;
+@layer base {
+  html {
+    background-color: var(--color-surface-base);
+    color: var(--color-text-primary);
+    color-scheme: dark;
+    min-height: 100%;
   }
   
-  .btn-primary:hover {
-    background-color: #0369a1 !important;
+  body {
+    background-color: var(--color-surface-base);
+    color: var(--color-text-primary);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
   }
+  
+  /* Remove all default margins/paddings for neumorphism */
+  h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* ======================================== */
+/* NEUMORPHISM COMPONENTS */
+/* ======================================== */
+
+@layer components {
+  /* Neumorphism Card - The core neumorphic element */
+  .neumorphism-card {
+    background-color: var(--color-surface-raised);
+    border-radius: theme('borderRadius.neumorphism');
+    box-shadow: theme('boxShadow.neumorphism');
+    padding: theme('spacing.6');
+    transition: all theme('transitionDuration.neumorphism') theme('transitionTimingFunction.neumorphism');
+    border: 1px solid var(--color-surface-border);
+  }
+  
+  .neumorphism-card:hover {
+    box-shadow: theme('boxShadow.neumorphism-hover');
+  }
+  
+  .neumorphism-card:active {
+    box-shadow: theme('boxShadow.neumorphism-active');
+    background-color: var(--color-surface-pressed);
+  }
+  
+  /* Neumorphism Button */
+  .neumorphism-btn {
+    position: relative;
+    background-color: var(--color-surface-raised);
+    color: var(--color-text-primary);
+    border: none;
+    border-radius: theme('borderRadius.neumorphism-sm');
+    padding: theme('spacing.3') theme('spacing.6');
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: theme('boxShadow.neumorphism');
+    transition: all theme('transitionDuration.neumorphism') theme('transitionTimingFunction.neumorphism');
+    outline: none;
+  }
+  
+  .neumorphism-btn:hover {
+    box-shadow: theme('boxShadow.neumorphism-hover');
+    background-color: var(--color-surface-base);
+  }
+  
+  .neumorphism-btn:active {
+    box-shadow: theme('boxShadow.neumorphism-active');
+    background-color: var(--color-surface-pressed);
+  }
+  
+  .neumorphism-btn:focus-visible {
+    box-shadow: theme('boxShadow.neumorphism-hover'), 0 0 0 3px rgba(13, 148, 136, 0.3);
+  }
+  
+  /* Primary Button - Teal color */
+  .neumorphism-btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .neumorphism-btn-primary:hover {
+    background-color: var(--color-primary-light);
+    box-shadow: theme('boxShadow.neumorphism-hover'), 0 0 15px rgba(13, 148, 136, 0.3);
+  }
+  
+  .neumorphism-btn-primary:active {
+    background-color: var(--color-primary-dark);
+    box-shadow: theme('boxShadow.neumorphism-active');
+  }
+  
+  /* Neumorphism Input */
+  .neumorphism-input {
+    background-color: var(--color-surface-raised);
+    border: 1px solid var(--color-surface-border);
+    border-radius: theme('borderRadius.neumorphism-sm');
+    padding: theme('spacing.3') theme('spacing.4');
+    color: var(--color-text-primary);
+    width: 100%;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all theme('transitionDuration.neumorphism') theme('transitionTimingFunction.neumorphism');
+  }
+  
+  .neumorphism-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(13, 148, 136, 0.2);
+  }
+  
+  /* Neumorphism Typography */
+  .neumorphism-h1 {
+    font-size: theme('fontSize.5xl');
+    font-weight: 700;
+    color: var(--color-primary-light);
+    letter-spacing: -0.025em;
+    margin-bottom: theme('spacing.4');
+  }
+  
+  .neumorphism-h2 {
+    font-size: theme('fontSize.2xl');
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: theme('spacing.4');
+  }
+  
+  .neumorphism-body {
+    font-size: theme('fontSize.base');
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+  
+  .neumorphism-muted {
+    font-size: theme('fontSize.sm');
+    color: var(--color-text-muted);
+  }
+}
+
+/* ======================================== */
+/* UTILITY CLASSES */
+/* ======================================== */
+
+@layer utilities {
+  /* Text colors using neumorphism tokens */
+  .text-neumorphism-primary {
+    color: var(--color-text-primary);
+  }
+  
+  .text-neumorphism-secondary {
+    color: var(--color-text-secondary);
+  }
+  
+  .text-neumorphism-muted {
+    color: var(--color-text-muted);
+  }
+  
+  /* Background colors */
+  .bg-neumorphism-base {
+    background-color: var(--color-surface-base);
+  }
+  
+  .bg-neumorphism-raised {
+    background-color: var(--color-surface-raised);
+  }
+  
+  .bg-neumorphism-pressed {
+    background-color: var(--color-surface-pressed);
+  }
+  
+  /* Border colors */
+  .border-neumorphism {
+    border-color: var(--color-surface-border);
+  }
+  
+  /* Primary color */
+  .text-primary-neumorphism {
+    color: var(--color-primary);
+  }
+  
+  .bg-primary-neumorphism {
+    background-color: var(--color-primary);
+  }
+}
+
+/* ======================================== */
+/* ANIMATIONS */
+/* ======================================== */
+
+@keyframes neumorphism-pulse {
+  0%, 100% {
+    box-shadow: theme('boxShadow.neumorphism');
+  }
+  50% {
+    box-shadow: theme('boxShadow.neumorphism-hover');
+  }
+}
+
+.neumorphism-pulse {
+  animation: neumorphism-pulse 2s ease-in-out infinite;
 }

@@ -19,8 +19,9 @@
 11. [On-Premises Deployment](#-on-premises-deployment)
 12. [Vercel Deployment](#-vercel-deployment-recommended)
 13. [Data Storage](#-data-storage)
-14. [Security](#-security)
-14. [Roadmap](#-roadmap)
+14. [Neumorphism Design System](#-neumorphism-design-system-dark-mode-only)
+15. [Security](#-security)
+16. [Roadmap](#-roadmap)
 15. [Contributing](#-contributing)
 16. [Troubleshooting](#-troubleshooting)
 17. [Changelog](#-changelog)
@@ -959,9 +960,231 @@ git push origin feature/new-feature
 ---
 
 ---
-## **💾 Data Storage**
+## **🎨 Neumorphism Design System (Dark Mode Only)**
 
-### Current Setup
+Based on [TypeUI Neumorphism](https://www.typeui.sh/design-skills/neumorphism), this project implements a **dark mode only** neumorphism design system with soft, extruded UI elements and tactile shadows.
+
+### Design Philosophy
+
+**Neumorphism** (New Skeuomorphism) creates UI elements that appear to be extruded from or embedded into the surface, using subtle shadows and highlights. For dark mode, we use:
+- **Outer shadows**: Dark shadows on bottom-right (extruded effect)
+- **Inner shadows**: Light shadows on top-left (embedded effect)
+- **Monochromatic surfaces**: Dark gray color palette
+- **Tactile feel**: Elements appear touchable and physical
+
+### Color Palette (Dark Mode Only)
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| **Surface Base** | `#111827` | Page background |
+| **Surface Raised** | `#1f2937` | Cards, raised elements |
+| **Surface Pressed** | `#374151` | Pressed/active states |
+| **Surface Border** | `#374151` | Borders, dividers |
+| **Text Primary** | `#f9fafb` | Main text |
+| **Text Secondary** | `#9ca3af` | Secondary text |
+| **Text Muted** | `#6b7280` | Muted text, captions |
+| **Primary** | `#0d9488` | Primary actions, accents |
+| **Primary Light** | `#14b8a6` | Hover states |
+| **Primary Dark** | `#0f766e` | Active states |
+
+### Typography
+
+- **Font Family**: Space Mono (primary), JetBrains Mono (monospace)
+- **Weights**: 100-900 (full range)
+- **Scale**: Desktop-first expressive scale
+
+### Box Shadows (Dark Mode Neumorphism)
+
+```css
+/* Extruded effect (raised elements) */
+box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), 
+            -4px -4px 8px rgba(255, 255, 255, 0.05);
+
+/* Inset effect (pressed elements) */
+box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3), 
+            inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+
+/* Hover effect */
+box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), 
+            -6px -6px 12px rgba(255, 255, 255, 0.05);
+```
+
+### Component Classes
+
+The design system includes these Tailwind classes:
+
+#### Layout
+- `.bg-neumorphism-base` - Background color
+- `.bg-neumorphism-raised` - Raised surface color
+- `.bg-neumorphism-pressed` - Pressed surface color
+- `.border-neumorphism` - Border color
+
+#### Typography
+- `.neumorphism-h1` - Main heading (5xl, bold, primary-light)
+- `.neumorphism-h2` - Section heading (2xl, semibold)
+- `.neumorphism-body` - Body text (base, secondary)
+- `.neumorphism-muted` - Muted text (sm, muted)
+- `.text-neumorphism-primary` - Primary text color
+- `.text-neumorphism-secondary` - Secondary text color
+- `.text-neumorphism-muted` - Muted text color
+- `.text-primary-neumorphism` - Primary accent color
+- `.bg-primary-neumorphism` - Primary background color
+
+#### Components
+- `.neumorphism-card` - Card with neumorphic shadow
+- `.neumorphism-btn` - Base button with neumorphic effect
+- `.neumorphism-btn-primary` - Primary colored button
+- `.neumorphism-input` - Input field with inset shadow
+
+#### Animations
+- `.neumorphism-pulse` - Gentle pulsing shadow effect
+
+### Usage Examples
+
+#### Card Component
+```typescript
+<div className="neumorphism-card">
+  <h2 className="neumorphism-h2">Card Title</h2>
+  <p className="neumorphism-body">Card content goes here.</p>
+</div>
+```
+
+#### Button Component
+```typescript
+<button 
+  className="neumorphism-btn neumorphism-btn-primary"
+  onClick={handleClick}
+>
+  Click Me
+</button>
+```
+
+#### Input Component
+```typescript
+<input 
+  className="neumorphism-input"
+  placeholder="Enter text..."
+/>
+```
+
+### Customizing Components
+
+Create custom neumorphic components by combining the base classes:
+
+```typescript
+// Custom neumorphic badge
+<div className="neumorphism-btn bg-primary-neumorphism text-white px-3 py-1 text-sm">
+  New
+</div>
+
+// Custom neumorphic panel
+<div className="neumorphism-card border-neumorphism p-6">
+  <h3 className="neumorphism-h2 text-primary-neumorphism">Panel Title</h3>
+  <p className="neumorphism-body">Panel content</p>
+</div>
+```
+
+### Accessibility
+
+✅ **WCAG 2.2 AA Compliant**
+- All text has sufficient contrast (minimum 4.5:1)
+- Interactive elements have visible focus states
+- Keyboard navigation supported
+- Screen reader friendly
+
+**Focus States**:
+- Buttons show focus ring: `0 0 0 3px rgba(13, 148, 136, 0.3)`
+- Inputs show focus border: `1px solid var(--color-primary)`
+
+**Keyboard Navigation**:
+- All interactive elements are keyboard accessible
+- Tab order follows visual hierarchy
+- Enter/Space activates buttons
+
+### Design Tokens in tailwind.config.ts
+
+```typescript
+// Colors
+primary: {
+  600: '#0d9488',  // Main primary
+  500: '#14b8a6',  // Light primary
+  700: '#0f766e',  // Dark primary
+},
+surface: {
+  base: '#111827',    // Background
+  raised: '#1f2937',  // Cards
+  pressed: '#374151', // Active states
+  border: '#374151',  // Borders
+},
+
+// Shadows
+boxShadow: {
+  neumorphism: '4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05)',
+  'neumorphism-inset': 'inset 2px 2px 4px rgba(0, 0, 0, 0.3), inset -2px -2px 4px rgba(255, 255, 255, 0.05)',
+  'neumorphism-hover': '6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.05)',
+  'neumorphism-active': 'inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.05)',
+},
+
+// Border radius
+borderRadius: {
+  neumorphism: '12px',
+  'neumorphism-sm': '8px',
+},
+
+// Transitions
+transitionTimingFunction: {
+  neumorphism: 'cubic-bezier(0.4, 0, 0.2, 1)',
+},
+transitionDuration: {
+  neumorphism: '200ms',
+},
+```
+
+### Best Practices
+
+✅ **DO:**
+- Use neumorphism classes for all UI elements
+- Maintain consistent shadow depth
+- Use the color tokens for consistency
+- Test contrast ratios (minimum 4.5:1)
+- Ensure all interactive elements have hover/active states
+
+❌ **DON'T:**
+- Mix neumorphism with flat design
+- Use light mode (dark mode only!)
+- Create custom shadows without testing
+- Use colors outside the palette
+- Ignore accessibility requirements
+
+### Migration from Flat Design
+
+If migrating existing components to neumorphism:
+
+1. **Replace flat cards** with `.neumorphism-card`
+2. **Replace flat buttons** with `.neumorphism-btn`
+3. **Replace flat inputs** with `.neumorphism-input`
+4. **Update typography** to use neumorphism classes
+5. **Remove flat shadows** and use neumorphism shadows
+
+### QA Checklist
+
+Before merging neumorphism changes:
+
+- [ ] All text has sufficient contrast (4.5:1 minimum)
+- [ ] All interactive elements have hover states
+- [ ] All interactive elements have focus states
+- [ ] All interactive elements are keyboard accessible
+- [ ] Shadows are consistent across all components
+- [ ] Color palette is used consistently
+- [ ] Typography hierarchy is maintained
+- [ ] No light mode styles exist
+- [ ] All components work in dark mode
+- [ ] Performance is not impacted by complex shadows
+
+---
+
+---
+## **💾 Data Storage**
 
 The boilerplate is ready for LowDB integration. LowDB is a lightweight JSON file database that's perfect for on-premises deployment.
 
