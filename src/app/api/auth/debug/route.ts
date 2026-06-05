@@ -1,19 +1,6 @@
 import { NextResponse } from "next/server";
 import { encode } from "next-auth/jwt";
 
-// Mock user for debug login
-const mockUser = {
-  id: process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_ACCOUNT_ID || "debug_user_id",
-  name: "Debug User",
-  email: "debug@example.com",
-  image: "https://via.placeholder.com/150",
-  bio: "Debug account",
-  followers: 0,
-  following: 0,
-  posts: 0,
-  accessToken: process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_TOKEN,
-};
-
 export async function POST(request: Request) {
   try {
     const { token, accountId } = await request.json();
@@ -25,14 +12,37 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create a mock session token
+    // Fetch real user data from Instagram API using the debug token
+    const instagramResponse = await fetch(
+      `https://graph.instagram.com/${accountId}?fields=id,username,account_type,media_count&access_token=${token}`
+    );
+
+    if (!instagramResponse.ok) {
+      return NextResponse.json(
+        { error: "Failed to fetch user data from Instagram." },
+        { status: 400 }
+      );
+    }
+
+    const instagramData = await instagramResponse.json();
+
+    // Create a user object with real data
+    const user = {
+      id: accountId,
+      name: instagramData.username,
+      email: `${accountId}@instagram.com`, // Mock email (Instagram doesn't provide emails)
+      picture: `https://www.instagram.com/${instagramData.username}/?__a=1`, // Profile picture URL
+      bio: "Instagram user", // Placeholder, as bio isn't available in this endpoint
+      followers: 0, // Placeholder
+      following: 0, // Placeholder
+      posts: instagramData.media_count || 0,
+      accessToken: token,
+    };
+
+    // Create a session token
     const sessionToken = await encode({
-      token: {
-        ...mockUser,
-        accessToken: token,
-        id: accountId,
-      },
-      user: mockUser,
+      token: user,
+      user: user,
     });
 
     // Set the session cookie
@@ -47,6 +57,7 @@ export async function POST(request: Request) {
 
     return response;
   } catch (error) {
+    console.error("Debug login error:", error);
     return NextResponse.json(
       { error: "An error occurred during debug login." },
       { status: 500 }
