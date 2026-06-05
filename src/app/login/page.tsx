@@ -1,17 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
   const [useDebugToken, setUseDebugToken] = useState(false);
+  const [debugAvailable, setDebugAvailable] = useState(false);
+  const [debugChecked, setDebugChecked] = useState(false);
+  const router = useRouter();
 
-  // Check if debug token is available in environment variables
-  const debugTokenAvailable = process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_TOKEN !== undefined;
+  // Check if debug endpoint is available
+  const checkDebugAvailable = async () => {
+    if (debugChecked) return;
+    setDebugChecked(true);
+    try {
+      const response = await fetch("/api/auth/debug", {
+        method: "GET",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setDebugAvailable(data.available);
+      }
+    } catch {
+      setDebugAvailable(false);
+    }
+  };
+
+  // Check debug availability when the page loads
+  useEffect(() => {
+    checkDebugAvailable();
+  }, []);
 
   const handleOAuthSignIn = (provider: string) => {
     setLoading(true);
@@ -19,25 +40,12 @@ export default function LoginPage() {
   };
 
   const handleDebugLogin = async () => {
-    if (!debugTokenAvailable) {
-      setError("Debug token is not configured.");
-      return;
-    }
-
     setLoading(true);
     setError("");
 
     try {
-      // Use a custom login flow for debug token
       const response = await fetch("/api/auth/debug", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_TOKEN,
-          accountId: process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_ACCOUNT_ID,
-        }),
       });
 
       if (response.ok) {
@@ -73,7 +81,7 @@ export default function LoginPage() {
             </div>
           )}
 
-          {debugTokenAvailable && (
+          {debugAvailable && (
             <div className="mb-6">
               <label className="flex items-center">
                 <input
