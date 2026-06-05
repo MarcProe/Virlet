@@ -1,5 +1,5 @@
 # **Virlet: Instagram Creator Analytics & Management App**
-*Modern, adaptive one-page web app for sports creators to track, analyze, and optimize Instagram performance. Dark mode only—because light mode is for n00bs.*
+*Modern, adaptive one-page web app for sports creators to track, analyze, and optimize Instagram performance.
 
 ![Virlet Dashboard Preview](https://via.placeholder.com/1200x630/1F2937/3B82F6?text=Virlet+Dashboard) *(Replace with actual dark-themed screenshot later)*
 
