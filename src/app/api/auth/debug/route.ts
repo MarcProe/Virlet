@@ -7,10 +7,17 @@ export async function POST() {
     const accountId = process.env.NEXT_PUBLIC_DEBUG_INSTAGRAM_ACCOUNT_ID;
     const secret = process.env.AUTH_SECRET;
 
-    if (!token || !accountId || !secret) {
+    if (!token || !accountId) {
       return NextResponse.json(
-        { error: "Debug token, account ID, or secret are not configured." },
+        { error: "Debug token and account ID are not configured." },
         { status: 400 }
+      );
+    }
+
+    if (!secret) {
+      return NextResponse.json(
+        { error: "AUTH_SECRET is not configured." },
+        { status: 500 }
       );
     }
 
@@ -29,9 +36,7 @@ export async function POST() {
 
     // Create a session token with the user object and secret
     const sessionToken = await encode({
-      token: {
-        ...user,
-      },
+      token: user,
       secret,
     });
 
