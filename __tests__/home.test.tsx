@@ -27,10 +27,24 @@ describe('Home Page', () => {
     expect(screen.getByText(/Count: 1/)).toBeInTheDocument()
   })
 
-  it('has dark mode classes', () => {
+  it('has neumorphism page class', () => {
     render(<Home />)
     
     const main = screen.getByRole('main')
-    expect(main).toHaveClass('bg-gray-900')
+    expect(main).toHaveClass('neumorphism-page')
+  })
+
+  it('has neumorphism card', () => {
+    render(<Home />)
+    
+    const card = screen.getByText('Hello, World! 👋').parentElement
+    expect(card).toHaveClass('neumorphism-card')
+  })
+
+  it('has neumorphism button', () => {
+    render(<Home />)
+    
+    const button = screen.getByText(/Count: 0/)
+    expect(button).toHaveClass('neumorphism-btn')
   })
 })

@@ -7,8 +7,8 @@ export default function Home() {
 
   return (
     <main className="neumorphism-page">
-      <div style={{ maxWidth: '48rem', margin: '0 auto' }}>
-        <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
+      <div className="max-w-2xl mx-auto">
+        <header className="text-center mb-8">
           <h1 className="neumorphism-h1">
             Virlet
           </h1>
@@ -18,18 +18,18 @@ export default function Home() {
         </header>
 
         <div className="neumorphism-card">
-          <h2 className="neumorphism-h2" style={{ marginBottom: '1.5rem' }}>
+          <h2 className="neumorphism-h2 mb-4">
             Hello, World! 👋
           </h2>
-          <p className="neumorphism-body" style={{ marginBottom: '1.5rem' }}>
+          <p className="neumorphism-body mb-4">
             Welcome to Virlet! This is a boilerplate Next.js application with 
             App Router, Neumorphism design, and dark mode enabled.
           </p>
-          <p className="neumorphism-muted" style={{ marginBottom: '2rem' }}>
+          <p className="neumorphism-muted mb-8">
             The app is ready for Instagram creator analytics and management.
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div className="flex items-center gap-4">
             <button
               onClick={() => setCount((c) => c + 1)}
               className="neumorphism-btn"
@@ -43,7 +43,7 @@ export default function Home() {
           </div>
         </div>
 
-        <footer style={{ marginTop: '3rem', textAlign: 'center' }}>
+        <footer className="mt-8 text-center">
           <p className="neumorphism-muted">
             © {new Date().getFullYear()} Virlet. All rights reserved.
           </p>
