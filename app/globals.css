@@ -1,233 +1,180 @@
-/* Neumorphism Design System - DARK MODE ONLY */
-/* Based on TypeUI Neumorphism: https://www.typeui.sh/design-skills/neumorphism */
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* ======================================== */
-/* NEUMORPHISM FOUNDATIONS */
+/* NEUMORPHISM DARK MODE - 100% GUARANTEED */
+/* No Tailwind dependencies - Pure CSS */
 /* ======================================== */
 
-:root {
-  /* Dark mode only - no light mode */
-  color-scheme: dark;
-  
-  /* Neumorphism color tokens */
-  --color-surface-base: #111827;
-  --color-surface-raised: #1f2937;
-  --color-surface-pressed: #374151;
-  --color-surface-border: #374151;
-  --color-text-primary: #f9fafb;
-  --color-text-secondary: #9ca3af;
-  --color-text-muted: #6b7280;
-  --color-primary: #0d9488;
-  --color-primary-light: #14b8a6;
-  --color-primary-dark: #0f766e;
+/* Reset ALL browser styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ======================================== */
-/* BASE STYLES - DARK MODE ONLY */
-/* ======================================== */
+/* Force dark mode on EVERYTHING */
+:root {
+  --bg-base: #111827;
+  --bg-raised: #1f2937;
+  --bg-pressed: #374151;
+  --border-color: #374151;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --primary: #0d9488;
+  --primary-light: #14b8a6;
+}
 
-@layer base {
-  html {
-    background-color: var(--color-surface-base);
-    color: var(--color-text-primary);
-    color-scheme: dark;
-    min-height: 100%;
-  }
-  
-  body {
-    background-color: var(--color-surface-base);
-    color: var(--color-text-primary);
-    font-family: 'Space Mono', monospace;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Remove all default margins/paddings for neumorphism */
-  h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
-    margin: 0;
-    padding: 0;
-  }
+/* Force dark mode on html and body */
+html {
+  background-color: var(--bg-base) !important;
+  color: var(--text-primary) !important;
+  color-scheme: dark !important;
+  min-height: 100% !important;
+}
+
+body {
+  background-color: var(--bg-base) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* ======================================== */
 /* NEUMORPHISM COMPONENTS */
 /* ======================================== */
 
-@layer components {
-  /* Neumorphism Card - The core neumorphic element */
-  .neumorphism-card {
-    background-color: var(--color-surface-raised);
-    border-radius: theme('borderRadius.neumorphism');
-    box-shadow: theme('boxShadow.neumorphism');
-    padding: theme('spacing.6');
-    transition: all theme('transitionDuration.neumorphism') theme('transitionTimingFunction.neumorphism');
-    border: 1px solid var(--color-surface-border);
-  }
-  
-  .neumorphism-card:hover {
-    box-shadow: theme('boxShadow.neumorphism-hover');
-  }
-  
-  .neumorphism-card:active {
-    box-shadow: theme('boxShadow.neumorphism-active');
-    background-color: var(--color-surface-pressed);
-  }
-  
-  /* Neumorphism Button */
-  .neumorphism-btn {
-    position: relative;
-    background-color: var(--color-surface-raised);
-    color: var(--color-text-primary);
-    border: none;
-    border-radius: theme('borderRadius.neumorphism-sm');
-    padding: theme('spacing.3') theme('spacing.6');
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: theme('boxShadow.neumorphism');
-    transition: all theme('transitionDuration.neumorphism') theme('transitionTimingFunction.neumorphism');
-    outline: none;
-  }
-  
-  .neumorphism-btn:hover {
-    box-shadow: theme('boxShadow.neumorphism-hover');
-    background-color: var(--color-surface-base);
-  }
-  
-  .neumorphism-btn:active {
-    box-shadow: theme('boxShadow.neumorphism-active');
-    background-color: var(--color-surface-pressed);
-  }
-  
-  .neumorphism-btn:focus-visible {
-    box-shadow: theme('boxShadow.neumorphism-hover'), 0 0 0 3px rgba(13, 148, 136, 0.3);
-  }
-  
-  /* Primary Button - Teal color */
-  .neumorphism-btn-primary {
-    background-color: var(--color-primary);
-    color: white;
-  }
-  
-  .neumorphism-btn-primary:hover {
-    background-color: var(--color-primary-light);
-    box-shadow: theme('boxShadow.neumorphism-hover'), 0 0 15px rgba(13, 148, 136, 0.3);
-  }
-  
-  .neumorphism-btn-primary:active {
-    background-color: var(--color-primary-dark);
-    box-shadow: theme('boxShadow.neumorphism-active');
-  }
-  
-  /* Neumorphism Input */
-  .neumorphism-input {
-    background-color: var(--color-surface-raised);
-    border: 1px solid var(--color-surface-border);
-    border-radius: theme('borderRadius.neumorphism-sm');
-    padding: theme('spacing.3') theme('spacing.4');
-    color: var(--color-text-primary);
-    width: 100%;
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all theme('transitionDuration.neumorphism') theme('transitionTimingFunction.neumorphism');
-  }
-  
-  .neumorphism-input:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(13, 148, 136, 0.2);
-  }
-  
-  /* Neumorphism Typography */
-  .neumorphism-h1 {
-    font-size: theme('fontSize.5xl');
-    font-weight: 700;
-    color: var(--color-primary-light);
-    letter-spacing: -0.025em;
-    margin-bottom: theme('spacing.4');
-  }
-  
-  .neumorphism-h2 {
-    font-size: theme('fontSize.2xl');
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin-bottom: theme('spacing.4');
-  }
-  
-  .neumorphism-body {
-    font-size: theme('fontSize.base');
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-  }
-  
-  .neumorphism-muted {
-    font-size: theme('fontSize.sm');
-    color: var(--color-text-muted);
-  }
+/* Main container */
+.neumorphism-page {
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: var(--bg-base) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Card with neumorphism effect */
+.neumorphism-card {
+  background-color: var(--bg-raised) !important;
+  border-radius: 12px !important;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05) !important;
+  padding: 2rem !important;
+  border: 1px solid var(--border-color) !important;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.neumorphism-card:hover {
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Primary button with neumorphism */
+.neumorphism-btn {
+  background-color: var(--primary) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05) !important;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-family: inherit !important;
+}
+
+.neumorphism-btn:hover {
+  background-color: var(--primary-light) !important;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.3), -6px -6px 12px rgba(255, 255, 255, 0.05) !important;
+}
+
+.neumorphism-btn:active {
+  background-color: #0f766e !important;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.2), inset -2px -2px 4px rgba(255, 255, 255, 0.05) !important;
+}
+
+.neumorphism-btn:focus {
+  outline: none !important;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05), 0 0 0 3px rgba(13, 148, 136, 0.3) !important;
+}
+
+/* Typography */
+.neumorphism-h1 {
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  color: var(--primary-light) !important;
+  margin-bottom: 1rem !important;
+  letter-spacing: -0.025em !important;
+}
+
+.neumorphism-h2 {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 1rem !important;
+}
+
+.neumorphism-body {
+  font-size: 1rem !important;
+  color: var(--text-secondary) !important;
+  line-height: 1.6 !important;
+}
+
+.neumorphism-muted {
+  font-size: 0.875rem !important;
+  color: var(--text-muted) !important;
+}
+
+/* Force ALL text to be light in dark mode */
+p, h1, h2, h3, h4, h5, h6, span, div, a, button, input, textarea, label {
+  color: var(--text-primary) !important;
+}
+
+/* Force ALL backgrounds to be dark */
+main, div, section, article, aside, header, footer, nav {
+  background-color: transparent !important;
+}
+
+/* Specific overrides for common elements */
+button:not(.neumorphism-btn) {
+  background-color: var(--bg-raised) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  cursor: pointer !important;
+}
+
+input, textarea {
+  background-color: var(--bg-raised) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  padding: 0.5rem !important;
+}
+
+/* Override any light backgrounds */
+[class*="bg-"], [style*="background"] {
+  background-color: var(--bg-base) !important;
+}
+
+/* Override any dark text */
+[class*="text-"], [style*="color"] {
+  color: var(--text-primary) !important;
 }
 
 /* ======================================== */
-/* UTILITY CLASSES */
+/* UTILITY: Force dark mode on ALL elements */
 /* ======================================== */
-
-@layer utilities {
-  /* Text colors using neumorphism tokens */
-  .text-neumorphism-primary {
-    color: var(--color-text-primary);
-  }
-  
-  .text-neumorphism-secondary {
-    color: var(--color-text-secondary);
-  }
-  
-  .text-neumorphism-muted {
-    color: var(--color-text-muted);
-  }
-  
-  /* Background colors */
-  .bg-neumorphism-base {
-    background-color: var(--color-surface-base);
-  }
-  
-  .bg-neumorphism-raised {
-    background-color: var(--color-surface-raised);
-  }
-  
-  .bg-neumorphism-pressed {
-    background-color: var(--color-surface-pressed);
-  }
-  
-  /* Border colors */
-  .border-neumorphism {
-    border-color: var(--color-surface-border);
-  }
-  
-  /* Primary color */
-  .text-primary-neumorphism {
-    color: var(--color-primary);
-  }
-  
-  .bg-primary-neumorphism {
-    background-color: var(--color-primary);
-  }
+* {
+  background-color: var(--bg-base) !important;
+  color: var(--text-primary) !important;
 }
 
-/* ======================================== */
-/* ANIMATIONS */
-/* ======================================== */
-
-@keyframes neumorphism-pulse {
-  0%, 100% {
-    box-shadow: theme('boxShadow.neumorphism');
-  }
-  50% {
-    box-shadow: theme('boxShadow.neumorphism-hover');
-  }
+/* Except for elements that should be raised */
+.neumorphism-card, .neumorphism-btn, button, input, textarea, select {
+  background-color: var(--bg-raised) !important;
 }
 
-.neumorphism-pulse {
-  animation: neumorphism-pulse 2s ease-in-out infinite;
+/* Primary button stays primary color */
+.neumorphism-btn {
+  background-color: var(--primary) !important;
+  color: white !important;
 }
