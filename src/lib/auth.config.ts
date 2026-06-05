@@ -1,5 +1,6 @@
 import type { NextAuthOptions } from "next-auth";
 import InstagramProvider from "next-auth/providers/instagram";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authConfig = {
   providers: [
@@ -11,6 +12,16 @@ export const authConfig = {
         params: {
           scope: "user_profile user_media",
         },
+      },
+    }),
+    CredentialsProvider({
+      name: "Debug",
+      credentials: {},
+      async authorize(credentials: any) {
+        if (credentials?.user) {
+          return credentials.user;
+        }
+        return null;
       },
     }),
   ],
