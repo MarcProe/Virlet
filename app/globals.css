@@ -1,13 +1,13 @@
-/* ======================================== */
-/* VIRLET - NEUMORPHISM DARK MODE */
-/* DARK MODE ONLY - No light mode support */
-/* ======================================== */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Custom Properties - Dark Mode Color Palette */
+/* ======================================== */
+/* VIRLET - NEUMORPHISM DARK MODE */
+/* Dark mode is default via html.dark class */
+/* ======================================== */
+
+/* CSS Custom Properties for dark mode */
 :root {
   /* Background colors */
   --bg-base: #111827;
@@ -34,19 +34,14 @@
 }
 
 /* ======================================== */
-/* BASE STYLES - Force Dark Mode */
+/* BASE STYLES */
 /* ======================================== */
 
 html {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
   color-scheme: dark;
-  min-height: 100%;
 }
 
 body {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
   margin: 0;
@@ -60,15 +55,13 @@ h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
 }
 
 /* ======================================== */
-/* NEUMORPHISM COMPONENTS */
+/* NEUMORPHISM COMPONENTS - DARK MODE */
 /* ======================================== */
 
 /* Page container */
 .neumorphism-page {
   min-height: 100vh;
   padding: 2rem;
-  background-color: var(--bg-base);
-  color: var(--text-primary);
 }
 
 /* Card with neumorphism effect */
@@ -162,12 +155,10 @@ textarea:focus {
 /* UTILITY CLASSES */
 /* ======================================== */
 
-/* Center text */
 .text-center {
   text-align: center;
 }
 
-/* Flex utilities */
 .flex {
   display: flex;
 }
@@ -180,11 +171,6 @@ textarea:focus {
   gap: 1rem;
 }
 
-.gap-2 {
-  gap: 0.5rem;
-}
-
-/* Margin utilities */
 .mt-4 {
   margin-top: 1rem;
 }
@@ -201,12 +187,10 @@ textarea:focus {
   margin-bottom: 2rem;
 }
 
-/* Max width */
 .max-w-2xl {
   max-width: 48rem;
 }
 
-/* Auto margins */
 .mx-auto {
   margin-left: auto;
   margin-right: auto;

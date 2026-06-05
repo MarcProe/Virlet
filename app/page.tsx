@@ -6,7 +6,7 @@ export default function Home() {
   const [count, setCount] = useState(0)
 
   return (
-    <main className="neumorphism-page">
+    <main className="neumorphism-page bg-[var(--bg-base)] text-[var(--text-primary)]">
       <div className="max-w-2xl mx-auto">
         <header className="text-center mb-8">
           <h1 className="neumorphism-h1">
@@ -17,7 +17,7 @@ export default function Home() {
           </p>
         </header>
 
-        <div className="neumorphism-card">
+        <div className="neumorphism-card bg-[var(--bg-raised)] border-[var(--border-color)] text-[var(--text-primary)]">
           <h2 className="neumorphism-h2 mb-4">
             Hello, World! 👋
           </h2>
