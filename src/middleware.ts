@@ -1,10 +1,10 @@
-import { auth } from "@/lib/auth";
+import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
-export default auth((req) => {
-  if (!req.auth) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+export default withAuth({
+  pages: {
+    signIn: "/login",
+  },
 });
 
 export const config = {

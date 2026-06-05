@@ -1,22 +1,22 @@
-import type { NextAuthConfig } from "next-auth";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
-import Credentials from "next-auth/providers/credentials";
+import type { NextAuthOptions } from "next-auth";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authConfig = {
   providers: [
     // Using GitHub as a simple OAuth provider for demo purposes
     // In production, you'd want to use Instagram OAuth
-    GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
     }),
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
     // Simple credentials provider for demo
-    Credentials({
+    CredentialsProvider({
       name: "credentials",
       credentials: {
         username: { label: "Username", type: "text" },
@@ -85,7 +85,8 @@ export const authConfig = {
       return session;
     },
   },
-} satisfies NextAuthConfig;
+  secret: process.env.AUTH_SECRET,
+} satisfies NextAuthOptions;
 
 // Extend the types to include custom fields
 declare module "next-auth" {
