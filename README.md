@@ -654,11 +654,111 @@ Set environment variables specific to preview deployments:
 - Interactive button functions
 - API routes respond
 - No console errors
+- Speed Insights metrics (if configured)
 
 ❌ **What won't work on preview:**
 - Custom domains
 - Production-only environment variables
 - Some third-party integrations
+
+### Performance Monitoring with Vercel Speed Insights
+
+**Vercel Speed Insights** is now integrated into your project for performance monitoring!
+
+#### What is Speed Insights?
+
+Vercel Speed Insights provides:
+- **Real User Monitoring (RUM)**: Track actual user performance
+- **Core Web Vitals**: Measure LCP, FID, CLS
+- **Performance Metrics**: Load times, TTI, FCP
+- **Dashboard**: Visualize performance data
+- **Alerts**: Get notified of performance regressions
+
+#### Setup Complete ✅
+
+The project already includes:
+
+1. **Package installed**: `@vercel/speed-insights` in `package.json`
+2. **Component added**: `<SpeedInsights />` in `app/layout.tsx`
+
+#### How It Works
+
+1. **Automatic Collection**: Speed Insights automatically collects performance data from real users
+2. **No Configuration**: Works out of the box with Next.js
+3. **Vercel Integration**: Data appears in your Vercel project dashboard
+
+#### Viewing Performance Data
+
+1. Go to: [https://vercel.com/dashboard](https://vercel.com/dashboard)
+2. Select your **Virlet** project
+3. Go to **Speed Insights** tab
+4. View:
+   - Performance metrics over time
+   - Core Web Vitals scores
+   - Page load distributions
+   - User experience breakdowns
+
+#### Performance Metrics Tracked
+
+| Metric | Description | Target |
+|--------|-------------|--------|
+| **LCP** | Largest Contentful Paint | < 2.5s |
+| **FID** | First Input Delay | < 100ms |
+| **CLS** | Cumulative Layout Shift | < 0.1 |
+| **FCP** | First Contentful Paint | < 1.8s |
+| **TTI** | Time to Interactive | < 3.8s |
+| **TBT** | Total Blocking Time | < 200ms |
+
+#### Customizing Speed Insights
+
+The `<SpeedInsights />` component accepts props:
+
+```typescript
+<SpeedInsights
+  // Optional: Custom endpoint (default: Vercel's endpoint)
+  endpoint="https://vitals.vercel-insights.com/v1/speed-insights"
+  // Optional: Debug mode
+  debug={false}
+  // Optional: Sample rate (0-1, default: 1)
+  sampleRate={1}
+/>
+```
+
+#### Disabling in Development
+
+To disable Speed Insights in development:
+
+```typescript
+{process.env.NODE_ENV === 'production' && <SpeedInsights />}
+```
+
+#### Best Practices
+
+✅ **Do:**
+- Keep Speed Insights in production
+- Monitor Core Web Vitals regularly
+- Set performance budgets
+- Optimize based on real user data
+
+❌ **Don't:**
+- Remove Speed Insights (it's lightweight)
+- Ignore performance regressions
+- Test only on fast connections
+
+#### Troubleshooting
+
+**Speed Insights not showing data?**
+1. Wait 5-10 minutes after deployment
+2. Ensure the component is in your root layout
+3. Check for ad blockers (they may block the script)
+4. Verify deployment succeeded
+5. Check Vercel dashboard for errors
+
+**High CLS or LCP?**
+- Optimize images with `next/image`
+- Use dynamic imports for heavy components
+- Implement loading states
+- Check font loading (use `next/font`)
 
 ### Automatic Deployments (Git Integration)
 
