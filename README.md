@@ -48,7 +48,7 @@
 |-------------------|---------------------|---------|---------------|
 | **Frontend**      | **Next.js 14.2.3** | Frontend + Backend (API routes) in one | No separate server needed; built-in API routes, SSR, and static export. |
 | **Database**      | LowDB | Lightweight JSON file database | Zero setup, file-based, perfect for on-premises and small-scale apps. |
-| **Authentication**| NextAuth.js v5 | OAuth 2.0 (GitHub, Google, etc.) + JWT | Built for Next.js, supports multiple OAuth providers. |
+| **Authentication**| NextAuth.js v4 | OAuth 2.0 (GitHub, Google, etc.) + JWT | Built for Next.js, supports multiple OAuth providers. |
 | **Styling**       | Tailwind CSS | Utility-first CSS framework | Rapid UI development with pre-defined classes. |
 | **TypeScript**    | TypeScript | Type safety | Better developer experience and code maintainability. |
 | **Deployment**    | Vercel | Hosting platform | Optimized for Next.js applications. |
