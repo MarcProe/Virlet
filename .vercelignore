@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+
+# Testing
+__tests__
+coverage
+
+# Next.js
+.next
+out
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+
+# Local files
+.env
+.env.local
+.env.*.local
+
+# Documentation
+*.md
+
+# Config files (kept in repo, but not needed for deployment)
+vercel.json
+.vercelignore

@@ -17,7 +17,8 @@
 9. [API Integration](#-api-integration)
 10. [UI/UX Guidelines](#-uiux-guidelines)
 11. [On-Premises Deployment](#-on-premises-deployment)
-12. [Data Storage](#-data-storage)
+12. [Vercel Deployment](#-vercel-deployment-recommended)
+13. [Data Storage](#-data-storage)
 13. [Security](#-security)
 14. [Roadmap](#-roadmap)
 15. [Contributing](#-contributing)
@@ -449,6 +450,317 @@ INSTAGRAM_CLIENT_SECRET=your_client_secret
 ```
 
 **Never commit `.env.local` to Git!** It's already in `.gitignore`.
+
+---
+
+---
+## **☁️ Vercel Deployment (Recommended)**
+
+Vercel is the recommended platform for deploying Next.js applications. It offers:
+- Zero-configuration deployment for Next.js
+- Automatic CI/CD
+- Edge network for fast global performance
+- Built-in support for Serverless Functions
+- Free tier for personal projects
+
+### Prerequisites
+
+1. **Vercel Account**: [Sign up for free](https://vercel.com/signup)
+2. **Vercel CLI**: Install the CLI tool
+   ```bash
+   npm install -g vercel
+   ```
+3. **GitHub Integration**: Connect your GitHub account to Vercel
+
+### Method 1: Deploy via Vercel Dashboard (Easiest)
+
+#### Step 1: Import the Repository
+
+1. Go to [https://vercel.com/dashboard](https://vercel.com/dashboard)
+2. Click "Add New" → "Project"
+3. Click "Import" next to your GitHub repository
+4. Select the repository: `MarcProe/Virlet`
+
+#### Step 2: Configure Project
+
+- **Project Name**: `virlet` (or your preferred name)
+- **Framework Preset**: **Next.js** (auto-detected)
+- **Build Command**: `npm run build` (auto-detected)
+- **Output Directory**: `.next` (auto-detected)
+- **Install Command**: `npm install` (auto-detected)
+- **Root Directory**: (leave empty for root)
+
+#### Step 3: Environment Variables
+
+Add any environment variables your app needs:
+- Click "Environment Variables" in the project settings
+- Add variables like `INSTAGRAM_CLIENT_ID`, `INSTAGRAM_CLIENT_SECRET`, etc.
+
+#### Step 4: Deploy
+
+Click "Deploy". Vercel will:
+1. Clone your repository
+2. Install dependencies
+3. Build the app
+4. Deploy to a preview URL
+5. Assign a production URL
+
+#### Step 5: Access Your App
+
+- **Preview Deployment**: Available immediately after push
+- **Production URL**: Assigned after first successful deployment
+- Example: `https://virlet.vercel.app` or `https://virlet-[hash].vercel.app`
+
+### Method 2: Deploy via Vercel CLI
+
+#### Step 1: Install Vercel CLI
+
+```bash
+npm install -g vercel
+```
+
+#### Step 2: Login to Vercel
+
+```bash
+vercel login
+```
+
+This will open your browser for authentication.
+
+#### Step 3: Link Project to Vercel
+
+```bash
+# Navigate to your project directory
+cd Virlet
+
+# Link to an existing Vercel project
+vercel link
+
+# Or create a new project
+vercel
+```
+
+Follow the prompts to:
+- Select your Vercel account
+- Link to your GitHub repository
+- Configure project settings
+
+#### Step 4: Deploy
+
+```bash
+# Development deployment (preview)
+vercel
+
+# Production deployment
+vercel --prod
+```
+
+#### Step 5: Push to GitHub for Automatic Deployments
+
+```bash
+# Add and commit your changes
+git add .
+git commit -m "feat: add new feature"
+git push origin main
+```
+
+Vercel will automatically deploy when you push to the linked branch.
+
+### Automatic Deployments (Git Integration)
+
+Once connected to GitHub, Vercel provides:
+
+- **Preview Deployments**: Created for every pull request
+- **Production Deployments**: Created when merging to `main`
+- **Rollbacks**: Instant rollback to previous deployments
+- **Custom Domains**: Add your own domain (e.g., `virlet.com`)
+
+#### Setting Up Git Integration
+
+1. Go to your project in [Vercel Dashboard](https://vercel.com/dashboard)
+2. Navigate to "Git" tab
+3. Connect your GitHub repository
+4. Configure deployment settings:
+   - **Production Branch**: `main`
+   - **Preview Branch**: All branches
+   - **Build & Development Settings**: Auto-detected
+
+### Configuration Files
+
+The project includes these Vercel-specific files:
+
+- **`vercel.json`**: Vercel project configuration
+  - Specifies build settings
+  - Configures routes
+  - Sets install command
+
+- **`.vercelignore`**: Files to exclude from deployment
+  - Excludes `node_modules`, `.next`, test files
+  - Reduces deployment size and speeds up builds
+
+### Environment Variables on Vercel
+
+#### Adding Environment Variables
+
+1. **Via Dashboard**:
+   - Go to Project → Settings → Environment Variables
+   - Click "Add New"
+   - Enter Name and Value
+   - Select environments (Production, Preview, Development)
+
+2. **Via CLI**:
+   ```bash
+   vercel env add
+   ```
+
+#### Example Environment Variables
+
+```bash
+# Next.js Configuration
+NEXT_PUBLIC_APP_URL=https://virlet.vercel.app
+NEXT_PUBLIC_API_URL=https://virlet.vercel.app/api
+
+# Instagram API (for future integration)
+INSTAGRAM_CLIENT_ID=your_client_id
+INSTAGRAM_CLIENT_SECRET=your_client_secret
+INSTAGRAM_REDIRECT_URI=https://virlet.vercel.app/api/auth/callback/instagram
+
+# Database (for future LowDB or other)
+DATABASE_URL=your_database_url
+```
+
+### Custom Domain Setup
+
+To use your own domain (e.g., `virlet.com`):
+
+1. Go to Project → Settings → Domains
+2. Click "Add Domain"
+3. Enter your domain name
+4. Follow DNS configuration instructions
+5. Wait for DNS propagation (can take up to 48 hours)
+
+### Monitoring and Analytics
+
+Vercel provides built-in monitoring:
+
+- **Deployment Logs**: View build and runtime logs
+- **Performance Metrics**: Core Web Vitals, load times
+- **Error Tracking**: Automatic error detection
+- **Analytics**: Page views, unique visitors
+
+Access these in your project dashboard under "Analytics" and "Logs" tabs.
+
+### Troubleshooting Vercel Deployments
+
+#### Common Issues
+
+**1. Build Fails**
+- Check `npm install` works locally
+- Verify Node.js version (Vercel uses latest LTS)
+- Check for missing environment variables
+- Review build logs in Vercel dashboard
+
+**2. Deployment Stuck**
+- Check Vercel status: [https://status.vercel.com](https://status.vercel.com)
+- Try redeploying manually
+- Check for infinite loops in your code
+
+**3. 404 Errors**
+- Verify your `next.config.js` export settings
+- Check that `output: 'standalone'` is not set (unless intentional)
+- Ensure all pages are in the correct directory
+
+**4. Environment Variables Not Loading**
+- Verify variables are added in Vercel dashboard
+- Check variable names match your code
+- Ensure variables are marked for the correct environment
+
+**5. Slow Deployments**
+- Reduce `node_modules` size (remove unused dependencies)
+- Use `.vercelignore` to exclude unnecessary files
+- Enable caching in Vercel project settings
+
+### Vercel Project Settings
+
+Recommended settings for this project:
+
+| Setting | Value | Notes |
+|---------|-------|-------|
+| **Node.js Version** | Latest (20.x) | Next.js 16 requires Node.js 20.9+ |
+| **Memory** | 3008 MB | Sufficient for Next.js builds |
+| **Max Duration** | 60s | For Serverless Functions |
+| **Regions** | Auto | Deploy to multiple regions |
+| **Concurrency** | Default | Adjust based on traffic |
+
+### Useful Vercel Commands
+
+```bash
+# List all projects
+vercel projects
+
+# List deployments
+vercel deployments
+
+# View logs for a deployment
+vercel logs
+
+# Pull environment variables locally
+vercel env pull
+
+# Push environment variables to Vercel
+vercel env push
+
+# Open project in browser
+vercel open
+
+# Remove a deployment
+vercel remove
+```
+
+### Testing on Vercel
+
+#### Preview Deployments
+
+Every pull request creates a preview deployment:
+- URL format: `https://virlet-[branch-name]-[hash].vercel.app`
+- Automatically updated as you push new commits
+- Perfect for testing PRs before merging
+
+#### Production Testing
+
+After merging to `main`:
+1. Deployment automatically starts
+2. Wait for build to complete (usually 1-3 minutes)
+3. Test at your production URL
+4. Use Vercel's rollback feature if issues arise
+
+### Continuous Deployment Workflow
+
+```bash
+# 1. Create a feature branch
+git checkout -b feature/new-feature
+
+# 2. Make changes and commit
+git add .
+git commit -m "feat: add new feature"
+git push origin feature/new-feature
+
+# 3. Vercel automatically creates a preview deployment
+#    URL: https://virlet-feature-new-feature-[hash].vercel.app
+
+# 4. Test the preview deployment
+#    - Open the preview URL
+#    - Test all functionality
+#    - Check console for errors
+
+# 5. Create a PR on GitHub
+#    - Vercel adds a comment with the preview URL
+#    - Reviewers can test the preview
+
+# 6. After approval, merge to main
+#    - Vercel automatically deploys to production
+#    - Production URL: https://virlet.vercel.app
+```
 
 ---
 
