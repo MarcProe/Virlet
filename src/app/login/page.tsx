@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [debugAvailable, setDebugAvailable] = useState(false);
   const router = useRouter();
 
-  // Check if debug endpoint is available (only once on mount)
+  // Check if debug endpoint is available
   useEffect(() => {
     const checkDebugAvailable = async () => {
       try {
@@ -27,7 +27,7 @@ export default function LoginPage() {
       }
     };
     checkDebugAvailable();
-  }, []); // Empty dependency array = run once on mount
+  }, []);
 
   const handleOAuthSignIn = (provider: string) => {
     setLoading(true);
@@ -44,8 +44,13 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        // Manually redirect to dashboard after setting the cookie
-        window.location.href = "/dashboard";
+        const { user } = await response.json();
+        // Use NextAuth.js's signIn to set the session
+        await signIn("credentials", {
+          user,
+          redirect: false,
+        });
+        router.push("/dashboard");
       } else {
         const errorData = await response.json();
         setError(errorData.error || "Failed to log in with debug token.");
