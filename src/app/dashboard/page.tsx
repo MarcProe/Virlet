@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import AccountWidget from "@/components/AccountWidget";
 import Image from "next/image";
@@ -30,7 +30,7 @@ export default function DashboardPage() {
                 Virlet
               </h1>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <div className="relative flex-shrink-0 h-8 w-8">
                 <Image
                   className="rounded-full object-cover"
@@ -48,6 +48,12 @@ export default function DashboardPage() {
                   {session.user?.email}
                 </div>
               </div>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>
