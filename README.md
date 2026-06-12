@@ -62,3 +62,14 @@
 
 - **Never push to main!**
 - For every session, create **ONE feature branch** and **ONE PR** that is updated on every push to the branch.
+
+---
+
+---
+## **🎨 UI/UX Guidelines**
+
+Design system and styling rules are defined in the `.typeui/` directory:
+- **[`.typeui/DESIGN.md`](./.typeui/DESIGN.md)**: Color palettes (light + dark mode), typography, spacing, and rounded corners for the Neumorphism theme.
+- **[`.typeui/SKILL.md`](./.typeui/SKILL.md)**: Full design system specification and implementation details.
+
+Follow these guidelines to maintain visual consistency across the app.
