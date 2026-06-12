@@ -1,108 +1,181 @@
 # **Virlet: Instagram Creator Analytics & Management App**
-*Modern, adaptive one-page web app for sports creators to track, analyze, and optimize Instagram performance.*
-
-![Virlet Dashboard Preview](https://via.placeholder.com/1200x630/1F2937/3B82F6?text=Virlet+Dashboard) *(Replace with actual dark-themed screenshot later)*
+*Modern, adaptive dashboard for sports creators to track, analyze, and optimize Instagram performance.*
 
 ---
 
-## **📌 Table of Contents**
-1. [Overview](#-overview)
-2. [Tech Stack](#-tech-stack)
-3. [Features](#-features)
-4. [Dev Rules](#-dev-rules)
-5. [Project Structure](#-project-structure)
-6. [Authentication](#-authentication)
-7. [UI/UX Guidelines](#-uiux-guidelines)
-8. [On-Premises Deployment](#-on-premises-deployment)
-9. [Data Storage](#-data-storage)
-10. [License](#-license)
+## **Table of Contents**
+1. [Overview](#overview)
+2. [Tech Stack](#tech-stack)
+3. [Features](#features)
+4. [Widget System](#widget-system)
+5. [Project Structure](#project-structure)
+6. [Dev Rules](#dev-rules)
+7. [Authentication](#authentication)
+8. [UI/UX Guidelines](#uiux-guidelines)
+9. [License](#license)
 
 ---
 
-## **📌 Overview**
-**Virlet** is a **Next.js-based web app** (frontend + backend in one) for Instagram creators to **measure post impact, analyze audience growth, and manage content professionally**. The app is:
-- **One-page, adaptive** (works on mobile, tablet, desktop)
-- **Visually striking** (big, colorful elements, interactive graphs)
-- **Zero-setup backend** (uses Next.js API routes + Dexie.js for client-side persistence)
-- **On-premises ready** (self-hosted, no cloud dependencies)
-- **Data-driven** (real-time analytics, exportable reports)
-- **Token-based Instagram auth** (paste your long-lived access token once, stored in the browser)
+## **Overview**
+**Virlet** is a **Next.js-based web app** for Instagram creators to measure post impact, analyze audience growth, and manage content professionally. The app is:
+- **Widget-based dashboard** — add, remove, resize, and configure widgets freely
+- **One-page, adaptive** — works on mobile, tablet, desktop
+- **Visually striking** — neumorphic design with light/dark mode
+- **Zero-setup backend** — Next.js API routes + Dexie.js for client-side persistence (IndexedDB)
+- **Deployed on Vercel** — automatic CI/CD on every push
 
 **Target Users**: Sports influencers, athletes, and content creators.
 
 ---
 
-## **✨ Features**
+## **Features**
 
 ### Done
 | Feature | Description |
 |---------|-------------|
-| Instagram token auth | Paste a long-lived Instagram API token; profile card shown on connect |
-| Profile card | Shows avatar, name, @handle, bio, follower count, post count, website |
+| Widget dashboard | 10-column grid; widgets can span multiple columns and be freely positioned |
+| Widget shell | Every widget has a title bar with a progress ring (reload indicator), settings gear, minimize, and close |
+| Widget persistence | All widget state (position, config, minimized) stored in IndexedDB via Dexie — survives page refresh |
+| Sidebar panel | Slide-in panel for adding new widgets and editing their settings at runtime |
+| Widget registry | Central registry maps widget types to components, config fields, and singleton rules |
+| Singleton widgets | Widgets flagged as singleton can only be added once; greyed out in catalog when present |
+| Auto-reload | Per-widget configurable reload interval (e.g. `30s`, `5m`, `1h`); progress shown as pie ring |
+| Manual reload | Click the progress ring to reload immediately and restart the auto-reload timer |
+| Last-updated timestamp | Each widget title bar shows a relative timestamp of the last successful data fetch |
+| Instagram profile widget | Compact card: avatar (with bio tooltip on hover), name, handle, follower count, post count |
+| Instagram token auth | Paste a long-lived access token in the widget settings gear; stored in widget config in Dexie |
+| Logout | Profile widget has a dedicated logout button that clears the token from Dexie |
 
 ### Todo
 | Feature | Description |
 |---------|-------------|
-| Analytics dashboard | Post performance, reach, engagement over time |
-| Media feed | Grid view of recent posts with stats |
+| Analytics widget | Post performance, reach, engagement rate over time |
+| Media feed widget | Grid view of recent posts with per-post stats |
+| Engagement rate | Computed from recent media: (avg likes + comments) / followers |
+| Profile insights | Reach, impressions, profile views, website clicks (requires `instagram_manage_insights`) |
 
 ---
 
-## **🛠️ Tech Stack**
+## **Tech Stack**
 
-| Category          | Technology          | Purpose                                                                 | Justification                                                                 |
-|-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| **Frontend**      | **Next.js 16.2.9** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
-| **Database**      | **Dexie.js**       | Lightweight IndexedDB wrapper for browser-based NoSQL persistence       | SQL-like syntax, transactions, and offline-first storage. Ideal for client-side data with zero server dependencies. |
-| **Styling**       | **TypeUI Neumorphism** | Design system for neumorphic UI (colors, typography, spacing)      | Pre-configured theme with light/dark palettes, compact spacing, and rounded corners. |
-| **Deployment**    | **Vercel**         | Cloud platform for Next.js apps                                        | Optimized for Next.js, with automatic CI/CD, edge functions, and zero-config deployments. |
-| **Version Control** | **Git**         | Code collaboration and versioning                                      | Enables branch protection, pull requests, and CI/CD pipelines. Hosted on GitHub. |
-
----
-
-## **📁 Project Structure**
-
-| Path | Description |
-|------|-------------|
-| `/pages/` | Next.js page routes (`index.tsx`, `404.tsx`, `_app.tsx`) |
-| `/pages/api/` | Next.js API routes for backend logic |
-| `/components/` | Shared React components (e.g., `CenteredCard.tsx`) |
-| `/styles/` | Global CSS tokens and base styles (`globals.css`) |
-| `/.typeui/` | TypeUI design system files (`DESIGN.md`, `SKILL.md`) |
-| `package.json` | Project dependencies and scripts |
-| `next.config.js` | Next.js configuration |
-| `vercel.json` | Vercel deployment configuration |
-| `README.md` | Project documentation |
+| Category | Technology | Purpose |
+|----------|------------|---------|
+| **Frontend** | Next.js 16.2.9 | Full-stack framework (frontend + API routes) |
+| **Database** | Dexie.js 4.x | IndexedDB wrapper for client-side widget persistence |
+| **Styling** | TypeUI Neumorphism | Design system: colors, typography, spacing, shadows |
+| **Deployment** | Vercel | Automatic CI/CD, preview deployments per branch |
+| **Version Control** | Git / GitHub | Branch-per-feature, PR-per-feature workflow |
 
 ---
 
-## 🚀 Dev Rules
+## **Widget System**
 
-- **Never push to main!**
-- For every session, create **ONE feature branch** and **ONE PR** that is updated on every push to the branch.
+Widgets are the core building block of Virlet. Every widget consists of two parts:
+
+### Shell (`components/widgets/Widget.tsx`)
+The generic wrapper every widget lives in. Provides:
+- Title bar with label and last-updated timestamp
+- Progress ring — fills as time passes toward the next auto-reload; click to reload now
+- Settings gear — opens the sidebar in config mode for this widget
+- Minimize toggle — collapses the widget body; title bar remains
+- Close button — removes the widget instance from Dexie
+
+### Registry (`components/widgets/WidgetRegistry.tsx`)
+Maps a `type` string to everything needed to render and configure a widget:
+
+```ts
+{
+  type: 'profile',
+  label: 'Instagram Profile',
+  singleton: true,          // only one instance allowed
+  configFields: [           // rendered as form fields in the sidebar
+    { key: 'token', label: 'Access Token', type: 'password' }
+  ],
+  component: ProfileWidget,
+}
+```
+
+### Adding a new widget type
+1. Create `components/widgets/YourWidget.tsx` implementing `WidgetContentProps`
+2. Add an entry to `REGISTRY` in `WidgetRegistry.tsx`
+3. That's it — the sidebar, shell, persistence, and auto-reload all work automatically
+
+### Instance storage (Dexie)
+Each widget instance is stored as:
+
+```ts
+{
+  id: string;         // uuid
+  type: string;       // maps to registry
+  minimized: boolean;
+  x: number;          // start column (0-indexed)
+  y: number;          // sort order (lower = higher on page)
+  colSpan?: number;   // columns to span (default 1)
+  config: Record<string, unknown>;  // widget-specific settings
+  lastUpdated?: number;             // epoch ms of last successful fetch
+  interval?: string;                // auto-reload interval e.g. "5m"
+}
+```
 
 ---
 
-## **🔑 Authentication**
+## **Project Structure**
 
-Virlet uses **direct Instagram API token auth** — no OAuth flow, no server-side session. You generate a long-lived access token once and paste it into the app. It is stored in `localStorage` and used for all Graph API calls.
+```
+/
+├── pages/
+│   ├── _app.tsx              # App shell, fonts, global head
+│   ├── index.tsx             # Dashboard — grid layout, widget rendering
+│   ├── index.module.css      # Dashboard styles (10-col grid)
+│   └── 404.tsx               # Custom 404
+├── components/
+│   ├── widgets/
+│   │   ├── Widget.tsx        # Generic widget shell
+│   │   ├── Widget.module.css
+│   │   ├── WidgetRegistry.tsx  # Central widget type registry
+│   │   ├── ProfileWidget.tsx   # Instagram profile widget
+│   │   └── ProfileWidget.module.css
+│   └── sidebar/
+│       ├── Sidebar.tsx       # Slide-in config/add panel
+│       └── Sidebar.module.css
+├── lib/
+│   ├── db.ts                 # Dexie database definition
+│   └── parseInterval.ts      # Parses "30s" / "5m" / "1h" to ms
+├── types/
+│   └── widget.ts             # WidgetInstance, ConfigField, WidgetContentProps
+├── styles/
+│   └── globals.css           # CSS custom properties, dark mode, base reset
+└── .typeui/
+    ├── DESIGN.md             # Color palettes, typography, spacing tokens
+    └── SKILL.md              # Full TypeUI neumorphism design system spec
+```
+
+---
+
+## **Dev Rules**
+
+- **Never push to main directly**
+- For every session, create **one feature branch** and **one PR**
+
+---
+
+## **Authentication**
+
+Virlet uses **direct Instagram API token auth** — no OAuth flow, no server-side session. Generate a long-lived access token once and paste it into the Profile widget settings. It is stored in the widget's Dexie config record, not in `localStorage`.
 
 ### How to get your Instagram access token
-
 **[How To Get Instagram API Key (Access Token)](https://www.youtube.com/watch?v=sPjlyDSNYQs)**
 
 ---
 
-## **🎨 UI/UX Guidelines**
+## **UI/UX Guidelines**
 
 Design system and styling rules are defined in the `.typeui/` directory:
-- **[`.typeui/DESIGN.md`](./.typeui/DESIGN.md)**: Color palettes (light + dark mode), typography, spacing, and rounded corners for the Neumorphism theme.
-- **[`.typeui/SKILL.md`](./.typeui/SKILL.md)**: Full design system specification and implementation details.
-
-Follow these guidelines to maintain visual consistency across the app.
+- **[`.typeui/DESIGN.md`](./.typeui/DESIGN.md)**: Color palettes (light + dark mode), typography, spacing, and shadow tokens
+- **[`.typeui/SKILL.md`](./.typeui/SKILL.md)**: Full neumorphism design system specification
 
 ---
 
-## **📜 License**
+## **License**
 
 This project is licensed under the **MIT License**. See **[`LICENSE.md`](./LICENSE.md)** for the full license text.
