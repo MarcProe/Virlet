@@ -34,7 +34,7 @@
 **Virlet** is a **Next.js-based web app** (frontend + backend in one) for Instagram creators to **measure post impact, analyze audience growth, and manage content professionally**. The app is:
 ✅ **One-page, adaptive** (works on mobile, tablet, desktop)
 ✅ **Visually striking** (big, colorful elements, interactive graphs)
-✅ **Zero-setup backend** (uses Next.js API routes + LowDB)
+✅ **Zero-setup backend** (uses Next.js API routes + Dexie.js for client-side persistence)
 ✅ **On-premises ready** (self-hosted, no cloud dependencies)
 ✅ **Data-driven** (real-time analytics, exportable reports)
 ✅ **Instagram Authentication** (for the app itself and API access to Instagram)
@@ -64,7 +64,7 @@
 | Category          | Technology          | Purpose                                                                 | Justification                                                                 |
 |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
 | **Frontend**      | **Next.js 16.2.9** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
-| **Database**      | **LowDB**          | Lightweight JSON file database                                         | Zero setup, file-based storage. Ideal for on-premises and small-scale apps. Supports CRUD operations via Lodash. |
+| **Database**      | **Dexie.js**       | Lightweight IndexedDB wrapper for browser-based NoSQL persistence       | SQL-like syntax, transactions, and offline-first storage. Ideal for client-side data with zero server dependencies. |
 | **Authentication**| **NextAuth.js**    | OAuth 2.0 (Instagram, Google, etc.) + JWT                              | Built for Next.js. Simplifies OAuth flows (e.g., Instagram login) and session management. |
 | **Styling**       | **TypeUI Neumorphism** | Design system for neumorphic UI (colors, typography, spacing)      | Pre-configured theme with light/dark palettes, compact spacing, and rounded corners. |
 | **Deployment**    | **Vercel**         | Cloud platform for Next.js apps                                        | Optimized for Next.js, with automatic CI/CD, edge functions, and zero-config deployments. |
