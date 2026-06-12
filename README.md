@@ -60,14 +60,15 @@
 
 ---
 ## **🛠️ Tech Stack**
-   Category          | Technology          | Purpose                                                                 | Justification                                                                 |
- |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
- | **Frontend**      | **Next.js 16.2.7** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
- | **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
- | **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
- | **Style Template**  | TypeUI Neumorphism | Style Template | |
- | **Deployment**    | Vercel |                     |                          |
- | **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
+
+| Category          | Technology          | Purpose                                                                 | Justification                                                                 |
+|-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| **Frontend**      | **Next.js 16.2.7** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
+| **Database**      | **LowDB**          | Lightweight JSON file database                                         | Zero setup, file-based storage. Ideal for on-premises and small-scale apps. Supports CRUD operations via Lodash. |
+| **Authentication**| **NextAuth.js**    | OAuth 2.0 (Instagram, Google, etc.) + JWT                              | Built for Next.js. Simplifies OAuth flows (e.g., Instagram login) and session management. |
+| **Styling**       | **TypeUI Neumorphism** | Design system for neumorphic UI (colors, typography, spacing)      | Pre-configured theme with light/dark palettes, compact spacing, and rounded corners. |
+| **Deployment**    | **Vercel**         | Cloud platform for Next.js apps                                        | Optimized for Next.js, with automatic CI/CD, edge functions, and zero-config deployments. |
+| **Version Control** | **Git**         | Code collaboration and versioning                                      | Enables branch protection, pull requests, and CI/CD pipelines. Hosted on GitHub. |
 
 
 ---
