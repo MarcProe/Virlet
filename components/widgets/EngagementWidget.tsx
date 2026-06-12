@@ -67,10 +67,11 @@ function metricLabel(metric: string): string {
 // defined outside component to avoid recharts re-render issues
 function renderDot(props: Record<string, unknown>): React.ReactElement {
   const { cx, cy, payload, index } = props as { cx: number; cy: number; payload: ChartPoint; index: number };
+  const openPost = () => { if (payload.post.permalink) window.open(payload.post.permalink, '_blank', 'noopener'); };
   if (payload.isHighlighted) {
-    return <circle key={index} cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="var(--surface)" strokeWidth={2} />;
+    return <circle key={index} cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="var(--surface)" strokeWidth={2} onClick={openPost} style={{ cursor: 'pointer' }} />;
   }
-  return <circle key={index} cx={cx} cy={cy} r={3} fill="var(--fg-brand)" fillOpacity={0.65} />;
+  return <circle key={index} cx={cx} cy={cy} r={3} fill="var(--fg-brand)" fillOpacity={0.65} onClick={openPost} style={{ cursor: 'pointer' }} />;
 }
 
 function TooltipContent({ active, payload, metric }: { active?: boolean; payload?: { payload: ChartPoint }[]; metric: string }) {
@@ -122,14 +123,20 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
         const sorted = values.map((v, i) => ({ v, i })).sort((a, b) => b.v - a.v);
         const topIdx = new Set(sorted.slice(0, hlCount).map(x => x.i));
 
-        setPoints(posts.map((post, i) => ({
+        const nextPoints = posts.map((post, i) => ({
           index: i,
           date: fmtDate(post.timestamp),
           value: parseFloat(values[i].toFixed(3)),
           trend: parseFloat(trendFn(i).toFixed(3)),
           post,
           isHighlighted: topIdx.has(i),
-        })));
+        }));
+        // preload thumbnail images so hover tooltip doesn't trigger network requests
+        nextPoints.forEach(pt => {
+          const src = pt.post.media_type === 'VIDEO' ? pt.post.thumbnail_url : pt.post.media_url;
+          if (src) { const img = new Image(); img.src = src; }
+        });
+        setPoints(nextPoints);
         setLoading(false);
         onRefreshed();
       })
@@ -175,16 +182,7 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
       </div>
 
       <ResponsiveContainer width="100%" height={190}>
-        <ComposedChart
-          data={points}
-          margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-          style={{ cursor: 'pointer' }}
-          onClick={(data) => {
-            const d = data as unknown as { activePayload?: { payload: ChartPoint }[] };
-            const pt = d?.activePayload?.[0]?.payload;
-            if (pt?.post.permalink) window.open(pt.post.permalink, '_blank', 'noopener');
-          }}
-        >
+        <ComposedChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" vertical={false} />
           <XAxis
             dataKey="date"
