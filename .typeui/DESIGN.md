@@ -9,6 +9,15 @@ colors:
   surface: "#E7E5E4"
   text: "#1E2938"
   neutral: "#E7E5E4"
+dark:
+  primary: "#00A3A3"
+  secondary: "#1E1E1E"
+  success: "#00D4AA"
+  warning: "#FFB347"
+  danger: "#FF5E8A"
+  surface: "#2D2D2D"
+  text: "#E0E0E0"
+  neutral: "#3A3A3A"
 typography:
   h1:
     fontFamily: "Space Mono"
@@ -53,3 +62,13 @@ Soft, extruded UI elements with inner and outer shadows on monochromatic surface
 - **Surface (#E7E5E4):** Token from style foundations.
 - **Text (#1E2938):** Token from style foundations.
 - **Neutral (#E7E5E4):** Derived from the surface token for official format compatibility.
+
+## Dark Mode Colors
+- **Primary (#00A3A3):** Brighter teal for contrast in dark mode.
+- **Secondary (#1E1E1E):** Deep background for dark theme.
+- **Surface (#2D2D2D):** Elevated surfaces on dark backgrounds.
+- **Text (#E0E0E0):** High-contrast light text for readability.
+- **Success (#00D4AA):** Vibrant green for success states.
+- **Warning (#FFB347):** Soft orange for warnings.
+- **Danger (#FF5E8A):** Muted pink for errors.
+- **Neutral (#3A3A3A):** Subtle borders and dividers.
