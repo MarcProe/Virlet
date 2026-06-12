@@ -32,12 +32,12 @@
 ---
 ## **📌 Overview**
 **Virlet** is a **Next.js-based web app** (frontend + backend in one) for Instagram creators to **measure post impact, analyze audience growth, and manage content professionally**. The app is:
-✅ **One-page, adaptive** (works on mobile, tablet, desktop)
-✅ **Visually striking** (big, colorful elements, interactive graphs)
-✅ **Zero-setup backend** (uses Next.js API routes + Dexie.js for client-side persistence)
-✅ **On-premises ready** (self-hosted, no cloud dependencies)
-✅ **Data-driven** (real-time analytics, exportable reports)
-✅ **Instagram Authentication** (for the app itself and API access to Instagram)
+- **One-page, adaptive** (works on mobile, tablet, desktop)
+- **Visually striking** (big, colorful elements, interactive graphs)
+- **Zero-setup backend** (uses Next.js API routes + Dexie.js for client-side persistence)
+- **On-premises ready** (self-hosted, no cloud dependencies)
+- **Data-driven** (real-time analytics, exportable reports)
+- **Instagram Authentication** (for the app itself and API access to Instagram)
 
 **Target Users**: Sports influencers, athletes, and content creators.
 
@@ -49,7 +49,7 @@
 ### Done
 | Feature | Description |
 |---------|-------------|
-| Basic "Hello World" implementation | Placeholder homepage (`pages/index.js`) |
+| Basic "Hello World" implementation | Placeholder homepage (`pages/index.tsx`) |
 
 ### Todo
 | Feature | Description |
@@ -78,8 +78,10 @@
 
 | Path | Description |
 |------|-------------|
-| `/pages/` | Next.js page routes (e.g., `index.js` for homepage) |
+| `/pages/` | Next.js page routes (`index.tsx`, `404.tsx`, `_app.tsx`) |
 | `/pages/api/` | Next.js API routes for backend logic |
+| `/components/` | Shared React components (e.g., `CenteredCard.tsx`) |
+| `/styles/` | Global CSS tokens and base styles (`globals.css`) |
 | `/.typeui/` | TypeUI design system files (`DESIGN.md`, `SKILL.md`) |
 | `package.json` | Project dependencies and scripts |
 | `next.config.js` | Next.js configuration |

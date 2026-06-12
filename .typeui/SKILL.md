@@ -1038,6 +1038,8 @@ Group all radio items under the same `name` attribute.
 
 # Shadows
 
+### Light mode
+
 | Token | CSS value |
 |---|---|
 | shadow-2xs | `1px 1px 2px #b8b9be, -1px -1px 2px #ffffff` |
@@ -1048,6 +1050,17 @@ Group all radio items under the same `name` attribute.
 | shadow-xl | `10px 10px 20px #b8b9be, -10px -10px 20px #ffffff` |
 | shadow-2xl | `12px 12px 24px #b8b9be, -12px -12px 24px #ffffff` |
 | shadow-inset | `inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #ffffff` |
+
+### Dark mode (surface `#262833`)
+
+Dark shadow colors derived from the surface: dark side `#1a1b24` (surface - 10%), light side `#323442` (surface + 10%).
+
+| Token | CSS value |
+|---|---|
+| shadow-sm | `3px 3px 6px #1a1b24, -3px -3px 6px #323442` |
+| shadow-md | `6px 6px 12px #1a1b24, -6px -6px 12px #323442` |
+| shadow-lg | `8px 8px 16px #1a1b24, -8px -8px 16px #323442` |
+| shadow-inset | `inset 2px 2px 5px #1a1b24, inset -3px -3px 7px #323442` |
 
 ## Component Mapping
 
@@ -1072,7 +1085,7 @@ Group all radio items under the same `name` attribute.
 - Hover/focus on interactive elevated elements: step up by one level
 - Never stack multiple shadow tokens on one element
 - Never use shadow-xl/shadow-2xl for dense list items or body containers
-- In dark mode, shadow colors must be adjusted to match the dark surface (#262833): use darker/lighter variants of the surface color instead of #b8b9be/#ffffff
+- In dark mode, use the dark mode shadow tokens above — never use the light-mode `#b8b9be`/`#ffffff` values in a dark context
 
 ---
 
@@ -1295,7 +1308,7 @@ Children overlap with -1px left margin on all except first.
 
 ## Core Rules
 
-- **Font:** "Nunito Sans", sans-serif — configured at app level, never override
+- **Font:** "Space Mono", monospace (primary/display) and "JetBrains Mono", monospace (labels/code) — configured at app level via CSS variables, never override
 - **Headings:** semibold weight (600), heading text color
 - **Body copy:** body text color, never use brand color for paragraphs longer than one sentence
 - **Semantic HTML:** Use `h1`–`h6` in order, never skip levels
