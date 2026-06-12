@@ -135,13 +135,19 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
         setPoints(nextPoints);
         setLoading(false);
         onRefreshed();
-        // fetch images as blob URLs so tooltip never hits the network again
+        // fetch images as data URLs so tooltip never hits the network again (data: never appears in DevTools)
         Promise.all(nextPoints.map(async pt => {
           const src = pt.post.media_type === 'VIDEO' ? pt.post.thumbnail_url : pt.post.media_url;
           if (!src) return pt;
           try {
             const blob = await fetch(src).then(r => r.blob());
-            return { ...pt, blobSrc: URL.createObjectURL(blob) };
+            const dataUrl = await new Promise<string>((res, rej) => {
+              const reader = new FileReader();
+              reader.onload = () => res(reader.result as string);
+              reader.onerror = rej;
+              reader.readAsDataURL(blob);
+            });
+            return { ...pt, blobSrc: dataUrl };
           } catch { return pt; }
         })).then(cached => setPoints(cached));
       })
