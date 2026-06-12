@@ -7,6 +7,7 @@ import styles from './ProfileWidget.module.css';
 interface Profile {
   id: string;
   username: string;
+  name: string;
   biography: string;
   followers_count: number;
   media_count: number;
@@ -28,7 +29,7 @@ export default function ProfileWidget({ config, instanceId, refreshKey, onRefres
     if (!token) { setProfile(null); setError(null); return; }
     setError(null);
     fetch(
-      `https://graph.instagram.com/me?fields=id,username,biography,followers_count,media_count,profile_picture_url&access_token=${token}`
+      `https://graph.instagram.com/me?fields=id,username,name,biography,followers_count,media_count,profile_picture_url&access_token=${token}`
     )
       .then(r => r.json())
       .then(data => {
@@ -51,40 +52,41 @@ export default function ProfileWidget({ config, instanceId, refreshKey, onRefres
   if (!profile) return <p className={styles.loading}>Loading…</p>;
 
   return (
-    <div className={styles.row}>
-      <div className={styles.avatarWrap}>
-        {profile.profile_picture_url && (
-          <Image
-            className={styles.avatar}
-            src={profile.profile_picture_url}
-            alt={profile.username}
-            width={48}
-            height={48}
-            unoptimized
-          />
-        )}
-        {profile.biography && (
-          <div className={styles.bioTooltip}>{profile.biography}</div>
-        )}
+    <div className={styles.card}>
+      <div className={styles.top}>
+        <div className={styles.avatarWrap}>
+          {profile.profile_picture_url && (
+            <Image
+              className={styles.avatar}
+              src={profile.profile_picture_url}
+              alt={profile.username}
+              width={56}
+              height={56}
+              unoptimized
+            />
+          )}
+          {profile.biography && (
+            <div className={styles.bioTooltip}>{profile.biography}</div>
+          )}
+        </div>
+        <div className={styles.identity}>
+          {profile.name && <span className={styles.name}>{profile.name}</span>}
+          <span className={styles.handle}>@{profile.username}</span>
+        </div>
+        <button className={styles.logout} onClick={logout} title="Log out">↪</button>
       </div>
 
-      <span className={styles.handle}>@{profile.username}</span>
-
-      <div className={styles.divider} />
-
-      <div className={styles.stat}>
-        <span className={styles.statValue}>{fmt(profile.followers_count)}</span>
-        <span className={styles.statLabel}>Followers</span>
+      <div className={styles.stats}>
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{fmt(profile.followers_count)}</span>
+          <span className={styles.statLabel}>Followers</span>
+        </div>
+        <div className={styles.statDivider} />
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{fmt(profile.media_count)}</span>
+          <span className={styles.statLabel}>Posts</span>
+        </div>
       </div>
-
-      <div className={styles.divider} />
-
-      <div className={styles.stat}>
-        <span className={styles.statValue}>{fmt(profile.media_count)}</span>
-        <span className={styles.statLabel}>Posts</span>
-      </div>
-
-      <button className={styles.logout} onClick={logout} title="Log out">↪</button>
     </div>
   );
 }

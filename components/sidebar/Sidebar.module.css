@@ -186,33 +186,38 @@
   color: var(--danger);
 }
 
-.columnPicker {
+.positionRow {
   display: flex;
-  gap: 8px;
+  gap: 12px;
 }
 
-.colBtn {
+.posField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   flex: 1;
+}
+
+.posLabel {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  color: var(--body-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.numInput {
   background: var(--surface);
-  border: 1px solid var(--border-default);
-  border-radius: 8px;
-  padding: 8px;
+  color: var(--body);
   font-family: var(--font-space-mono), monospace;
   font-size: 0.875rem;
-  color: var(--body-subtle);
-  cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: all 150ms;
-}
-
-.colBtn:hover {
-  color: var(--heading);
-  box-shadow: var(--shadow-md);
-}
-
-.colBtnActive {
-  color: var(--fg-brand);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 8px 10px;
   box-shadow: var(--shadow-inset);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .saveBtn {

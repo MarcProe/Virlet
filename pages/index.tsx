@@ -8,7 +8,7 @@ import { parseInterval } from '../lib/parseInterval';
 import type { WidgetInstance } from '../types/widget';
 import styles from './index.module.css';
 
-const NUM_COLUMNS = 3;
+const NUM_COLUMNS = 10;
 
 export default function Dashboard() {
   const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
@@ -31,20 +31,9 @@ export default function Dashboard() {
     return () => { Object.values(intervalRefs.current).forEach(clearInterval); };
   }, [instances]);
 
-  function openAdd() {
-    setEditingId(null);
-    setSidebarOpen(true);
-  }
-
-  function openConfig(instanceId: string) {
-    setEditingId(instanceId);
-    setSidebarOpen(true);
-  }
-
-  function closeSidebar() {
-    setSidebarOpen(false);
-    setEditingId(null);
-  }
+  function openAdd() { setEditingId(null); setSidebarOpen(true); }
+  function openConfig(id: string) { setEditingId(id); setSidebarOpen(true); }
+  function closeSidebar() { setSidebarOpen(false); setEditingId(null); }
 
   function handleRefresh(instanceId: string) {
     setRefreshKeys(prev => ({ ...prev, [instanceId]: (prev[instanceId] ?? 0) + 1 }));
@@ -60,24 +49,24 @@ export default function Dashboard() {
     type: string,
     config: Record<string, unknown>,
     x: number,
+    colSpan: number,
     interval: string
   ) {
     if (instanceId) {
       const inst = instances.find(i => i.id === instanceId);
-      if (inst) await db.widgets.put({ ...inst, config, x, interval: interval || undefined });
+      if (inst) await db.widgets.put({ ...inst, config, x, colSpan, interval: interval || undefined });
     } else {
-      const inCol = instances.filter(i => i.x === x);
-      const y = inCol.length > 0 ? Math.max(...inCol.map(i => i.y)) + 1 : 0;
-      const next: WidgetInstance = {
+      const y = instances.length > 0 ? Math.max(...instances.map(i => i.y)) + 1 : 0;
+      await db.widgets.add({
         id: crypto.randomUUID(),
         type,
         minimized: false,
         x,
         y,
+        colSpan,
         config,
         interval: interval || undefined,
-      };
-      await db.widgets.add(next);
+      });
     }
   }
 
@@ -90,13 +79,7 @@ export default function Dashboard() {
     if (inst) await db.widgets.put({ ...inst, minimized: !inst.minimized });
   }
 
-  const columns: WidgetInstance[][] = Array.from({ length: NUM_COLUMNS }, () => []);
-  instances.forEach(inst => {
-    columns[Math.min(inst.x, NUM_COLUMNS - 1)].push(inst);
-  });
-  columns.forEach(col => col.sort((a, b) => a.y !== b.y ? a.y - b.y : a.id.localeCompare(b.id)));
-
-  const isEmpty = instances.length === 0;
+  const sorted = [...instances].sort((a, b) => a.y !== b.y ? a.y - b.y : a.x - b.x);
 
   return (
     <div className={styles.dashboard}>
@@ -106,41 +89,40 @@ export default function Dashboard() {
       </header>
 
       <main className={styles.grid}>
-        {isEmpty ? (
+        {instances.length === 0 ? (
           <div className={styles.empty}>
             <p className={styles.emptyText}>No widgets yet.</p>
             <p className={styles.emptyHint}>Click <strong>+</strong> to add your first widget.</p>
           </div>
         ) : (
-          columns.map((col, colIndex) => (
-            <div key={colIndex} className={styles.column}>
-              {col.map(inst => {
-                const entry = getEntry(inst.type);
-                if (!entry) return null;
-                const Content = entry.component;
-                return (
-                  <Widget
-                    key={inst.id}
-                    title={entry.label}
-                    minimized={inst.minimized}
-                    lastUpdated={inst.lastUpdated}
-                    interval={inst.interval}
-                    onRefresh={() => handleRefresh(inst.id)}
-                    onToggleMinimize={() => handleToggleMinimize(inst.id)}
-                    onOpenConfig={() => openConfig(inst.id)}
-                    onClose={() => handleClose(inst.id)}
-                  >
-                    <Content
-                      config={inst.config}
-                      instanceId={inst.id}
-                      refreshKey={refreshKeys[inst.id] ?? 0}
-                      onRefreshed={() => handleRefreshed(inst.id)}
-                    />
-                  </Widget>
-                );
-              })}
-            </div>
-          ))
+          sorted.map(inst => {
+            const entry = getEntry(inst.type);
+            if (!entry) return null;
+            const Content = entry.component;
+            const colStart = Math.min(inst.x + 1, NUM_COLUMNS);
+            const colSpan = Math.min(inst.colSpan ?? 1, NUM_COLUMNS - inst.x);
+            return (
+              <div key={inst.id} style={{ gridColumn: `${colStart} / span ${colSpan}` }}>
+                <Widget
+                  title={entry.label}
+                  minimized={inst.minimized}
+                  lastUpdated={inst.lastUpdated}
+                  interval={inst.interval}
+                  onRefresh={() => handleRefresh(inst.id)}
+                  onToggleMinimize={() => handleToggleMinimize(inst.id)}
+                  onOpenConfig={() => openConfig(inst.id)}
+                  onClose={() => handleClose(inst.id)}
+                >
+                  <Content
+                    config={inst.config}
+                    instanceId={inst.id}
+                    refreshKey={refreshKeys[inst.id] ?? 0}
+                    onRefreshed={() => handleRefreshed(inst.id)}
+                  />
+                </Widget>
+              </div>
+            );
+          })
         )}
       </main>
 

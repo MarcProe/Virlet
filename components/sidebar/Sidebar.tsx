@@ -3,19 +3,19 @@ import { REGISTRY, getEntry } from '../widgets/WidgetRegistry';
 import type { WidgetInstance } from '../../types/widget';
 import styles from './Sidebar.module.css';
 
-const NUM_COLUMNS = 3;
+const NUM_COLUMNS = 10;
 const INTERVAL_RE = /^\d{1,5} ?[smh]$/;
 
 type SidebarView =
   | { view: 'catalog' }
-  | { view: 'config'; instanceId: string | null; type: string; draft: Record<string, unknown>; column: number; interval: string };
+  | { view: 'config'; instanceId: string | null; type: string; draft: Record<string, unknown>; column: number; colSpan: number; interval: string };
 
 interface Props {
   open: boolean;
   instances: WidgetInstance[];
   editingInstanceId: string | null;
   onClose: () => void;
-  onSave: (instanceId: string | null, type: string, config: Record<string, unknown>, x: number, interval: string) => void;
+  onSave: (instanceId: string | null, type: string, config: Record<string, unknown>, x: number, colSpan: number, interval: string) => void;
 }
 
 export default function Sidebar({ open, instances, editingInstanceId, onClose, onSave }: Props) {
@@ -26,7 +26,7 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
     if (editingInstanceId) {
       const inst = instances.find(i => i.id === editingInstanceId);
       if (inst) {
-        setState({ view: 'config', instanceId: inst.id, type: inst.type, draft: { ...inst.config }, column: inst.x, interval: inst.interval ?? '' });
+        setState({ view: 'config', instanceId: inst.id, type: inst.type, draft: { ...inst.config }, column: inst.x, colSpan: inst.colSpan ?? 1, interval: inst.interval ?? '' });
       }
     } else {
       setState({ view: 'catalog' });
@@ -40,7 +40,7 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
   }
 
   function selectType(type: string) {
-    setState({ view: 'config', instanceId: null, type, draft: {}, column: leastPopulatedColumn(), interval: '' });
+    setState({ view: 'config', instanceId: null, type, draft: {}, column: leastPopulatedColumn(), colSpan: 1, interval: '' });
   }
 
   function setDraft(key: string, value: unknown) {
@@ -48,14 +48,20 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
     setState({ ...state, draft: { ...state.draft, [key]: value } });
   }
 
-  function setColumn(col: number) {
+  function setColumn(val: number) {
     if (state.view !== 'config') return;
-    setState({ ...state, column: col });
+    const col = Math.max(0, Math.min(NUM_COLUMNS - 1, val));
+    const span = Math.min(state.colSpan, NUM_COLUMNS - col);
+    setState({ ...state, column: col, colSpan: span });
+  }
+
+  function setColSpan(val: number) {
+    if (state.view !== 'config') return;
+    setState({ ...state, colSpan: Math.max(1, Math.min(NUM_COLUMNS - state.column, val)) });
   }
 
   function setIntervalValue(raw: string) {
     if (state.view !== 'config') return;
-    // only allow digits, space, and s/m/h
     setState({ ...state, interval: raw.replace(/[^\d smh]/g, '').slice(0, 7) });
   }
 
@@ -66,7 +72,7 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
   function save() {
     if (state.view !== 'config') return;
     if (!intervalValid(state.interval)) return;
-    onSave(state.instanceId, state.type, state.draft, state.column, state.interval);
+    onSave(state.instanceId, state.type, state.draft, state.column, state.colSpan, state.interval);
     onClose();
   }
 
@@ -148,17 +154,30 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
                 ))}
 
                 <div className={styles.field}>
-                  <label className={styles.label}>Column</label>
-                  <div className={styles.columnPicker}>
-                    {Array.from({ length: NUM_COLUMNS }, (_, i) => (
-                      <button
-                        key={i}
-                        className={`${styles.colBtn} ${state.column === i ? styles.colBtnActive : ''}`}
-                        onClick={() => setColumn(i)}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
+                  <label className={styles.label}>Position &amp; Size</label>
+                  <div className={styles.positionRow}>
+                    <div className={styles.posField}>
+                      <span className={styles.posLabel}>Column</span>
+                      <input
+                        className={styles.numInput}
+                        type="number"
+                        min={1}
+                        max={NUM_COLUMNS}
+                        value={state.column + 1}
+                        onChange={e => setColumn((parseInt(e.target.value) || 1) - 1)}
+                      />
+                    </div>
+                    <div className={styles.posField}>
+                      <span className={styles.posLabel}>Span</span>
+                      <input
+                        className={styles.numInput}
+                        type="number"
+                        min={1}
+                        max={NUM_COLUMNS - state.column}
+                        value={state.colSpan}
+                        onChange={e => setColSpan(parseInt(e.target.value) || 1)}
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -171,9 +190,7 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
                     value={iv}
                     onChange={e => setIntervalValue(e.target.value)}
                   />
-                  {ivInvalid && (
-                    <span className={styles.fieldError}>Use format: 30s, 5m, 2h</span>
-                  )}
+                  {ivInvalid && <span className={styles.fieldError}>Use format: 30s, 5m, 2h</span>}
                 </div>
 
                 <button className={styles.saveBtn} onClick={save} disabled={ivInvalid}>

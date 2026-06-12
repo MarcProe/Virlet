@@ -13,13 +13,19 @@
   padding: 4px 0;
 }
 
-.row {
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Top row: avatar + identity + logout */
+
+.top {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-
-/* Avatar + bio tooltip */
 
 .avatarWrap {
   position: relative;
@@ -53,7 +59,7 @@
   opacity: 0;
   transition: opacity 150ms;
   pointer-events: none;
-  z-index: 20;
+  z-index: 50;
 }
 
 .avatarWrap:hover .bioTooltip {
@@ -61,51 +67,32 @@
   opacity: 1;
 }
 
-/* Username */
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .handle {
   font-family: var(--font-jetbrains), monospace;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: var(--body-subtle);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-/* Divider */
-
-.divider {
-  width: 1px;
-  height: 24px;
-  background: var(--border-default);
-  flex-shrink: 0;
-}
-
-/* Stats */
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.statValue {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--heading);
-  line-height: 1;
-}
-
-.statLabel {
-  font-family: var(--font-jetbrains), monospace;
-  font-size: 0.6rem;
-  color: var(--body-subtle);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Logout */
 
 .logout {
   margin-left: auto;
@@ -124,4 +111,48 @@
 .logout:hover {
   color: var(--danger);
   background: var(--border-default);
+}
+
+/* Bottom row: stats */
+
+.stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+  box-shadow: var(--shadow-inset);
+  padding: 12px 24px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.statDivider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-default);
+  flex-shrink: 0;
+}
+
+.statValue {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--heading);
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.6rem;
+  color: var(--body-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
