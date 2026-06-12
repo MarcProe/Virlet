@@ -189,7 +189,7 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed }: Wi
             width={yWidth}
             tickFormatter={yLabel}
           />
-          <Tooltip content={(props) => <TooltipContent {...(props as Parameters<typeof TooltipContent>[0])} metric={metric} />} />
+          <Tooltip content={(props) => <TooltipContent {...(props as unknown as Parameters<typeof TooltipContent>[0])} metric={metric} />} />
           <Line
             type="monotone"
             dataKey="value"
