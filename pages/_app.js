@@ -26,47 +26,25 @@ const darkTheme = {
   background: '#1E1E1E',
 };
 
-// Neumorphic shadow styles
-const getNeumorphicStyles = (theme) => ({
-  boxShadow: `5px 5px 10px ${theme.neutral}, -5px -5px 10px ${theme.surface}`,
-  borderRadius: '8px',
-  backgroundColor: theme.surface,
-  color: theme.text,
-  border: 'none',
-  transition: 'all 0.3s ease',
-});
-
 export default function App({ Component, pageProps }) {
   const [theme, setTheme] = useState(lightTheme);
-  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Check for saved theme preference or system preference
-    const savedTheme = localStorage.getItem('theme');
+    // Check system preference for dark mode
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-      setTheme(darkTheme);
-      setIsDark(true);
-    }
+    setTheme(prefersDark ? darkTheme : lightTheme);
   }, []);
 
   useEffect(() => {
-    // Update localStorage and document class when theme changes
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', isDark);
-  }, [isDark]);
-
-  const toggleTheme = () => {
-    setIsDark(!isDark);
-    setTheme(isDark ? lightTheme : darkTheme);
-  };
+    // Update document class when theme changes
+    document.documentElement.classList.toggle('dark', theme === darkTheme);
+  }, [theme]);
 
   return (
     <>
       <Head>
-        <title>Virlet - Instagram Creator Analytics</title>
-        <meta name="description" content="Track, analyze, and optimize Instagram performance" />
+        <title>Virlet</title>
+        <meta name="description" content="Instagram Creator Analytics & Management" />
         <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
         <style jsx global>{`
           :root {
@@ -106,43 +84,10 @@ export default function App({ Component, pageProps }) {
             min-height: 100vh;
             transition: background-color 0.3s ease, color 0.3s ease;
           }
-          
-          .neumorphic {
-            box-shadow: 5px 5px 10px var(--neutral), -5px -5px 10px var(--surface);
-            border-radius: 8px;
-            background-color: var(--surface);
-            color: var(--text);
-            border: none;
-            padding: 1rem;
-            transition: all 0.3s ease;
-          }
-          
-          .neumorphic:hover {
-            box-shadow: 3px 3px 8px var(--neutral), -3px -3px 8px var(--surface);
-          }
-          
-          .neumorphic:active {
-            box-shadow: inset 2px 2px 5px var(--neutral), inset -2px -2px 5px var(--surface);
-          }
-          
-          .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 1000;
-          }
         `}</style>
       </Head>
       
-      <button 
-        className="theme-toggle neumorphic"
-        onClick={toggleTheme}
-        aria-label="Toggle dark mode"
-      >
-        {isDark ? '☀️' : '🌙'}
-      </button>
-      
-      <Component {...pageProps} theme={theme} isDark={isDark} />
+      <Component {...pageProps} />
     </>
   );
 }
