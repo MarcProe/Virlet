@@ -180,7 +180,8 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
           margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
           style={{ cursor: 'pointer' }}
           onClick={(data) => {
-            const pt = (data?.activePayload?.[0]?.payload) as ChartPoint | undefined;
+            const d = data as unknown as { activePayload?: { payload: ChartPoint }[] };
+            const pt = d?.activePayload?.[0]?.payload;
             if (pt?.post.permalink) window.open(pt.post.permalink, '_blank', 'noopener');
           }}
         >
