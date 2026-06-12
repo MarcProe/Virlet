@@ -1,138 +1,120 @@
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import CenteredCard from '../components/CenteredCard';
+import { useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../lib/db';
+import { getEntry } from '../components/widgets/WidgetRegistry';
+import Widget from '../components/widgets/Widget';
+import Sidebar from '../components/sidebar/Sidebar';
+import type { WidgetInstance } from '../types/widget';
 import styles from './index.module.css';
 
-const TOKEN_KEY = 'ig_token';
+const NUM_COLUMNS = 3;
 
-interface Profile {
-  id: string;
-  username: string;
-  name: string;
-  biography: string;
-  followers_count: number;
-  media_count: number;
-  profile_picture_url: string;
-  website: string;
-}
+export default function Dashboard() {
+  const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
-function fmt(n: number): string {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
-  return String(n);
-}
-
-export default function Home() {
-  const [token, setToken] = useState<string | null>(null);
-  const [input, setInput] = useState('');
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const stored = localStorage.getItem(TOKEN_KEY);
-    if (stored) setToken(stored);
-  }, []);
-
-  useEffect(() => {
-    if (!token) { setProfile(null); return; }
-    fetch(
-      `https://graph.instagram.com/me?fields=id,username,name,biography,followers_count,media_count,profile_picture_url,website&access_token=${token}`
-    )
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) {
-          setError(data.error.message);
-          setToken(null);
-          localStorage.removeItem(TOKEN_KEY);
-        } else {
-          setProfile(data);
-        }
-      })
-      .catch(() => setError('Failed to reach Instagram API'));
-  }, [token]);
-
-  function save() {
-    const t = input.trim();
-    if (!t) return;
-    localStorage.setItem(TOKEN_KEY, t);
-    setInput('');
-    setError(null);
-    setToken(t);
+  function openAdd() {
+    setEditingId(null);
+    setSidebarOpen(true);
   }
 
-  function clear() {
-    localStorage.removeItem(TOKEN_KEY);
-    setToken(null);
-    setProfile(null);
-    setError(null);
+  function openConfig(instanceId: string) {
+    setEditingId(instanceId);
+    setSidebarOpen(true);
   }
+
+  function closeSidebar() {
+    setSidebarOpen(false);
+    setEditingId(null);
+  }
+
+  async function handleSave(
+    instanceId: string | null,
+    type: string,
+    config: Record<string, unknown>,
+    x: number
+  ) {
+    if (instanceId) {
+      const inst = instances.find(i => i.id === instanceId);
+      if (inst) await db.widgets.put({ ...inst, config, x });
+    } else {
+      const inCol = instances.filter(i => i.x === x);
+      const y = inCol.length > 0 ? Math.max(...inCol.map(i => i.y)) + 1 : 0;
+      const next: WidgetInstance = {
+        id: crypto.randomUUID(),
+        type,
+        minimized: false,
+        x,
+        y,
+        config,
+      };
+      await db.widgets.add(next);
+    }
+  }
+
+  async function handleClose(instanceId: string) {
+    await db.widgets.delete(instanceId);
+  }
+
+  async function handleToggleMinimize(instanceId: string) {
+    const inst = instances.find(i => i.id === instanceId);
+    if (inst) await db.widgets.put({ ...inst, minimized: !inst.minimized });
+  }
+
+  const columns: WidgetInstance[][] = Array.from({ length: NUM_COLUMNS }, () => []);
+  instances.forEach(inst => {
+    columns[Math.min(inst.x, NUM_COLUMNS - 1)].push(inst);
+  });
+  columns.forEach(col => col.sort((a, b) => a.y !== b.y ? a.y - b.y : a.id.localeCompare(b.id)));
+
+  const isEmpty = instances.length === 0;
 
   return (
-    <CenteredCard>
-      <h1 className={styles.heading}>Virlet</h1>
+    <div className={styles.dashboard}>
+      <header className={styles.topBar}>
+        <span className={styles.logo}>Virlet</span>
+        <button className={styles.addButton} onClick={openAdd} title="Add widget" aria-label="Add widget">+</button>
+      </header>
 
-      {!token && (
-        <>
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="Paste Instagram access token"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && save()}
-          />
-          {error && <p className={styles.error}>{error}</p>}
-          <button className={styles.button} onClick={save}>Connect</button>
-        </>
-      )}
-
-      {token && !profile && !error && (
-        <p className={styles.loading}>Loading profile…</p>
-      )}
-
-      {profile && (
-        <div className={styles.profile}>
-          {profile.profile_picture_url && (
-            <Image
-              className={styles.avatar}
-              src={profile.profile_picture_url}
-              alt={profile.username}
-              width={88}
-              height={88}
-              unoptimized
-            />
-          )}
-          <div className={styles.names}>
-            {profile.name && <span className={styles.name}>{profile.name}</span>}
-            <span className={styles.handle}>@{profile.username}</span>
+      <main className={styles.grid}>
+        {isEmpty ? (
+          <div className={styles.empty}>
+            <p className={styles.emptyText}>No widgets yet.</p>
+            <p className={styles.emptyHint}>Click <strong>+</strong> to add your first widget.</p>
           </div>
-          {profile.biography && (
-            <p className={styles.bio}>{profile.biography}</p>
-          )}
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{fmt(profile.followers_count)}</span>
-              <span className={styles.statLabel}>Followers</span>
+        ) : (
+          columns.map((col, colIndex) => (
+            <div key={colIndex} className={styles.column}>
+              {col.map(inst => {
+                const entry = getEntry(inst.type);
+                if (!entry) return null;
+                const Content = entry.component;
+                return (
+                  <Widget
+                    key={inst.id}
+                    title={entry.label}
+                    minimized={inst.minimized}
+                    onToggleMinimize={() => handleToggleMinimize(inst.id)}
+                    onOpenConfig={() => openConfig(inst.id)}
+                    onClose={() => handleClose(inst.id)}
+                  >
+                    <Content config={inst.config} instanceId={inst.id} />
+                  </Widget>
+                );
+              })}
             </div>
-            <div className={styles.statDivider} />
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{fmt(profile.media_count)}</span>
-              <span className={styles.statLabel}>Posts</span>
-            </div>
-          </div>
-          {profile.website && (
-            <a
-              className={styles.website}
-              href={profile.website}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {profile.website.replace(/^https?:\/\//, '')}
-            </a>
-          )}
-          <button className={styles.button} onClick={clear}>Disconnect</button>
-        </div>
-      )}
-    </CenteredCard>
+          ))
+        )}
+      </main>
+
+      <Sidebar
+        open={sidebarOpen}
+        instances={instances}
+        editingInstanceId={editingId}
+        onClose={closeSidebar}
+        onSave={handleSave}
+      />
+    </div>
   );
 }
