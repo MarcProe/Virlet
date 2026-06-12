@@ -63,7 +63,7 @@
 
 | Category          | Technology          | Purpose                                                                 | Justification                                                                 |
 |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| **Frontend**      | **Next.js 16.2.7** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
+| **Frontend**      | **Next.js 16.2.9** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
 | **Database**      | **LowDB**          | Lightweight JSON file database                                         | Zero setup, file-based storage. Ideal for on-premises and small-scale apps. Supports CRUD operations via Lodash. |
 | **Authentication**| **NextAuth.js**    | OAuth 2.0 (Instagram, Google, etc.) + JWT                              | Built for Next.js. Simplifies OAuth flows (e.g., Instagram login) and session management. |
 | **Styling**       | **TypeUI Neumorphism** | Design system for neumorphic UI (colors, typography, spacing)      | Pre-configured theme with light/dark palettes, compact spacing, and rounded corners. |
