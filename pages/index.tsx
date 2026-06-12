@@ -1,28 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import CenteredCard from '../components/CenteredCard';
 import styles from './index.module.css';
 
-type ApiState =
-  | { status: 'loading' }
-  | { status: 'success'; message: string }
-  | { status: 'error' };
-
 export default function Home() {
-  const [state, setState] = useState<ApiState>({ status: 'loading' });
-
-  useEffect(() => {
-    fetch('/api/helloworld')
-      .then((res) => res.json())
-      .then((data: { message: string }) => setState({ status: 'success', message: data.message }))
-      .catch(() => setState({ status: 'error' }));
-  }, []);
+  const { data: session, status } = useSession();
 
   return (
     <CenteredCard>
-      <h1 className={styles.heading}>HELLO WORLD</h1>
-      {state.status === 'loading' && <p className={styles.loading}>Loading...</p>}
-      {state.status === 'success' && <p className={styles.message}>{state.message}</p>}
-      {state.status === 'error' && <p className={styles.message}>Failed to load</p>}
+      <h1 className={styles.heading}>Virlet</h1>
+      {status === 'loading' && <p className={styles.loading}>Loading...</p>}
+      {status === 'unauthenticated' && (
+        <button className={styles.message} onClick={() => signIn('instagram')}>
+          Sign in with Instagram
+        </button>
+      )}
+      {status === 'authenticated' && (
+        <>
+          <p className={styles.message}>Signed in as @{session.user?.name}</p>
+          <button className={styles.message} onClick={() => signOut()}>
+            Sign out
+          </button>
+        </>
+      )}
     </CenteredCard>
   );
 }
