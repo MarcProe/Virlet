@@ -8,7 +8,12 @@ export const authOptions: NextAuthOptions = {
       type: 'oauth',
       authorization: {
         url: 'https://www.instagram.com/oauth/authorize',
-        params: { scope: 'instagram_business_basic', response_type: 'code' },
+        params: {
+          scope: 'instagram_business_basic',
+          response_type: 'code',
+          enable_fb_login: '0',
+          force_authentication: '1',
+        },
       },
       token: 'https://api.instagram.com/oauth/access_token',
       userinfo: {
