@@ -1,138 +1,138 @@
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import CenteredCard from '../components/CenteredCard';
+import { useState, useEffect, useRef } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../lib/db';
+import { getEntry } from '../components/widgets/WidgetRegistry';
+import Widget from '../components/widgets/Widget';
+import Sidebar from '../components/sidebar/Sidebar';
+import { parseInterval } from '../lib/parseInterval';
+import type { WidgetInstance } from '../types/widget';
 import styles from './index.module.css';
 
-const TOKEN_KEY = 'ig_token';
+const NUM_COLUMNS = 10;
 
-interface Profile {
-  id: string;
-  username: string;
-  name: string;
-  biography: string;
-  followers_count: number;
-  media_count: number;
-  profile_picture_url: string;
-  website: string;
-}
-
-function fmt(n: number): string {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-  if (n >= 1_000) return (n / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
-  return String(n);
-}
-
-export default function Home() {
-  const [token, setToken] = useState<string | null>(null);
-  const [input, setInput] = useState('');
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export default function Dashboard() {
+  const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({});
+  const intervalRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
 
   useEffect(() => {
-    const stored = localStorage.getItem(TOKEN_KEY);
-    if (stored) setToken(stored);
-  }, []);
+    Object.values(intervalRefs.current).forEach(clearInterval);
+    intervalRefs.current = {};
+    instances.forEach(inst => {
+      if (!inst.interval) return;
+      const ms = parseInterval(inst.interval);
+      if (!ms) return;
+      intervalRefs.current[inst.id] = setInterval(() => {
+        setRefreshKeys(prev => ({ ...prev, [inst.id]: (prev[inst.id] ?? 0) + 1 }));
+      }, ms);
+    });
+    return () => { Object.values(intervalRefs.current).forEach(clearInterval); };
+  }, [instances]);
 
-  useEffect(() => {
-    if (!token) { setProfile(null); return; }
-    fetch(
-      `https://graph.instagram.com/me?fields=id,username,name,biography,followers_count,media_count,profile_picture_url,website&access_token=${token}`
-    )
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) {
-          setError(data.error.message);
-          setToken(null);
-          localStorage.removeItem(TOKEN_KEY);
-        } else {
-          setProfile(data);
-        }
-      })
-      .catch(() => setError('Failed to reach Instagram API'));
-  }, [token]);
+  function openAdd() { setEditingId(null); setSidebarOpen(true); }
+  function openConfig(id: string) { setEditingId(id); setSidebarOpen(true); }
+  function closeSidebar() { setSidebarOpen(false); setEditingId(null); }
 
-  function save() {
-    const t = input.trim();
-    if (!t) return;
-    localStorage.setItem(TOKEN_KEY, t);
-    setInput('');
-    setError(null);
-    setToken(t);
+  function handleRefresh(instanceId: string) {
+    setRefreshKeys(prev => ({ ...prev, [instanceId]: (prev[instanceId] ?? 0) + 1 }));
   }
 
-  function clear() {
-    localStorage.removeItem(TOKEN_KEY);
-    setToken(null);
-    setProfile(null);
-    setError(null);
+  async function handleRefreshed(instanceId: string) {
+    const inst = instances.find(i => i.id === instanceId);
+    if (inst) await db.widgets.put({ ...inst, lastUpdated: Date.now() });
   }
+
+  async function handleSave(
+    instanceId: string | null,
+    type: string,
+    config: Record<string, unknown>,
+    x: number,
+    colSpan: number,
+    interval: string
+  ) {
+    if (instanceId) {
+      const inst = instances.find(i => i.id === instanceId);
+      if (inst) await db.widgets.put({ ...inst, config, x, colSpan, interval: interval || undefined });
+    } else {
+      const y = instances.length > 0 ? Math.max(...instances.map(i => i.y)) + 1 : 0;
+      await db.widgets.add({
+        id: crypto.randomUUID(),
+        type,
+        minimized: false,
+        x,
+        y,
+        colSpan,
+        config,
+        interval: interval || undefined,
+      });
+    }
+  }
+
+  async function handleClose(instanceId: string) {
+    await db.widgets.delete(instanceId);
+  }
+
+  async function handleToggleMinimize(instanceId: string) {
+    const inst = instances.find(i => i.id === instanceId);
+    if (inst) await db.widgets.put({ ...inst, minimized: !inst.minimized });
+  }
+
+  const sorted = [...instances].sort((a, b) => a.y !== b.y ? a.y - b.y : a.x - b.x);
 
   return (
-    <CenteredCard>
-      <h1 className={styles.heading}>Virlet</h1>
+    <div className={styles.dashboard}>
+      <header className={styles.topBar}>
+        <span className={styles.logo}>Virlet</span>
+        <button className={styles.addButton} onClick={openAdd} title="Add widget" aria-label="Add widget">+</button>
+      </header>
 
-      {!token && (
-        <>
-          <input
-            className={styles.input}
-            type="password"
-            placeholder="Paste Instagram access token"
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && save()}
-          />
-          {error && <p className={styles.error}>{error}</p>}
-          <button className={styles.button} onClick={save}>Connect</button>
-        </>
-      )}
-
-      {token && !profile && !error && (
-        <p className={styles.loading}>Loading profile…</p>
-      )}
-
-      {profile && (
-        <div className={styles.profile}>
-          {profile.profile_picture_url && (
-            <Image
-              className={styles.avatar}
-              src={profile.profile_picture_url}
-              alt={profile.username}
-              width={88}
-              height={88}
-              unoptimized
-            />
-          )}
-          <div className={styles.names}>
-            {profile.name && <span className={styles.name}>{profile.name}</span>}
-            <span className={styles.handle}>@{profile.username}</span>
+      <main className={styles.grid}>
+        {instances.length === 0 ? (
+          <div className={styles.empty}>
+            <p className={styles.emptyText}>No widgets yet.</p>
+            <p className={styles.emptyHint}>Click <strong>+</strong> to add your first widget.</p>
           </div>
-          {profile.biography && (
-            <p className={styles.bio}>{profile.biography}</p>
-          )}
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{fmt(profile.followers_count)}</span>
-              <span className={styles.statLabel}>Followers</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.stat}>
-              <span className={styles.statValue}>{fmt(profile.media_count)}</span>
-              <span className={styles.statLabel}>Posts</span>
-            </div>
-          </div>
-          {profile.website && (
-            <a
-              className={styles.website}
-              href={profile.website}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {profile.website.replace(/^https?:\/\//, '')}
-            </a>
-          )}
-          <button className={styles.button} onClick={clear}>Disconnect</button>
-        </div>
-      )}
-    </CenteredCard>
+        ) : (
+          sorted.map(inst => {
+            const entry = getEntry(inst.type);
+            if (!entry) return null;
+            const Content = entry.component;
+            const colStart = Math.min(inst.x + 1, NUM_COLUMNS);
+            const colSpan = Math.min(inst.colSpan ?? 1, NUM_COLUMNS - inst.x);
+            return (
+              <div key={inst.id} style={{ gridColumn: `${colStart} / span ${colSpan}` }}>
+                <Widget
+                  title={entry.label}
+                  minimized={inst.minimized}
+                  lastUpdated={inst.lastUpdated}
+                  interval={inst.interval}
+                  onRefresh={() => handleRefresh(inst.id)}
+                  onToggleMinimize={() => handleToggleMinimize(inst.id)}
+                  onOpenConfig={() => openConfig(inst.id)}
+                  onClose={() => handleClose(inst.id)}
+                >
+                  <Content
+                    config={inst.config}
+                    instanceId={inst.id}
+                    refreshKey={refreshKeys[inst.id] ?? 0}
+                    onRefreshed={() => handleRefreshed(inst.id)}
+                  />
+                </Widget>
+              </div>
+            );
+          })
+        )}
+      </main>
+
+      <Sidebar
+        open={sidebarOpen}
+        instances={instances}
+        editingInstanceId={editingId}
+        onClose={closeSidebar}
+        onSave={handleSave}
+      />
+    </div>
   );
 }
