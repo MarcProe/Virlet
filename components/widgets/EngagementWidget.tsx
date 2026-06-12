@@ -24,6 +24,7 @@ interface ChartPoint {
   trend: number;
   post: Post;
   isHighlighted: boolean;
+  blobSrc?: string;
 }
 
 function linReg(ys: number[]): (x: number) => number {
@@ -77,7 +78,7 @@ function renderDot(props: Record<string, unknown>): React.ReactElement {
 function TooltipContent({ active, payload, metric }: { active?: boolean; payload?: { payload: ChartPoint }[]; metric: string }) {
   if (!active || !payload?.[0]) return null;
   const pt = payload[0].payload;
-  const imgSrc = pt.post.media_type === 'VIDEO' ? pt.post.thumbnail_url : pt.post.media_url;
+  const imgSrc = pt.blobSrc ?? (pt.post.media_type === 'VIDEO' ? pt.post.thumbnail_url : pt.post.media_url);
   return (
     <div className={styles.tooltip}>
       {imgSrc && <img src={imgSrc} alt="" className={styles.tooltipImg} />}
@@ -131,14 +132,18 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
           post,
           isHighlighted: topIdx.has(i),
         }));
-        // preload thumbnail images so hover tooltip doesn't trigger network requests
-        nextPoints.forEach(pt => {
-          const src = pt.post.media_type === 'VIDEO' ? pt.post.thumbnail_url : pt.post.media_url;
-          if (src) { const img = new Image(); img.src = src; }
-        });
         setPoints(nextPoints);
         setLoading(false);
         onRefreshed();
+        // fetch images as blob URLs so tooltip never hits the network again
+        Promise.all(nextPoints.map(async pt => {
+          const src = pt.post.media_type === 'VIDEO' ? pt.post.thumbnail_url : pt.post.media_url;
+          if (!src) return pt;
+          try {
+            const blob = await fetch(src).then(r => r.blob());
+            return { ...pt, blobSrc: URL.createObjectURL(blob) };
+          } catch { return pt; }
+        })).then(cached => setPoints(cached));
       })
       .catch(() => { setError('Failed to fetch data'); setLoading(false); });
   }, [token, postCount, hlCount, metric, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
