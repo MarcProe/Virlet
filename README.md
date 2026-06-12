@@ -73,6 +73,21 @@
 ---
 
 ---
+## **📁 Project Structure**
+
+| Path | Description |
+|------|-------------|
+| `/pages/` | Next.js page routes (e.g., `index.js` for homepage) |
+| `/pages/api/` | Next.js API routes for backend logic |
+| `/.typeui/` | TypeUI design system files (`DESIGN.md`, `SKILL.md`) |
+| `package.json` | Project dependencies and scripts |
+| `next.config.js` | Next.js configuration |
+| `vercel.json` | Vercel deployment configuration |
+| `README.md` | Project documentation |
+
+---
+
+---
 ## 🚀 Dev Rules
 
 - **Never push to main!**
