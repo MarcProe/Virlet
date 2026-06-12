@@ -69,10 +69,14 @@ function metricLabel(metric: string): string {
 function renderDot(props: Record<string, unknown>): React.ReactElement {
   const { cx, cy, payload, index } = props as { cx: number; cy: number; payload: ChartPoint; index: number };
   const openPost = () => { if (payload.post.permalink) window.open(payload.post.permalink, '_blank', 'noopener'); };
-  if (payload.isHighlighted) {
-    return <circle key={index} cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="var(--surface)" strokeWidth={2} onClick={openPost} style={{ cursor: 'pointer' }} />;
-  }
-  return <circle key={index} cx={cx} cy={cy} r={3} fill="var(--fg-brand)" fillOpacity={0.65} onClick={openPost} style={{ cursor: 'pointer' }} />;
+  return (
+    <g key={index} onClick={openPost} style={{ cursor: 'pointer' }}>
+      <circle cx={cx} cy={cy} r={14} fill="transparent" />
+      {payload.isHighlighted
+        ? <circle cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="var(--surface)" strokeWidth={2} />
+        : <circle cx={cx} cy={cy} r={3} fill="var(--fg-brand)" fillOpacity={0.65} />}
+    </g>
+  );
 }
 
 function TooltipContent({ active, payload, metric }: { active?: boolean; payload?: { payload: ChartPoint }[]; metric: string }) {
