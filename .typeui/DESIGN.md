@@ -6,16 +6,16 @@ colors:
   success: "#00A63D"
   warning: "#FE9900"
   danger: "#FF2157"
-  surface: "#E7E5E4"
-  text: "#1E2938"
-  neutral: "#E7E5E4"
+  surface: "#ECF0F3"
+  text: "#31344B"
+  neutral: "#ECF0F3"
 dark:
   primary: "#00A3A3"
   secondary: "#1E1E1E"
   success: "#00D4AA"
   warning: "#FFB347"
   danger: "#FF5E8A"
-  surface: "#2D2D2D"
+  surface: "#262833"
   text: "#E0E0E0"
   neutral: "#3A3A3A"
 typography:
@@ -29,7 +29,7 @@ typography:
     fontFamily: "JetBrains Mono"
     fontSize: 0.75rem
   sourceScale: "desktop-first expressive scale"
-  weights: "100, 200, 300, 400, 500, 600, 700, 800, 900"
+  weights: "Space Mono: 400, 700 — JetBrains Mono: 400, 500, 600, 700"
 rounded:
   sm: 4px
   md: 8px
@@ -48,7 +48,7 @@ Soft, extruded UI elements with inner and outer shadows on monochromatic surface
 - **Visual style:** minimal, clean, high-contrast, playful, matrix
 - **Typography scale:** desktop-first expressive scale
 - **Typography fonts:** primary=Space Mono, display=Space Mono, mono=JetBrains Mono
-- **Typography weights:** 100, 200, 300, 400, 500, 600, 700, 800, 900
+- **Typography weights:** Space Mono: 400, 700 — JetBrains Mono: 400, 500, 600, 700
 - **Color palette:** primary, secondary, success, warning, danger, info
 - **Spacing scale:** compact density mode
 
@@ -59,14 +59,14 @@ Soft, extruded UI elements with inner and outer shadows on monochromatic surface
 - **Success (#00A63D):** Token from style foundations.
 - **Warning (#FE9900):** Token from style foundations.
 - **Danger (#FF2157):** Token from style foundations.
-- **Surface (#E7E5E4):** Token from style foundations.
-- **Text (#1E2938):** Token from style foundations.
-- **Neutral (#E7E5E4):** Derived from the surface token for official format compatibility.
+- **Surface (#ECF0F3):** Token from style foundations.
+- **Text (#31344B):** Token from style foundations.
+- **Neutral (#ECF0F3):** Derived from the surface token for official format compatibility.
 
 ## Dark Mode Colors
 - **Primary (#00A3A3):** Brighter teal for contrast in dark mode.
 - **Secondary (#1E1E1E):** Deep background for dark theme.
-- **Surface (#2D2D2D):** Elevated surfaces on dark backgrounds.
+- **Surface (#262833):** Elevated surfaces on dark backgrounds.
 - **Text (#E0E0E0):** High-contrast light text for readability.
 - **Success (#00D4AA):** Vibrant green for success states.
 - **Warning (#FFB347):** Soft orange for warnings.
