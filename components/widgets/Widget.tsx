@@ -1,5 +1,11 @@
+import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { parseInterval } from '../../lib/parseInterval';
 import styles from './Widget.module.css';
+
+const RING_R = 6;
+const RING_SIZE = 16;
+const CIRC = 2 * Math.PI * RING_R;
 
 function formatAge(ts: number): string {
   const diff = Date.now() - ts;
@@ -13,6 +19,7 @@ interface Props {
   title: string;
   minimized: boolean;
   lastUpdated?: number;
+  interval?: string;
   onRefresh: () => void;
   onToggleMinimize: () => void;
   onOpenConfig: () => void;
@@ -20,7 +27,23 @@ interface Props {
   children: ReactNode;
 }
 
-export default function Widget({ title, minimized, lastUpdated, onRefresh, onToggleMinimize, onOpenConfig, onClose, children }: Props) {
+export default function Widget({ title, minimized, lastUpdated, interval, onRefresh, onToggleMinimize, onOpenConfig, onClose, children }: Props) {
+  const intervalMs = interval ? parseInterval(interval) : null;
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+    if (!intervalMs) return;
+    const stepMs = Math.max(Math.floor(intervalMs / 24), 250);
+    const id = setInterval(() => setTick(t => t + 1), stepMs);
+    return () => clearInterval(id);
+  }, [intervalMs]);
+
+  let progress = 0;
+  if (intervalMs && lastUpdated) {
+    const raw = Math.min((Date.now() - lastUpdated) / intervalMs, 1);
+    progress = Math.floor(raw * 24) / 24;
+  }
+
   return (
     <div className={styles.widget}>
       <div className={styles.titleBar}>
@@ -29,7 +52,31 @@ export default function Widget({ title, minimized, lastUpdated, onRefresh, onTog
           {lastUpdated && <span className={styles.timestamp}>{formatAge(lastUpdated)}</span>}
         </div>
         <div className={styles.controls}>
-          <button className={styles.ctrl} onClick={onRefresh} title="Refresh" aria-label="Refresh">↻</button>
+          <button className={styles.ringBtn} onClick={onRefresh} title="Refresh" aria-label="Refresh">
+            <svg
+              width={RING_SIZE}
+              height={RING_SIZE}
+              style={{ transform: 'rotate(-90deg)', display: 'block' }}
+            >
+              <circle
+                cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R}
+                fill="none"
+                stroke="var(--border-default)"
+                strokeWidth={2}
+              />
+              {intervalMs && (
+                <circle
+                  cx={RING_SIZE / 2} cy={RING_SIZE / 2} r={RING_R}
+                  fill="none"
+                  stroke="var(--fg-brand)"
+                  strokeWidth={2}
+                  strokeDasharray={CIRC}
+                  strokeDashoffset={CIRC * (1 - progress)}
+                  strokeLinecap="round"
+                />
+              )}
+            </svg>
+          </button>
           <button className={styles.ctrl} onClick={onOpenConfig} title="Settings" aria-label="Settings">⚙</button>
           <button
             className={styles.ctrl}

@@ -4,20 +4,11 @@ import { db } from '../lib/db';
 import { getEntry } from '../components/widgets/WidgetRegistry';
 import Widget from '../components/widgets/Widget';
 import Sidebar from '../components/sidebar/Sidebar';
+import { parseInterval } from '../lib/parseInterval';
 import type { WidgetInstance } from '../types/widget';
 import styles from './index.module.css';
 
 const NUM_COLUMNS = 3;
-
-function parseInterval(s: string): number | null {
-  const m = s.trim().match(/^(\d{1,5}) ?([smh])$/);
-  if (!m) return null;
-  const n = parseInt(m[1], 10);
-  if (n === 0) return null;
-  if (m[2] === 's') return n * 1_000;
-  if (m[2] === 'm') return n * 60_000;
-  return n * 3_600_000;
-}
 
 export default function Dashboard() {
   const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
@@ -133,6 +124,7 @@ export default function Dashboard() {
                     title={entry.label}
                     minimized={inst.minimized}
                     lastUpdated={inst.lastUpdated}
+                    interval={inst.interval}
                     onRefresh={() => handleRefresh(inst.id)}
                     onToggleMinimize={() => handleToggleMinimize(inst.id)}
                     onOpenConfig={() => openConfig(inst.id)}

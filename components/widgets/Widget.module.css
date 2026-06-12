@@ -39,6 +39,24 @@
   gap: 2px;
 }
 
+.ringBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: opacity 150ms, background 150ms;
+}
+
+.ringBtn:hover {
+  opacity: 1;
+  background: var(--border-default);
+}
+
 .ctrl {
   background: none;
   border: none;
