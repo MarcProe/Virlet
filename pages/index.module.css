@@ -6,10 +6,36 @@
 .message {
   font-size: 1rem;
   color: var(--body);
+  margin-bottom: 16px;
 }
 
 .loading {
   font-size: 1rem;
+  color: var(--body-subtle);
+}
+
+.error {
+  font-size: 0.875rem;
+  color: var(--fg-brand);
+  margin-bottom: 12px;
+}
+
+.input {
+  background: var(--surface);
+  color: var(--body);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.875rem;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 12px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-inset);
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.input::placeholder {
   color: var(--body-subtle);
 }
 
