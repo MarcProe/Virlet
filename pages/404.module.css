@@ -1,0 +1,28 @@
+.heading {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+
+.message {
+  font-size: 1.25rem;
+  color: var(--body);
+  margin-bottom: 24px;
+}
+
+.link {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--surface);
+  color: var(--fg-brand);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  font-weight: 500;
+  transition: box-shadow 0.2s ease;
+}
+
+.link:hover {
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
