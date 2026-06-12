@@ -44,6 +44,21 @@
 ---
 
 ---
+## **✨ Features**
+
+### Done
+| Feature | Description |
+|---------|-------------|
+| Basic "Hello World" implementation | Placeholder homepage (`pages/index.js`) |
+
+### Todo
+| Feature | Description |
+|---------|-------------|
+| Login via Instagram | OAuth 2.0 authentication with Instagram |
+
+---
+
+---
 ## **🛠️ Tech Stack**
    Category          | Technology          | Purpose                                                                 | Justification                                                                 |
  |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
