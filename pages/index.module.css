@@ -1,6 +1,6 @@
 .heading {
   font-size: 2rem;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .message {
@@ -11,4 +11,26 @@
 .loading {
   font-size: 1rem;
   color: var(--body-subtle);
+}
+
+.button {
+  background: var(--surface);
+  color: var(--fg-brand);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  padding: 12px 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 200ms ease-in-out;
+}
+
+.button:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.button:active {
+  box-shadow: var(--shadow-inset);
 }
