@@ -39,10 +39,11 @@ interface Props {
   onToggleMinimize: () => void;
   onOpenConfig: () => void;
   onClose: () => void;
+  onDragStart?: (e: React.PointerEvent) => void;
   children: ReactNode;
 }
 
-export default function Widget({ title, minimized, mandatory, lastUpdated, interval, onRefresh, onToggleMinimize, onOpenConfig, onClose, children }: Props) {
+export default function Widget({ title, minimized, mandatory, lastUpdated, interval, onRefresh, onToggleMinimize, onOpenConfig, onClose, onDragStart, children }: Props) {
   const intervalMs = interval ? parseInterval(interval) : null;
   const [, setTick] = useState(0);
 
@@ -62,9 +63,19 @@ export default function Widget({ title, minimized, mandatory, lastUpdated, inter
   return (
     <div className={styles.widget}>
       <div className={styles.titleBar}>
-        <div className={styles.titleGroup}>
-          <span className={styles.title}>{title}</span>
-          {lastUpdated && <span className={styles.timestamp}>{formatAge(lastUpdated)}</span>}
+        <div className={styles.titleLeft}>
+          {onDragStart && (
+            <button
+              className={styles.dragHandle}
+              onPointerDown={onDragStart}
+              title="Move widget"
+              aria-label="Move widget"
+            >⠿</button>
+          )}
+          <div className={styles.titleGroup}>
+            <span className={styles.title}>{title}</span>
+            {lastUpdated && <span className={styles.timestamp}>{formatAge(lastUpdated)}</span>}
+          </div>
         </div>
         <div className={styles.controls}>
           <button className={styles.ringBtn} onClick={onRefresh} title="Refresh" aria-label="Refresh">
