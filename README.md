@@ -11,25 +11,14 @@
 3. [Features](#-features)
 4. [Dev Rules](#-dev-rules)
 5. [Project Structure](#-project-structure)
-6. [Prerequisites](#-prerequisites)
-7. [Setup](#-setup)
-8. [Configuration](#-configuration)
-9. [Running the App](#-running-the-app)
-10. [Development Workflow](#-development-workflow)
-11. [API Integration](#-api-integration)
-12. [UI/UX Guidelines](#-uiux-guidelines)
-13. [On-Premises Deployment](#-on-premises-deployment)
-14. [Data Storage](#-data-storage)
-15. [Security](#-security)
-16. [Roadmap](#-roadmap)
-17. [Contributing](#-contributing)
-18. [Troubleshooting](#-troubleshooting)
-19. [Changelog](#-changelog)
-20. [License](#-license)
+6. [Authentication](#-authentication)
+7. [UI/UX Guidelines](#-uiux-guidelines)
+8. [On-Premises Deployment](#-on-premises-deployment)
+9. [Data Storage](#-data-storage)
+10. [License](#-license)
 
 ---
 
----
 ## **📌 Overview**
 **Virlet** is a **Next.js-based web app** (frontend + backend in one) for Instagram creators to **measure post impact, analyze audience growth, and manage content professionally**. The app is:
 - **One-page, adaptive** (works on mobile, tablet, desktop)
@@ -37,43 +26,40 @@
 - **Zero-setup backend** (uses Next.js API routes + Dexie.js for client-side persistence)
 - **On-premises ready** (self-hosted, no cloud dependencies)
 - **Data-driven** (real-time analytics, exportable reports)
-- **Instagram Authentication** (for the app itself and API access to Instagram)
+- **Token-based Instagram auth** (paste your long-lived access token once, stored in the browser)
 
 **Target Users**: Sports influencers, athletes, and content creators.
 
 ---
 
----
 ## **✨ Features**
 
 ### Done
 | Feature | Description |
 |---------|-------------|
-| Basic "Hello World" implementation | Placeholder homepage (`pages/index.tsx`) |
+| Instagram token auth | Paste a long-lived Instagram API token; profile card shown on connect |
+| Profile card | Shows avatar, name, @handle, bio, follower count, post count, website |
 
 ### Todo
 | Feature | Description |
 |---------|-------------|
-| Login via Instagram | OAuth 2.0 authentication with Instagram |
+| Analytics dashboard | Post performance, reach, engagement over time |
+| Media feed | Grid view of recent posts with stats |
 
 ---
 
----
 ## **🛠️ Tech Stack**
 
 | Category          | Technology          | Purpose                                                                 | Justification                                                                 |
 |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
 | **Frontend**      | **Next.js 16.2.9** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
 | **Database**      | **Dexie.js**       | Lightweight IndexedDB wrapper for browser-based NoSQL persistence       | SQL-like syntax, transactions, and offline-first storage. Ideal for client-side data with zero server dependencies. |
-| **Authentication**| **NextAuth.js**    | OAuth 2.0 (Instagram, Google, etc.) + JWT                              | Built for Next.js. Simplifies OAuth flows (e.g., Instagram login) and session management. |
 | **Styling**       | **TypeUI Neumorphism** | Design system for neumorphic UI (colors, typography, spacing)      | Pre-configured theme with light/dark palettes, compact spacing, and rounded corners. |
 | **Deployment**    | **Vercel**         | Cloud platform for Next.js apps                                        | Optimized for Next.js, with automatic CI/CD, edge functions, and zero-config deployments. |
 | **Version Control** | **Git**         | Code collaboration and versioning                                      | Enables branch protection, pull requests, and CI/CD pipelines. Hosted on GitHub. |
 
-
 ---
 
----
 ## **📁 Project Structure**
 
 | Path | Description |
@@ -90,7 +76,6 @@
 
 ---
 
----
 ## 🚀 Dev Rules
 
 - **Never push to main!**
@@ -98,7 +83,16 @@
 
 ---
 
+## **🔑 Authentication**
+
+Virlet uses **direct Instagram API token auth** — no OAuth flow, no server-side session. You generate a long-lived access token once and paste it into the app. It is stored in `localStorage` and used for all Graph API calls.
+
+### How to get your Instagram access token
+
+**[How To Get Instagram API Key (Access Token)](https://www.youtube.com/watch?v=sPjlyDSNYQs)**
+
 ---
+
 ## **🎨 UI/UX Guidelines**
 
 Design system and styling rules are defined in the `.typeui/` directory:
@@ -107,10 +101,8 @@ Design system and styling rules are defined in the `.typeui/` directory:
 
 Follow these guidelines to maintain visual consistency across the app.
 
-
 ---
 
----
 ## **📜 License**
 
 This project is licensed under the **MIT License**. See **[`LICENSE.md`](./LICENSE.md)** for the full license text.
