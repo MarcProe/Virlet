@@ -25,6 +25,7 @@
 17. [Troubleshooting](#-troubleshooting)
 18. [Changelog](#-changelog)
 19. [License](#-license)
+20. [Dev Rules](#-dev-rules)
 
 ---
 
@@ -56,10 +57,7 @@
 
 ---
 
-
-
 ---
-
 ## 🚀 Dev Rules
 
 - **Never push to main!**
