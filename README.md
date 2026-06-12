@@ -1,5 +1,5 @@
 # **Virlet: Instagram Creator Analytics & Management App**
-*Modern, adaptive one-page web app for sports creators to track, analyze, and optimize Instagram performance.
+*Modern, adaptive one-page web app for sports creators to track, analyze, and optimize Instagram performance.*
 
 ![Virlet Dashboard Preview](https://via.placeholder.com/1200x630/1F2937/3B82F6?text=Virlet+Dashboard) *(Replace with actual dark-themed screenshot later)*
 
@@ -56,3 +56,9 @@
 
 ---
 
+---
+
+## 🚀 Dev Rules
+
+- **Never push to main!**
+- For every session, create **ONE feature branch** and **ONE PR** that is updated on every push to the branch.
