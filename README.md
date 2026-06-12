@@ -103,3 +103,11 @@ Design system and styling rules are defined in the `.typeui/` directory:
 - **[`.typeui/SKILL.md`](./.typeui/SKILL.md)**: Full design system specification and implementation details.
 
 Follow these guidelines to maintain visual consistency across the app.
+
+
+---
+
+---
+## **📜 License**
+
+This project is licensed under the **MIT License**. See **[`LICENSE.md`](./LICENSE.md)** for the full license text.
