@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 export default function Home() {
   const [apiMessage, setApiMessage] = useState('');
 
