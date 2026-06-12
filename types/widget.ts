@@ -18,6 +18,7 @@ export interface ConfigField {
   type: ConfigFieldType;
   options?: { label: string; value: string }[];
   placeholder?: string;
+  default?: string;
 }
 
 export interface WidgetContentProps {

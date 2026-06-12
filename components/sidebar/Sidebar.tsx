@@ -40,7 +40,10 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
   }
 
   function selectType(type: string) {
-    setState({ view: 'config', instanceId: null, type, draft: {}, column: leastPopulatedColumn(), colSpan: 1, interval: '' });
+    const entry = REGISTRY.find(e => e.type === type);
+    const draft: Record<string, unknown> = {};
+    entry?.configFields.forEach(f => { if (f.default !== undefined) draft[f.key] = f.default; });
+    setState({ view: 'config', instanceId: null, type, draft, column: leastPopulatedColumn(), colSpan: entry?.defaultColSpan ?? 1, interval: '' });
   }
 
   function setDraft(key: string, value: unknown) {
