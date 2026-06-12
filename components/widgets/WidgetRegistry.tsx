@@ -7,6 +7,7 @@ export interface RegistryEntry {
   type: string;
   label: string;
   singleton: boolean;
+  mandatory?: boolean;
   defaultColSpan?: number;
   configFields: ConfigField[];
   component: ComponentType<WidgetContentProps>;
@@ -17,6 +18,7 @@ export const REGISTRY: RegistryEntry[] = [
     type: 'profile',
     label: 'Instagram Profile',
     singleton: true,
+    mandatory: true,
     defaultColSpan: 2,
     configFields: [
       {
@@ -34,12 +36,6 @@ export const REGISTRY: RegistryEntry[] = [
     singleton: false,
     defaultColSpan: 4,
     configFields: [
-      {
-        key: 'token',
-        label: 'Access Token',
-        type: 'password',
-        placeholder: 'Paste Instagram access token',
-      },
       {
         key: 'postCount',
         label: 'Posts to analyse',

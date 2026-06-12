@@ -88,8 +88,8 @@ function TooltipContent({ active, payload, metric }: { active?: boolean; payload
   );
 }
 
-export default function EngagementWidget({ config, refreshKey, onRefreshed }: WidgetContentProps) {
-  const token      = config.token as string | undefined;
+export default function EngagementWidget({ config, refreshKey, onRefreshed, sharedToken }: WidgetContentProps) {
+  const token      = sharedToken || (config.token as string | undefined);
   const postCount  = Math.min(100, Math.max(5, parseInt(config.postCount as string) || 50));
   const hlCount    = Math.min(10, Math.max(0, parseInt(config.highlightCount as string) || 3));
   const metric     = (config.metric as string) || 'engagement';

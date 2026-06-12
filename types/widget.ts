@@ -26,4 +26,5 @@ export interface WidgetContentProps {
   instanceId: string;
   refreshKey: number;
   onRefreshed: () => void;
+  sharedToken?: string;
 }

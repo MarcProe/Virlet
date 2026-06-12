@@ -11,11 +11,27 @@ import styles from './index.module.css';
 const NUM_COLUMNS = 10;
 
 export default function Dashboard() {
-  const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
+  const rawInstances = useLiveQuery(() => db.widgets.toArray(), []);
+  const instances = rawInstances ?? [];
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({});
   const intervalRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
+
+  // Auto-seed mandatory profile widget on first load
+  useEffect(() => {
+    if (rawInstances === undefined) return;
+    if (rawInstances.some(i => i.type === 'profile')) return;
+    db.widgets.add({
+      id: crypto.randomUUID(),
+      type: 'profile',
+      minimized: false,
+      x: 0,
+      y: 0,
+      colSpan: 2,
+      config: {},
+    });
+  }, [rawInstances === undefined]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     Object.values(intervalRefs.current).forEach(clearInterval);
@@ -79,6 +95,8 @@ export default function Dashboard() {
     if (inst) await db.widgets.put({ ...inst, minimized: !inst.minimized });
   }
 
+  const sharedToken = (instances.find(i => i.type === 'profile')?.config.token as string | undefined) ?? '';
+
   const sorted = [...instances].sort((a, b) => a.y !== b.y ? a.y - b.y : a.x - b.x);
 
   return (
@@ -106,6 +124,7 @@ export default function Dashboard() {
                 <Widget
                   title={entry.label}
                   minimized={inst.minimized}
+                  mandatory={entry.mandatory}
                   lastUpdated={inst.lastUpdated}
                   interval={inst.interval}
                   onRefresh={() => handleRefresh(inst.id)}
@@ -118,6 +137,7 @@ export default function Dashboard() {
                     instanceId={inst.id}
                     refreshKey={refreshKeys[inst.id] ?? 0}
                     onRefreshed={() => handleRefreshed(inst.id)}
+                    sharedToken={sharedToken}
                   />
                 </Widget>
               </div>
