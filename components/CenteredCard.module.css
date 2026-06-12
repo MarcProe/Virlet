@@ -1,0 +1,15 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  background-color: var(--surface);
+  padding: 48px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}

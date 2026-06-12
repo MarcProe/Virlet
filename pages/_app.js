@@ -1,95 +1,28 @@
+import { Space_Mono, JetBrains_Mono } from 'next/font/google';
 import Head from 'next/head';
+import '../styles/globals.css';
+
+const spaceMono = Space_Mono({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-space-mono',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-jetbrains',
+});
 
 export default function App({ Component, pageProps }) {
   return (
-    <>
+    <div className={`${spaceMono.variable} ${jetbrainsMono.variable}`}>
       <Head>
         <title>Virlet</title>
         <meta name="description" content="Instagram Creator Analytics & Management" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
-
-      <style jsx global>{`
-        :root {
-          --primary: #006666;
-          --secondary: #F1F2F5;
-          --success: #00A63D;
-          --warning: #FE9900;
-          --danger: #FF2157;
-          --surface: #ECF0F3;
-          --text: #1E2938;
-          --neutral: #E7E5E4;
-          --heading: #31344B;
-          --body: #44476A;
-          --body-subtle: #66799E;
-          --fg-brand: #128759;
-          --fg-disabled: #93A5BE;
-          --border-default: #D1D5DB;
-
-          --shadow-sm: 3px 3px 6px #b8b9be, -3px -3px 6px #ffffff;
-          --shadow-md: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
-          --shadow-lg: 8px 8px 16px #b8b9be, -8px -8px 16px #ffffff;
-          --shadow-inset: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #ffffff;
-        }
-
-        @media (prefers-color-scheme: dark) {
-          :root {
-            --primary: #00A3A3;
-            --secondary: #1E1E1E;
-            --success: #00D4AA;
-            --warning: #FFB347;
-            --danger: #FF5E8A;
-            --surface: #262833;
-            --text: #E0E0E0;
-            --neutral: #3A3A3A;
-            --heading: #ECF0F3;
-            --body: #93A5BE;
-            --body-subtle: #93A5BE;
-            --fg-brand: #20B27A;
-            --fg-disabled: #66799E;
-            --border-default: #4B5563;
-
-            --shadow-sm: 3px 3px 6px #1a1b24, -3px -3px 6px #323442;
-            --shadow-md: 6px 6px 12px #1a1b24, -6px -6px 12px #323442;
-            --shadow-lg: 8px 8px 16px #1a1b24, -8px -8px 16px #323442;
-            --shadow-inset: inset 2px 2px 5px #1a1b24, inset -3px -3px 7px #323442;
-          }
-        }
-
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-
-        body {
-          font-family: 'Space Mono', monospace;
-          background-color: var(--surface);
-          color: var(--body);
-          min-height: 100vh;
-          line-height: 1.6;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-          color: var(--heading);
-          font-weight: 600;
-        }
-
-        a {
-          color: var(--fg-brand);
-          text-decoration: underline;
-        }
-
-        a:hover {
-          text-decoration: none;
-        }
-      `}</style>
-
       <Component {...pageProps} />
-    </>
+    </div>
   );
 }
