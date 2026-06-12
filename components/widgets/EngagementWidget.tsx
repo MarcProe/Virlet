@@ -71,12 +71,19 @@ function renderDot(props: Record<string, unknown>): React.ReactElement {
   const openPost = () => { if (payload.post.permalink) window.open(payload.post.permalink, '_blank', 'noopener'); };
   return (
     <g key={index} onClick={openPost} style={{ cursor: 'pointer' }}>
-      <circle cx={cx} cy={cy} r={14} fill="transparent" />
       {payload.isHighlighted
         ? <circle cx={cx} cy={cy} r={6} fill="var(--primary)" stroke="var(--surface)" strokeWidth={2} />
         : <circle cx={cx} cy={cy} r={3} fill="var(--fg-brand)" fillOpacity={0.65} />}
+      {/* transparent hit circle on top so it captures clicks over the visible dot */}
+      <circle cx={cx} cy={cy} r={14} fill="transparent" />
     </g>
   );
+}
+
+function renderActiveDot(props: Record<string, unknown>): React.ReactElement {
+  const { cx, cy, payload } = props as { cx: number; cy: number; payload: ChartPoint };
+  const openPost = () => { if (payload.post.permalink) window.open(payload.post.permalink, '_blank', 'noopener'); };
+  return <circle cx={cx} cy={cy} r={7} fill="var(--primary)" onClick={openPost} style={{ cursor: 'pointer' }} />;
 }
 
 function TooltipContent({ active, payload, metric }: { active?: boolean; payload?: { payload: ChartPoint }[]; metric: string }) {
@@ -220,7 +227,7 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
             stroke="var(--fg-brand)"
             strokeWidth={2}
             dot={renderDot as never}
-            activeDot={{ r: 7, fill: 'var(--primary)' }}
+            activeDot={renderActiveDot as never}
             isAnimationActive={false}
           />
           {showTrend && (
