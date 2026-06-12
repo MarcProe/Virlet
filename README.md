@@ -44,16 +44,47 @@
 ---
 
 ---
-## **🛠️ Tech Stack**
-   Category          | Technology          | Purpose                                                                 | Justification                                                                 |
- |-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
- | **Frontend**      | **Next.js 16.2.7** | Frontend + Backend (API routes) in one                              | No separate server needed; built-in API routes, SSR, and static export.     |
- | **Database**      | LowDB               | Lightweight JSON file database                                         | Zero setup, file-based, perfect for on-premises and small-scale apps.      |
- | **Authentication**| NextAuth.js         | OAuth 2.0 (Instagram, Google, etc.) + JWT                               | Built for Next.js, supports Instagram OAuth out of the box.                 |
- | **Style Template**  | TypeUI Neumorphism | Style Template | |
- | **Deployment**    | Vercel |                     |                          |
- | **Version Control** | Git            | Code collaboration                                                       | Branch protection, PRs, and CI/CD.                                         |
+## **✨ Features**
 
+### Done
+| Feature | Description |
+|---------|-------------|
+| Basic "Hello World" implementation | Placeholder homepage (`pages/index.js`) |
+
+### Todo
+| Feature | Description |
+|---------|-------------|
+| Login via Instagram | OAuth 2.0 authentication with Instagram |
+
+---
+
+---
+## **🛠️ Tech Stack**
+
+| Category          | Technology          | Purpose                                                                 | Justification                                                                 |
+|-------------------|---------------------|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| **Frontend**      | **Next.js 16.2.7** | Full-stack framework (frontend + API routes) in one                   | Built-in API routes, SSR, static export, and React integration. No separate server required. |
+| **Database**      | **LowDB**          | Lightweight JSON file database                                         | Zero setup, file-based storage. Ideal for on-premises and small-scale apps. Supports CRUD operations via Lodash. |
+| **Authentication**| **NextAuth.js**    | OAuth 2.0 (Instagram, Google, etc.) + JWT                              | Built for Next.js. Simplifies OAuth flows (e.g., Instagram login) and session management. |
+| **Styling**       | **TypeUI Neumorphism** | Design system for neumorphic UI (colors, typography, spacing)      | Pre-configured theme with light/dark palettes, compact spacing, and rounded corners. |
+| **Deployment**    | **Vercel**         | Cloud platform for Next.js apps                                        | Optimized for Next.js, with automatic CI/CD, edge functions, and zero-config deployments. |
+| **Version Control** | **Git**         | Code collaboration and versioning                                      | Enables branch protection, pull requests, and CI/CD pipelines. Hosted on GitHub. |
+
+
+---
+
+---
+## **📁 Project Structure**
+
+| Path | Description |
+|------|-------------|
+| `/pages/` | Next.js page routes (e.g., `index.js` for homepage) |
+| `/pages/api/` | Next.js API routes for backend logic |
+| `/.typeui/` | TypeUI design system files (`DESIGN.md`, `SKILL.md`) |
+| `package.json` | Project dependencies and scripts |
+| `next.config.js` | Next.js configuration |
+| `vercel.json` | Vercel deployment configuration |
+| `README.md` | Project documentation |
 
 ---
 
@@ -62,3 +93,22 @@
 
 - **Never push to main!**
 - For every session, create **ONE feature branch** and **ONE PR** that is updated on every push to the branch.
+
+---
+
+---
+## **🎨 UI/UX Guidelines**
+
+Design system and styling rules are defined in the `.typeui/` directory:
+- **[`.typeui/DESIGN.md`](./.typeui/DESIGN.md)**: Color palettes (light + dark mode), typography, spacing, and rounded corners for the Neumorphism theme.
+- **[`.typeui/SKILL.md`](./.typeui/SKILL.md)**: Full design system specification and implementation details.
+
+Follow these guidelines to maintain visual consistency across the app.
+
+
+---
+
+---
+## **📜 License**
+
+This project is licensed under the **MIT License**. See **[`LICENSE.md`](./LICENSE.md)** for the full license text.
