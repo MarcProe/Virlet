@@ -32,6 +32,7 @@ function formatAge(ts: number): string {
 interface Props {
   title: string;
   minimized: boolean;
+  mandatory?: boolean;
   lastUpdated?: number;
   interval?: string;
   onRefresh: () => void;
@@ -41,7 +42,7 @@ interface Props {
   children: ReactNode;
 }
 
-export default function Widget({ title, minimized, lastUpdated, interval, onRefresh, onToggleMinimize, onOpenConfig, onClose, children }: Props) {
+export default function Widget({ title, minimized, mandatory, lastUpdated, interval, onRefresh, onToggleMinimize, onOpenConfig, onClose, children }: Props) {
   const intervalMs = interval ? parseInterval(interval) : null;
   const [, setTick] = useState(0);
 
@@ -83,7 +84,7 @@ export default function Widget({ title, minimized, lastUpdated, interval, onRefr
           >
             {minimized ? '▲' : '▼'}
           </button>
-          <button className={styles.ctrl} onClick={onClose} title="Close" aria-label="Close">×</button>
+          {!mandatory && <button className={styles.ctrl} onClick={onClose} title="Close" aria-label="Close">×</button>}
         </div>
       </div>
       {!minimized && <div className={styles.body}>{children}</div>}

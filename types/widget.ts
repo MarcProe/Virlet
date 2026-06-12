@@ -18,6 +18,7 @@ export interface ConfigField {
   type: ConfigFieldType;
   options?: { label: string; value: string }[];
   placeholder?: string;
+  default?: string;
 }
 
 export interface WidgetContentProps {
@@ -25,4 +26,5 @@ export interface WidgetContentProps {
   instanceId: string;
   refreshKey: number;
   onRefreshed: () => void;
+  sharedToken?: string;
 }
