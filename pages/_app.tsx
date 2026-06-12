@@ -1,5 +1,6 @@
-import { Space_Mono, JetBrains_Mono } from 'next/font/google';
+import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Space_Mono, JetBrains_Mono } from 'next/font/google';
 import '../styles/globals.css';
 
 const spaceMono = Space_Mono({
@@ -14,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains',
 });
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={`${spaceMono.variable} ${jetbrainsMono.variable}`}>
       <Head>
