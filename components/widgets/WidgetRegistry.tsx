@@ -44,6 +44,13 @@ export const REGISTRY: RegistryEntry[] = [
         default: '50',
       },
       {
+        key: 'comparisonCount',
+        label: 'Compare last N vs prev N',
+        type: 'number',
+        placeholder: '5',
+        default: '5',
+      },
+      {
         key: 'highlightCount',
         label: 'Highlight top N posts',
         type: 'number',

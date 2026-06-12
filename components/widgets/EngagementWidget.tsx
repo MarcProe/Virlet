@@ -13,6 +13,7 @@ interface Post {
   timestamp: string;
   media_url?: string;
   thumbnail_url?: string;
+  permalink?: string;
   media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM';
 }
 
@@ -39,7 +40,7 @@ function linReg(ys: number[]): (x: number) => number {
 
 function fmtDate(ts: string): string {
   const d = new Date(ts);
-  return `${d.toLocaleString('default', { month: 'short' })} ${d.getDate()}`;
+  return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 
 function calcValue(post: Post, metric: string, followers: number): number {
@@ -91,6 +92,7 @@ function TooltipContent({ active, payload, metric }: { active?: boolean; payload
 export default function EngagementWidget({ config, refreshKey, onRefreshed, sharedToken }: WidgetContentProps) {
   const token      = sharedToken || (config.token as string | undefined);
   const postCount  = Math.min(100, Math.max(5, parseInt(config.postCount as string) || 50));
+  const cmpN       = Math.min(20, Math.max(1, parseInt(config.comparisonCount as string) || 5));
   const hlCount    = Math.min(10, Math.max(0, parseInt(config.highlightCount as string) || 3));
   const metric     = (config.metric as string) || 'engagement';
   const showTrend  = config.showTrendLine !== 'false';
@@ -106,7 +108,7 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
 
     Promise.all([
       fetch(`https://graph.instagram.com/me?fields=followers_count&access_token=${token}`).then(r => r.json()),
-      fetch(`https://graph.instagram.com/me/media?fields=id,like_count,comments_count,timestamp,media_url,thumbnail_url,media_type&limit=${postCount}&access_token=${token}`).then(r => r.json()),
+      fetch(`https://graph.instagram.com/me/media?fields=id,like_count,comments_count,timestamp,media_url,thumbnail_url,permalink,media_type&limit=${postCount}&access_token=${token}`).then(r => r.json()),
     ])
       .then(([profile, media]) => {
         if (profile.error) { setError(profile.error.message); setLoading(false); return; }
@@ -140,12 +142,12 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
   if (!points.length)  return <p className={styles.hint}>No posts found.</p>;
 
   const avg        = points.reduce((s, p) => s + p.value, 0) / points.length;
-  const last5      = points.slice(-5);
-  const prev5      = points.length >= 10 ? points.slice(-10, -5) : points.slice(0, 5);
-  const last5Avg   = last5.reduce((s, p) => s + p.value, 0) / last5.length;
-  const prev5Avg   = prev5.reduce((s, p) => s + p.value, 0) / prev5.length;
-  const trendUp    = last5Avg >= prev5Avg;
-  const trendPct   = prev5Avg > 0 ? Math.abs((last5Avg - prev5Avg) / prev5Avg * 100) : 0;
+  const lastN      = points.slice(-cmpN);
+  const prevN      = points.length >= cmpN * 2 ? points.slice(-cmpN * 2, -cmpN) : points.slice(0, cmpN);
+  const lastNAvg   = lastN.reduce((s, p) => s + p.value, 0) / lastN.length;
+  const prevNAvg   = prevN.reduce((s, p) => s + p.value, 0) / prevN.length;
+  const trendUp    = lastNAvg >= prevNAvg;
+  const trendPct   = prevNAvg > 0 ? Math.abs((lastNAvg - prevNAvg) / prevNAvg * 100) : 0;
   const peak       = Math.max(...points.map(p => p.value));
 
   const yLabel = metric === 'engagement' ? (v: number) => `${v.toFixed(1)}%` : (v: number) => String(Math.round(v));
@@ -163,7 +165,7 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
           <span className={`${styles.summaryValue} ${trendUp ? styles.up : styles.down}`}>
             {trendUp ? '↑' : '↓'} {trendPct.toFixed(1)}%
           </span>
-          <span className={styles.summaryLabel}>Last 5 vs prev 5</span>
+          <span className={styles.summaryLabel}>Last {cmpN} vs prev {cmpN}</span>
         </div>
         <div className={styles.summaryDivider} />
         <div className={styles.summaryItem}>
@@ -173,7 +175,15 @@ export default function EngagementWidget({ config, refreshKey, onRefreshed, shar
       </div>
 
       <ResponsiveContainer width="100%" height={190}>
-        <ComposedChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
+        <ComposedChart
+          data={points}
+          margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+          style={{ cursor: 'pointer' }}
+          onClick={(data) => {
+            const pt = (data?.activePayload?.[0]?.payload) as ChartPoint | undefined;
+            if (pt?.post.permalink) window.open(pt.post.permalink, '_blank', 'noopener');
+          }}
+        >
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-default)" vertical={false} />
           <XAxis
             dataKey="date"
