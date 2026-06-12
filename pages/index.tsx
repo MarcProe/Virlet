@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from '../lib/db';
 import { getEntry } from '../components/widgets/WidgetRegistry';
@@ -9,11 +9,36 @@ import styles from './index.module.css';
 
 const NUM_COLUMNS = 3;
 
+function parseInterval(s: string): number | null {
+  const m = s.trim().match(/^(\d{1,5}) ?([smh])$/);
+  if (!m) return null;
+  const n = parseInt(m[1], 10);
+  if (n === 0) return null;
+  if (m[2] === 's') return n * 1_000;
+  if (m[2] === 'm') return n * 60_000;
+  return n * 3_600_000;
+}
+
 export default function Dashboard() {
   const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({});
+  const intervalRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
+
+  useEffect(() => {
+    Object.values(intervalRefs.current).forEach(clearInterval);
+    intervalRefs.current = {};
+    instances.forEach(inst => {
+      if (!inst.interval) return;
+      const ms = parseInterval(inst.interval);
+      if (!ms) return;
+      intervalRefs.current[inst.id] = setInterval(() => {
+        setRefreshKeys(prev => ({ ...prev, [inst.id]: (prev[inst.id] ?? 0) + 1 }));
+      }, ms);
+    });
+    return () => { Object.values(intervalRefs.current).forEach(clearInterval); };
+  }, [instances]);
 
   function openAdd() {
     setEditingId(null);
@@ -43,11 +68,12 @@ export default function Dashboard() {
     instanceId: string | null,
     type: string,
     config: Record<string, unknown>,
-    x: number
+    x: number,
+    interval: string
   ) {
     if (instanceId) {
       const inst = instances.find(i => i.id === instanceId);
-      if (inst) await db.widgets.put({ ...inst, config, x });
+      if (inst) await db.widgets.put({ ...inst, config, x, interval: interval || undefined });
     } else {
       const inCol = instances.filter(i => i.x === x);
       const y = inCol.length > 0 ? Math.max(...inCol.map(i => i.y)) + 1 : 0;
@@ -58,6 +84,7 @@ export default function Dashboard() {
         x,
         y,
         config,
+        interval: interval || undefined,
       };
       await db.widgets.add(next);
     }

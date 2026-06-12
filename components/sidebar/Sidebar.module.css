@@ -175,6 +175,17 @@
   color: var(--body-subtle);
 }
 
+.inputError {
+  border-color: var(--danger);
+  box-shadow: var(--shadow-inset), 0 0 0 1px var(--danger);
+}
+
+.fieldError {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.7rem;
+  color: var(--danger);
+}
+
 .columnPicker {
   display: flex;
   gap: 8px;
@@ -227,4 +238,10 @@
 
 .saveBtn:active {
   box-shadow: var(--shadow-inset);
+}
+
+.saveBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
 }

@@ -6,6 +6,7 @@ export interface WidgetInstance {
   y: number;
   config: Record<string, unknown>;
   lastUpdated?: number;
+  interval?: string;
 }
 
 export type ConfigFieldType = 'text' | 'password' | 'select' | 'number';

@@ -4,17 +4,18 @@ import type { WidgetInstance } from '../../types/widget';
 import styles from './Sidebar.module.css';
 
 const NUM_COLUMNS = 3;
+const INTERVAL_RE = /^\d{1,5} ?[smh]$/;
 
 type SidebarView =
   | { view: 'catalog' }
-  | { view: 'config'; instanceId: string | null; type: string; draft: Record<string, unknown>; column: number };
+  | { view: 'config'; instanceId: string | null; type: string; draft: Record<string, unknown>; column: number; interval: string };
 
 interface Props {
   open: boolean;
   instances: WidgetInstance[];
   editingInstanceId: string | null;
   onClose: () => void;
-  onSave: (instanceId: string | null, type: string, config: Record<string, unknown>, x: number) => void;
+  onSave: (instanceId: string | null, type: string, config: Record<string, unknown>, x: number, interval: string) => void;
 }
 
 export default function Sidebar({ open, instances, editingInstanceId, onClose, onSave }: Props) {
@@ -25,7 +26,7 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
     if (editingInstanceId) {
       const inst = instances.find(i => i.id === editingInstanceId);
       if (inst) {
-        setState({ view: 'config', instanceId: inst.id, type: inst.type, draft: { ...inst.config }, column: inst.x });
+        setState({ view: 'config', instanceId: inst.id, type: inst.type, draft: { ...inst.config }, column: inst.x, interval: inst.interval ?? '' });
       }
     } else {
       setState({ view: 'catalog' });
@@ -39,7 +40,7 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
   }
 
   function selectType(type: string) {
-    setState({ view: 'config', instanceId: null, type, draft: {}, column: leastPopulatedColumn() });
+    setState({ view: 'config', instanceId: null, type, draft: {}, column: leastPopulatedColumn(), interval: '' });
   }
 
   function setDraft(key: string, value: unknown) {
@@ -52,9 +53,20 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
     setState({ ...state, column: col });
   }
 
+  function setIntervalValue(raw: string) {
+    if (state.view !== 'config') return;
+    // only allow digits, space, and s/m/h
+    setState({ ...state, interval: raw.replace(/[^\d smh]/g, '').slice(0, 7) });
+  }
+
+  function intervalValid(v: string): boolean {
+    return v === '' || INTERVAL_RE.test(v);
+  }
+
   function save() {
     if (state.view !== 'config') return;
-    onSave(state.instanceId, state.type, state.draft, state.column);
+    if (!intervalValid(state.interval)) return;
+    onSave(state.instanceId, state.type, state.draft, state.column, state.interval);
     onClose();
   }
 
@@ -99,6 +111,8 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
           {state.view === 'config' && (() => {
             const entry = getEntry(state.type);
             if (!entry) return null;
+            const iv = state.interval;
+            const ivInvalid = !intervalValid(iv);
             return (
               <div className={styles.configForm}>
                 {state.instanceId === null && (
@@ -148,7 +162,21 @@ export default function Sidebar({ open, instances, editingInstanceId, onClose, o
                   </div>
                 </div>
 
-                <button className={styles.saveBtn} onClick={save}>
+                <div className={styles.field}>
+                  <label className={styles.label}>Auto-reload</label>
+                  <input
+                    className={`${styles.input} ${ivInvalid ? styles.inputError : ''}`}
+                    type="text"
+                    placeholder="e.g. 30s, 5m, 1h — empty = never"
+                    value={iv}
+                    onChange={e => setIntervalValue(e.target.value)}
+                  />
+                  {ivInvalid && (
+                    <span className={styles.fieldError}>Use format: 30s, 5m, 2h</span>
+                  )}
+                </div>
+
+                <button className={styles.saveBtn} onClick={save} disabled={ivInvalid}>
                   {state.instanceId ? 'Save Changes' : 'Add Widget'}
                 </button>
               </div>
