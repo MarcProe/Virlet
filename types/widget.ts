@@ -5,6 +5,7 @@ export interface WidgetInstance {
   x: number;
   y: number;
   config: Record<string, unknown>;
+  lastUpdated?: number;
 }
 
 export type ConfigFieldType = 'text' | 'password' | 'select' | 'number';
@@ -20,4 +21,6 @@ export interface ConfigField {
 export interface WidgetContentProps {
   config: Record<string, unknown>;
   instanceId: string;
+  refreshKey: number;
+  onRefreshed: () => void;
 }

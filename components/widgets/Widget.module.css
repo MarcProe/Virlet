@@ -13,6 +13,12 @@
   border-bottom: 1px solid var(--border-default);
 }
 
+.titleGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
 .title {
   font-family: var(--font-space-mono), monospace;
   font-size: 0.75rem;
@@ -20,6 +26,12 @@
   color: var(--heading);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.timestamp {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 0.65rem;
+  color: var(--body-subtle);
 }
 
 .controls {

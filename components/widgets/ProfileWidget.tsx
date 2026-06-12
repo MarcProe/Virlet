@@ -20,7 +20,7 @@ function fmt(n: number): string {
   return String(n);
 }
 
-export default function ProfileWidget({ config }: WidgetContentProps) {
+export default function ProfileWidget({ config, refreshKey, onRefreshed }: WidgetContentProps) {
   const token = config.token as string | undefined;
   const [profile, setProfile] = useState<Profile | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -33,11 +33,15 @@ export default function ProfileWidget({ config }: WidgetContentProps) {
     )
       .then(r => r.json())
       .then(data => {
-        if (data.error) setError(data.error.message);
-        else setProfile(data);
+        if (data.error) {
+          setError(data.error.message);
+        } else {
+          setProfile(data);
+          onRefreshed();
+        }
       })
       .catch(() => setError('Failed to reach Instagram API'));
-  }, [token]);
+  }, [token, refreshKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!token) return <p className={styles.hint}>Open settings to add an access token.</p>;
   if (error) return <p className={styles.error}>{error}</p>;

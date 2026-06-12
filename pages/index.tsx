@@ -13,6 +13,7 @@ export default function Dashboard() {
   const instances = useLiveQuery(() => db.widgets.toArray(), []) ?? [];
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [refreshKeys, setRefreshKeys] = useState<Record<string, number>>({});
 
   function openAdd() {
     setEditingId(null);
@@ -27,6 +28,15 @@ export default function Dashboard() {
   function closeSidebar() {
     setSidebarOpen(false);
     setEditingId(null);
+  }
+
+  function handleRefresh(instanceId: string) {
+    setRefreshKeys(prev => ({ ...prev, [instanceId]: (prev[instanceId] ?? 0) + 1 }));
+  }
+
+  async function handleRefreshed(instanceId: string) {
+    const inst = instances.find(i => i.id === instanceId);
+    if (inst) await db.widgets.put({ ...inst, lastUpdated: Date.now() });
   }
 
   async function handleSave(
@@ -95,11 +105,18 @@ export default function Dashboard() {
                     key={inst.id}
                     title={entry.label}
                     minimized={inst.minimized}
+                    lastUpdated={inst.lastUpdated}
+                    onRefresh={() => handleRefresh(inst.id)}
                     onToggleMinimize={() => handleToggleMinimize(inst.id)}
                     onOpenConfig={() => openConfig(inst.id)}
                     onClose={() => handleClose(inst.id)}
                   >
-                    <Content config={inst.config} instanceId={inst.id} />
+                    <Content
+                      config={inst.config}
+                      instanceId={inst.id}
+                      refreshKey={refreshKeys[inst.id] ?? 0}
+                      onRefreshed={() => handleRefreshed(inst.id)}
+                    />
                   </Widget>
                 );
               })}
