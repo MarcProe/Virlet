@@ -89,22 +89,7 @@ Virlet uses **direct Instagram API token auth** — no OAuth flow, no server-sid
 
 ### How to get your Instagram access token
 
-Follow this guide: **[How To Get Instagram API Key (Access Token)](https://www.youtube.com/watch?v=sPjlyDSNYQs)**
-
-Key steps:
-1. Go to [Meta for Developers](https://developers.facebook.com) and create an app
-2. Add the **Instagram Business Login** use case
-3. Open the **Graph API Explorer** (Tools → Graph API Explorer)
-4. Select your app, add the `instagram_business_basic` permission
-5. Click **Generate Access Token** and complete the authorization
-6. Click **Extend Access Token** to convert the 1-hour token to a **60-day long-lived token**
-7. Copy the token (starts with `IGA...`) and paste it into the Virlet connect screen
-
-### Token notes
-- **Short-lived tokens** expire after **1 hour** — always extend to long-lived
-- **Long-lived tokens** expire after **60 days** — paste a fresh one when it expires
-- The token is stored in your browser's `localStorage` under the key `ig_token`
-- Clicking **Disconnect** in the app removes it
+**[How To Get Instagram API Key (Access Token)](https://www.youtube.com/watch?v=sPjlyDSNYQs)**
 
 ---
 
