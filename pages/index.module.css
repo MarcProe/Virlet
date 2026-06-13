@@ -81,3 +81,35 @@
   font-size: 0.875rem;
   color: var(--body-subtle);
 }
+
+.dragGhost {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 10px 16px;
+  opacity: 0.9;
+  border: 1px dashed var(--fg-brand);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dragGhostLabel {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--heading);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dropZone {
+  border-radius: 12px;
+  border: 2px dashed var(--fg-brand);
+  background: transparent;
+  opacity: 0.4;
+  min-height: 52px;
+}

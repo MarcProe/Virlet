@@ -77,3 +77,29 @@
 .body {
   padding: 24px;
 }
+
+.titleLeft {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dragHandle {
+  background: none;
+  border: none;
+  color: var(--body-subtle);
+  cursor: grab;
+  font-size: 1.1rem;
+  padding: 4px 6px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: color 150ms, background 150ms;
+  touch-action: none;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.dragHandle:hover {
+  color: var(--heading);
+  background: var(--border-default);
+}
