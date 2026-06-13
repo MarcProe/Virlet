@@ -47,6 +47,8 @@
 | Instagram token auth | Paste a long-lived access token in the widget settings gear; stored in widget config in Dexie |
 | Logout | Profile widget has a dedicated logout button that clears the token from Dexie |
 
+| Collaborator metrics | Collab posts marked on chart (orange dot); tooltip shows co-author + follower count via Business Discovery API; summary bar shows collab vs. solo avg engagement |
+
 ### Todo
 | Feature | Description |
 |---------|-------------|
