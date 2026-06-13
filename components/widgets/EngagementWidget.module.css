@@ -24,9 +24,11 @@
 .summary {
   display: flex;
   align-items: stretch;
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: 10px;
-  box-shadow: var(--shadow-inset);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   overflow: hidden;
 }
 
@@ -69,8 +71,10 @@
 
 .tooltip {
   background: var(--surface);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-md);
   display: flex;
   gap: 8px;

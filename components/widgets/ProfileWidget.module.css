@@ -34,8 +34,9 @@
 
 .avatar {
   border-radius: 50%;
-  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--glass-border);
   display: block;
+  box-shadow: var(--shadow-sm);
 }
 
 
@@ -68,7 +69,7 @@
 
 .logout {
   margin-left: auto;
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: var(--body-subtle);
   cursor: pointer;
@@ -76,13 +77,14 @@
   padding: 4px 6px;
   border-radius: 4px;
   line-height: 1;
-  transition: color 150ms, background 150ms;
+  transition: color 150ms, background 150ms, transform 150ms;
   flex-shrink: 0;
 }
 
 .logout:hover {
   color: var(--danger);
-  background: var(--border-default);
+  background: rgba(255, 85, 85, 0.2);
+  transform: scale(1.1);
 }
 
 /* Bottom row: stats */
@@ -91,11 +93,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface);
-  border: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--glass-border);
   border-radius: 10px;
-  box-shadow: var(--shadow-inset);
   padding: 12px 24px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .stat {

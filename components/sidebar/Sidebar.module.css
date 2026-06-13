@@ -1,7 +1,9 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 100;
 }
 
@@ -12,12 +14,16 @@
   bottom: 0;
   width: 320px;
   background: var(--surface);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-left: 1px solid var(--glass-border);
   box-shadow: var(--shadow-lg);
   z-index: 101;
   transform: translateX(100%);
   transition: transform 300ms ease-in-out;
   display: flex;
   flex-direction: column;
+  border-radius: 12px 0 0 12px;
 }
 
 .panelOpen {
@@ -31,6 +37,7 @@
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-default);
   flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .headerTitle {
@@ -43,7 +50,7 @@
 }
 
 .closeBtn {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: var(--body-subtle);
   cursor: pointer;
@@ -51,11 +58,13 @@
   padding: 4px 8px;
   border-radius: 4px;
   line-height: 1;
-  transition: color 150ms;
+  transition: color 150ms, background 150ms, transform 150ms;
 }
 
 .closeBtn:hover {
   color: var(--heading);
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
 }
 
 .content {
@@ -73,21 +82,24 @@
 }
 
 .catalogItem {
-  background: var(--surface);
-  border: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 8px;
   padding: 14px 16px;
   text-align: left;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 200ms;
+  transition: all 200ms;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .catalogItem:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
@@ -111,7 +123,8 @@
   font-family: var(--font-jetbrains), monospace;
   font-size: 0.65rem;
   color: var(--body-subtle);
-  background: var(--border-default);
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--glass-border);
   border-radius: 4px;
   padding: 2px 6px;
   text-transform: uppercase;
@@ -158,14 +171,15 @@
 
 .input,
 .select {
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.3);
   color: var(--body);
   font-family: var(--font-jetbrains), monospace;
   font-size: 0.875rem;
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: 8px;
   padding: 10px 14px;
-  box-shadow: var(--shadow-inset);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   outline: none;
   width: 100%;
   box-sizing: border-box;
@@ -207,42 +221,46 @@
 }
 
 .numInput {
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.3);
   color: var(--body);
   font-family: var(--font-space-mono), monospace;
   font-size: 0.875rem;
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: 8px;
   padding: 8px 10px;
-  box-shadow: var(--shadow-inset);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   outline: none;
   width: 100%;
   box-sizing: border-box;
 }
 
 .saveBtn {
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.4);
   color: var(--fg-brand);
   font-family: var(--font-space-mono), monospace;
   font-size: 0.8rem;
   font-weight: 700;
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: 8px;
   padding: 12px 24px;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 200ms;
+  transition: all 200ms;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-top: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .saveBtn:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .saveBtn:active {
-  box-shadow: var(--shadow-inset);
+  transform: translateY(0);
 }
 
 .saveBtn:disabled {

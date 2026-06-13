@@ -1,6 +1,9 @@
 .widget {
   background: var(--surface);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border-radius: 12px;
+  border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-md);
 }
 
@@ -10,6 +13,7 @@
   justify-content: space-between;
   padding: 10px 16px;
   border-bottom: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .titleGroup {
@@ -39,7 +43,7 @@
 }
 
 .ringBtn {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   cursor: pointer;
   padding: 4px 5px;
@@ -47,17 +51,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
-  transition: opacity 150ms, background 150ms;
+  color: var(--body);
+  transition: opacity 150ms, background 150ms, color 150ms;
 }
 
 .ringBtn:hover {
   opacity: 1;
-  background: var(--border-default);
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--heading);
 }
 
 .ctrl {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: var(--body-subtle);
   cursor: pointer;
@@ -65,13 +70,14 @@
   padding: 4px 7px;
   border-radius: 4px;
   line-height: 1;
-  transition: color 150ms, background 150ms;
+  transition: color 150ms, background 150ms, transform 150ms;
   font-family: inherit;
 }
 
 .ctrl:hover {
   color: var(--heading);
-  background: var(--border-default);
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
 }
 
 .body {
@@ -85,7 +91,7 @@
 }
 
 .dragHandle {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
   color: var(--body-subtle);
   cursor: grab;
@@ -93,7 +99,7 @@
   padding: 4px 6px;
   border-radius: 4px;
   line-height: 1;
-  transition: color 150ms, background 150ms;
+  transition: color 150ms, background 150ms, transform 150ms;
   touch-action: none;
   font-family: inherit;
   flex-shrink: 0;
@@ -101,5 +107,6 @@
 
 .dragHandle:hover {
   color: var(--heading);
-  background: var(--border-default);
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
 }
