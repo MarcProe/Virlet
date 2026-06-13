@@ -46,6 +46,7 @@
 | Viewport-safe tooltips | Reusable `Tooltip` component: always fully visible, flips above/below and clamps to viewport edges |
 | Instagram token auth | Paste a long-lived access token in the widget settings gear; stored in widget config in Dexie |
 | Logout | Profile widget has a dedicated logout button that clears the token from Dexie |
+| Reel Monitor widget | Pick one reel via built-in thumbnail picker; tracks likes and comments on every reload; persists snapshots in IndexedDB and renders a sparkline of likes over time |
 
 ### Todo
 | Feature | Description |
@@ -137,7 +138,11 @@ Each widget instance is stored as:
 │   │   ├── Widget.module.css
 │   │   ├── WidgetRegistry.tsx  # Central widget type registry
 │   │   ├── ProfileWidget.tsx   # Instagram profile widget
-│   │   └── ProfileWidget.module.css
+│   │   ├── ProfileWidget.module.css
+│   │   ├── EngagementWidget.tsx  # Engagement timeline chart
+│   │   ├── EngagementWidget.module.css
+│   │   ├── ReelMonitorWidget.tsx  # Single-reel stats monitor with snapshot history
+│   │   └── ReelMonitorWidget.module.css
 │   └── sidebar/
 │       ├── Sidebar.tsx       # Slide-in config/add panel
 │       └── Sidebar.module.css

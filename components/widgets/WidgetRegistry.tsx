@@ -2,6 +2,7 @@ import type { ComponentType } from 'react';
 import type { WidgetContentProps, ConfigField } from '../../types/widget';
 import ProfileWidget from './ProfileWidget';
 import EngagementWidget from './EngagementWidget';
+import ReelMonitorWidget from './ReelMonitorWidget';
 
 export interface RegistryEntry {
   type: string;
@@ -81,6 +82,14 @@ export const REGISTRY: RegistryEntry[] = [
       },
     ],
     component: EngagementWidget,
+  },
+  {
+    type: 'reel-monitor',
+    label: 'Reel Monitor',
+    singleton: false,
+    defaultColSpan: 3,
+    configFields: [],
+    component: ReelMonitorWidget,
   },
 ];
 
