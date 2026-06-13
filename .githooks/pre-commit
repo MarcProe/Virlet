@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Running typecheck before commit..."
+npm run typecheck
+if [ $? -ne 0 ]; then
+  echo "Typecheck failed — commit aborted. Fix the errors and try again."
+  exit 1
+fi
