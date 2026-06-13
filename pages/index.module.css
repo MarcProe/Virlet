@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--surface);
+  background: transparent;
 }
 
 .topBar {
@@ -11,10 +11,14 @@
   justify-content: space-between;
   padding: 16px 24px;
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 10;
+  border-radius: 0 0 12px 12px;
 }
 
 .logo {
@@ -27,7 +31,7 @@
 
 .addButton {
   background: var(--surface);
-  border: 1px solid var(--border-default);
+  border: 1px solid var(--glass-border);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -36,18 +40,23 @@
   color: var(--fg-brand);
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .addButton:hover {
   box-shadow: var(--shadow-md);
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 
 .addButton:active {
   box-shadow: var(--shadow-inset);
+  transform: scale(0.98);
 }
 
 .grid {
@@ -87,11 +96,13 @@
   z-index: 1000;
   pointer-events: none;
   background: var(--surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 12px;
+  border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-lg);
   padding: 10px 16px;
   opacity: 0.9;
-  border: 1px dashed var(--fg-brand);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -109,7 +120,9 @@
 .dropZone {
   border-radius: 12px;
   border: 2px dashed var(--fg-brand);
-  background: transparent;
-  opacity: 0.4;
+  background: rgba(20, 135, 89, 0.05);
+  opacity: 0.6;
   min-height: 52px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
