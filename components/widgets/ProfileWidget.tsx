@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { db } from '../../lib/db';
 import type { WidgetContentProps } from '../../types/widget';
+import Tooltip from '../Tooltip';
 import styles from './ProfileWidget.module.css';
 
 interface Profile {
@@ -54,7 +55,7 @@ export default function ProfileWidget({ config, instanceId, refreshKey, onRefres
   return (
     <div className={styles.card}>
       <div className={styles.top}>
-        <div className={styles.avatarWrap}>
+        <Tooltip content={profile.biography || null} className={styles.avatarWrap}>
           {profile.profile_picture_url && (
             <Image
               className={styles.avatar}
@@ -65,10 +66,7 @@ export default function ProfileWidget({ config, instanceId, refreshKey, onRefres
               unoptimized
             />
           )}
-          {profile.biography && (
-            <div className={styles.bioTooltip}>{profile.biography}</div>
-          )}
-        </div>
+        </Tooltip>
         <div className={styles.identity}>
           {profile.name && <span className={styles.name}>{profile.name}</span>}
           <span className={styles.handle}>@{profile.username}</span>

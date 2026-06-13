@@ -43,6 +43,7 @@
 | Manual reload | Click the progress ring to reload immediately and restart the auto-reload timer |
 | Last-updated timestamp | Each widget title bar shows a relative timestamp of the last successful data fetch |
 | Instagram profile widget | Compact card: avatar (with bio tooltip on hover), name, handle, follower count, post count |
+| Viewport-safe tooltips | Reusable `Tooltip` component: always fully visible, flips above/below and clamps to viewport edges |
 | Instagram token auth | Paste a long-lived access token in the widget settings gear; stored in widget config in Dexie |
 | Logout | Profile widget has a dedicated logout button that clears the token from Dexie |
 
@@ -129,6 +130,8 @@ Each widget instance is stored as:
 │   ├── index.module.css      # Dashboard styles (10-col grid)
 │   └── 404.tsx               # Custom 404
 ├── components/
+│   ├── Tooltip.tsx           # Reusable viewport-safe tooltip (position: fixed, auto-clamp)
+│   ├── Tooltip.module.css
 │   ├── widgets/
 │   │   ├── Widget.tsx        # Generic widget shell
 │   │   ├── Widget.module.css
