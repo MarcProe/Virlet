@@ -38,34 +38,6 @@
   display: block;
 }
 
-.bioTooltip {
-  position: absolute;
-  bottom: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--surface);
-  border: 1px solid var(--border-default);
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
-  padding: 8px 12px;
-  font-family: var(--font-jetbrains), monospace;
-  font-size: 0.75rem;
-  line-height: 1.5;
-  color: var(--body);
-  width: 200px;
-  text-align: center;
-  white-space: normal;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 150ms;
-  pointer-events: none;
-  z-index: 50;
-}
-
-.avatarWrap:hover .bioTooltip {
-  visibility: visible;
-  opacity: 1;
-}
 
 .identity {
   display: flex;
