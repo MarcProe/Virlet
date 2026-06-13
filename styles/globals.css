@@ -7,9 +7,9 @@
   --surface-solid: #ECF0F3;
   --heading: #1E202E;
   --body: #2D3048;
-  --body-subtle: #5A6484;
+  --body-subtle: #3A425C;
   --fg-brand: #006666;
-  --fg-disabled: rgba(90, 100, 132, 0.5);
+  --fg-disabled: rgba(58, 66, 92, 0.5);
   --border-default: rgba(209, 213, 219, 0.6);
   --border-glow: rgba(255, 255, 255, 0.3);
 
@@ -32,9 +32,9 @@
     --surface-solid: #262833;
     --heading: #FFFFFF;
     --body: #E0E4F0;
-    --body-subtle: #9CA7C2;
+    --body-subtle: #7A849C;
     --fg-brand: #00D4AA;
-    --fg-disabled: rgba(156, 167, 194, 0.5);
+    --fg-disabled: rgba(122, 132, 156, 0.5);
     --border-default: rgba(75, 85, 99, 0.6);
     --border-glow: rgba(0, 0, 0, 0.2);
 
